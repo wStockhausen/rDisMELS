@@ -32,7 +32,7 @@ parseTracks<-function(tracks,
     }
   }
   if (nt>1){
-    if (st_is(geoms[[1]],c("POINT","POINT Z"))) geoms<-geoms[2:nt];
+    if (sf::st_is(geoms[[1]],c("POINT","POINT Z"))) geoms<-geoms[2:nt];
   }
   sfc_geoms<-sf::st_sfc(geoms,crs=strCRS);
   sfc_geoms<-sfc_geoms[!sf::st_is_empty(sfc_geoms)];

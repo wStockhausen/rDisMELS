@@ -1,7 +1,7 @@
 #'
-#' @title Create a list of sf (simple features) datasets (dataframes) with linestring geometries from DisMELS tracks
+#' @title Extract trajectories from DisMELS output as a list of sf (simple features) datasets (dataframes) with linestring geometries
 #'
-#' @description Function to create a list of sf (simple features) datasets (dataframes) with linestring geometries from DisMELS tracks.
+#' @description Function to extract trajectories from DisMELS output as a list of sf (simple features) datasets (dataframes) with linestring geometries.
 #'
 #' @param dfrs - list of dataframes, by typeName, with DisMELS IBM results
 #' @param strCRS - coordinate reference system: EPSG code or character with proj4string
@@ -13,8 +13,8 @@
 #'
 #' @export
 #'
-createSFDatasets_Trajectories<-function(dfrs,
-                                        strCRS=wtsGIS::getCRS("WGS84")){
+extractTrajectories<-function(dfrs,
+                              strCRS=wtsGIS::getCRS("WGS84")){
   typeNames<-names(dfrs);
   dfrs_lines<-list();
   for (typeName in typeNames){
@@ -59,15 +59,15 @@ createSFDatasets_Trajectories<-function(dfrs,
         tbl$ageInStage[nID]<-dfrp$ageInStage[idx];
         tbl$successful[nID]<-dfrp$successful[idx];
         tbl$geom[nID]      <-trajectory;
-      }
-      attr(st_geometry(tbl), "bbox")<-bbox;
+      }#--uIDs
+      attr(sf::st_geometry(tbl), "bbox")<-bbox;
       bbx<-sf::st_bbox(tbl)
       dfrs_lines[[typeName]]<-tbl;
       cat("bbox=",bbox,"\n")
       cat("bbx =",bbx,"\n")
       cat("--elapsed time = ",Sys.time()-start,"\n")
-    }
-  }
+    }#--nIDs>0
+  }#--typeNames
   return(dfrs_lines)
 }
 

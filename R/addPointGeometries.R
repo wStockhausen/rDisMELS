@@ -1,19 +1,19 @@
 #'
-#' @title Create a list of sf (simple features) datasets (dataframes) with point geometries from DisMELS tracks
+#' @title Add point geometries to a list dataframes from DisMELS output
 #'
-#' @description Function to create a list of sf (simple features) datasets (dataframes) with point geometries from DisMELS tracks.
+#' @description Function to add point geometries to a list dataframes from DisMELS output
 #'
 #' @param dfrs - list of dataframes, by typeName, with DisMELS IBM results
 #' @param strCRS - coordinate reference system: EPSG code or character with proj4string
 #'
-#' @return a list of sf dataset objects, by typeName, each with a column ("geom") of class sfc_POINT
+#' @return a list of sf (dataset) objects, by typeName, each with a column ("geom") of class sfc_POINT
 #'
 #' @details Uses packages \code{sf}, \code{wtsGIS}. For each sf dataset, the point geometries
 #' are in column "geom". Other columns are copied from the associated input dataframes.
 #'
 #' @export
 #'
-createSFDatasets_Points<-function(dfrs){
+addPointGeometries<-function(dfrs){
   typeNames<-names(dfrs);
   dfrs_points<-list();
   for (typeName in typeNames){

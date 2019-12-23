@@ -20,6 +20,4 @@ Function to extract an index for successful individuals.
 \details{
 The "index" consists of a dataframe listing the origID and startTime for
 each successful individual in dfrs (or in dfrs[[typeName]] if dfrs is a list of dataframes).
-
- @export
 }

@@ -4,19 +4,24 @@
 #' @description Function to classify individuals by success/failure.
 #'
 #' @param dfrs - list of dataframes by typeName
-#' @param typeName - life stage typeName indicating success
+#' @param index - dataframe returned from \code{extractIndexForSuccessfulIndivs}
+#' @param typeName - life stage typeName considered successful (an alternative to providing \code{index})
 #'
 #' @return the list of dataframes by typeName, with added column "succcess"
 #' (TRUE/FALSE) indicating whether individual is considered a success.
 #'
-#' @details
+#' @details Successful individuals are identified using \code{extractIndexForSuccessfulIndivs(dfrs,typeName)} if
+#' \code{index} is null.
 #'
 #' @export
 #'
 classifyIndivsBySuccess<-function(dfrs,
+                                  index=NULL,
                                   typeName){
-  #--extract dataframe indicating successful individuals
-  idxSuccessfulIndivs<-extractIndexForSuccessfulIndivs(dfrs,typeName);
+  #--get dataframe indicating successful individuals
+  idxSuccessfulIndivs<-index;
+  if (is.null(idxSuccessfulIndivs))
+    idxSuccessfulIndivs<-extractIndexForSuccessfulIndivs(dfrs,typeName);
 
   #--classify individuals as successful or unsuccessful
   typeNames<-names(dfrs);
@@ -31,4 +36,5 @@ classifyIndivsBySuccess<-function(dfrs,
     }
     dfrs[[typeName]]$successful<-dfr$successful;
   }
+  return(dfrs);
 }

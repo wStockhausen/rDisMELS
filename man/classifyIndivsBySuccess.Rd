@@ -4,12 +4,14 @@
 \alias{classifyIndivsBySuccess}
 \title{Classify individuals by success/failure}
 \usage{
-classifyIndivsBySuccess(dfrs, typeName)
+classifyIndivsBySuccess(dfrs, index = NULL, typeName)
 }
 \arguments{
 \item{dfrs}{- list of dataframes by typeName}
 
-\item{typeName}{- life stage typeName indicating success}
+\item{index}{- dataframe returned from \code{extractIndexForSuccessfulIndivs}}
+
+\item{typeName}{- life stage typeName considered successful (an alternative to providing \code{index})}
 }
 \value{
 the list of dataframes by typeName, with added column "succcess"
@@ -19,5 +21,6 @@ the list of dataframes by typeName, with added column "succcess"
 Function to classify individuals by success/failure.
 }
 \details{
-
+Successful individuals are identified using \code{extractIndexForSuccessfulIndivs(dfrs,typeName)} if
+\code{index} is null.
 }

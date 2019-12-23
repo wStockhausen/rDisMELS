@@ -1,7 +1,7 @@
 #'
-#' @title Plot a dataframe with point locations on map
+#' @title Create map layers from a list of dataframes with point locations
 #'
-#' @description Function to plot a dataframe with point locations on map.
+#' @description Function to create map layers from a list of dataframes with point locations.
 #'
 #' @param dfr_points - dataframe with point locations
 #' @param markers - marker type (e.g., "dots", "symmbols")
