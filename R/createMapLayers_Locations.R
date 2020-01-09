@@ -46,7 +46,7 @@ createMapLayers_Locations<-function(
                              aes.palette=aes.palette)
   }
 
-  #make point-based map layers and print them to png files
+  #make point-based map layers
   ctr<-1;
   lyrs_points<-list();
   for (typeName in typeNames){
@@ -62,7 +62,7 @@ createMapLayers_Locations<-function(
       print(map);
     }
     ctr<-ctr+1;
-  }
+  }#--typeName
 
   return(lyrs_points)
 }
@@ -70,5 +70,5 @@ createMapLayers_Locations<-function(
 # source('createSFDatasets_Points.R')
 # dfrsp<-dfrs[[1]][dfrs[[4]]$id<1000,];
 # dfrs_points<-createSFDatasets_Points(list(test=dfrsp[dfrsp$age==0.0,]));
-# lyrs_points<-plotMap_Locations(dfrs_points,markers="symbols",size=0.05,basemap=basemap);
+# lyrs_points<-createMapLayers_Locations(dfrs_points,markers="symbols",size=0.05,basemap=NULL);
 

@@ -4,10 +4,14 @@
 \alias{createBasemap}
 \title{Create a basemap}
 \usage{
-createBasemap(boundingbox = tmaptools::bb(xlim = c(-162, -134), ylim =
-  c(54, 62)), colors.background = "grey85", colors.land = "grey45",
-  colors.bathym = "grey65", aes.palette = list(cat = c("blue", "red"),
-  div = c("blue", "red"), seq = c("blue", "red")))
+createBasemap(
+  boundingbox = tmaptools::bb(xlim = c(-162, -134), ylim = c(54, 62)),
+  colors.background = "grey85",
+  colors.land = "grey45",
+  colors.bathym = "grey65",
+  aes.palette = list(cat = c("blue", "red"), div = c("blue", "red"), seq = c("blue",
+    "red"))
+)
 }
 \arguments{
 \item{boundingbox}{- sf-style bounding box for map (default is for CGOA)}

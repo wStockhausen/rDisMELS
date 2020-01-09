@@ -4,14 +4,24 @@
 \alias{extractIndivs.MultipleRuns}
 \title{Extracts and re-orders a series of DisMELS model results files by individual}
 \usage{
-extractIndivs.MultipleRuns(YYYYs = NULL, MMs = NULL, DDs = NULL,
-  lhsTypeInfo = NULL, lhsTypes = NULL,
+extractIndivs.MultipleRuns(
+  YYYYs = NULL,
+  MMs = NULL,
+  DDs = NULL,
+  lhsTypeInfo = NULL,
+  lhsTypes = NULL,
   successful = "where (end_typeName=\\"benthic.juvenile\\")",
   nurseryZones = c("NurseryArea_000to050m", "NurseryArea_050to150m"),
-  onlySuccessful = TRUE, onlyUnsuccessful = FALSE,
-  inpDir.IndivConn = NULL, basename.IndivConn = "IndivConn",
-  inpDir.Results = NULL, basename.Results = "Results", outDir = NULL,
-  basename.Out = "SuccessfulIndivs", verbose = FALSE)
+  onlySuccessful = TRUE,
+  onlyUnsuccessful = FALSE,
+  inpDir.IndivConn = NULL,
+  basename.IndivConn = "IndivConn",
+  inpDir.Results = NULL,
+  basename.Results = "Results",
+  outDir = NULL,
+  basename.Out = "SuccessfulIndivs",
+  verbose = FALSE
+)
 }
 \arguments{
 \item{YYYYs}{- years to extract (can be NULL)}

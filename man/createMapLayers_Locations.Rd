@@ -4,11 +4,20 @@
 \alias{createMapLayers_Locations}
 \title{Create map layers from a list of dataframes with point locations}
 \usage{
-createMapLayers_Locations(dfrs_points, markers = c("dots", "symbols"),
-  shape = 1, size = 0.2, alpha = 0.6, basemap = NULL,
-  colors.background = "grey85", colors.land = "grey45",
-  colors.bathym = "grey65", aes.palette = list(cat = c("blue", "red"),
-  div = c("blue", "red"), seq = c("blue", "red")), printMaps = FALSE)
+createMapLayers_Locations(
+  dfrs_points,
+  markers = c("dots", "symbols"),
+  shape = 1,
+  size = 0.2,
+  alpha = 0.6,
+  basemap = NULL,
+  colors.background = "grey85",
+  colors.land = "grey45",
+  colors.bathym = "grey65",
+  aes.palette = list(cat = c("blue", "red"), div = c("blue", "red"), seq = c("blue",
+    "red")),
+  printMaps = FALSE
+)
 }
 \arguments{
 \item{markers}{- marker type (e.g., "dots", "symmbols")}

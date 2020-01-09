@@ -4,8 +4,14 @@
 \alias{unzipDisMELSResults}
 \title{Unzips and renames a series of DisMELS results or connectivity files}
 \usage{
-unzipDisMELSResults(YYYYs = NULL, MMs = NULL, DDs = NULL,
-  basename = "Results", dir.inp = getwd(), dir.out = getwd())
+unzipDisMELSResults(
+  YYYYs = NULL,
+  MMs = NULL,
+  DDs = NULL,
+  basename = "Results",
+  dir.inp = getwd(),
+  dir.out = getwd()
+)
 }
 \arguments{
 \item{YYYYs}{= years to extract (can be NULL)}
