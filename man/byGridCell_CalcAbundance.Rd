@@ -20,5 +20,8 @@ a list of dataframes, by life stage, with average abundance by grid cell
 Function to calculate abundance of individuals by grid cell.
 }
 \details{
-Uses packages \code{sqldf}, \code{reshape2}.
+Uses packages \code{sqldf}, \code{reshape2}.The number of unique individuals
+that occupied a grid cell is reported in output dataframe columns ?_indivs. The abundance (averaged
+over time for each individual, then summed over unique individuals) is reported in
+output dataframe columns ??_abundance.
 }

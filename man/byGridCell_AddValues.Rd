@@ -16,14 +16,15 @@ byGridCell_AddValues(
 
 \item{dfr2}{- dataframe with results by grid cell}
 
-\item{cols}{- dataframe column names to scale}
+\item{cols}{- dataframe column names to add together}
 }
 \value{
-dataframe with added results
+dataframe (dfr1) with added results in requested columns.
 }
 \description{
 Function to add values by grid cell.
 }
 \details{
-"Factor" levels (gridCellID, startTime) in dataframes must be aligned, each must have the same number of rows.
+"Factor" levels (gridCellID, startTime) in dataframes must be aligned,
+each must have the same number of rows.
 }

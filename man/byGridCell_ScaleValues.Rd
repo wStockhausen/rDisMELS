@@ -19,7 +19,7 @@ byGridCell_ScaleValues(
 \item{cols}{- dataframe column names to scale}
 }
 \value{
-dataframe with scaled results
+dataframe with scaled results in requested columns.
 }
 \description{
 Function to scale values by grid cell by a multiplicative constant.

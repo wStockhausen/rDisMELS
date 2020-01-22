@@ -6,14 +6,15 @@
 #' @param dfr - dataframe with values to create map layer by gridCellID
 #' @param val_col - column name of values to plot
 #' @param roms_grid - shapefile name or layer (sf dataset) with grid polygons by ID
-#' @param basemap - basemap to use
-#' @param title - map title
-#' @param alpha - transparency to apply to values layer
-#' @param plotMap - flag to combine layer with basemap and plot
+#' @param basemap - basemap to use (default is NULL)
+#' @param title - map title (default is "values")
+#' @param alpha - transparency to apply to values layer (default is 0.9)
+#' @param plotMap - flag to combine layer with basemap and plot (default is FALSE)
 #'
 #' @return a tmap layer object of the values by grid cell, or NULL if all values are 0.
 #'
-#' @details Uses packages \code{wtsGIS}, \code{tmap}. Note that the color scale used for the values
+#' @details Uses packages \code{wtsGIS}, \code{tmap}. If all values are 0, then NULL is
+#' returned for the map layer object. Note that the color scale used for the values
 #' is determined by the \code{aes.palette} argument to \code{createBasemap} when the basemap is created.
 #'
 #' @export
@@ -33,12 +34,6 @@ createMapLayer_ValuesByGridCell<-function(dfr,
                                                 as.sf = TRUE);
   }
 
-  #create basemap
-  if (plotMap & is.null(basemap)){
-    basemap <- createBasemap();#--use defaults
-  }
-
-
   valsByGC<-wtsGIS::mergeDataframeWithLayer(dfr,
                                             roms_grid,
                                             dataID="gridCellID",
@@ -55,6 +50,7 @@ createMapLayer_ValuesByGridCell<-function(dfr,
     if (any(idx)) {
       lyr <- tmap::tm_shape(valsByGC[idx,,drop=FALSE]) + tmap::tm_fill(vals_col,alpha=alpha);
       if (plotMap){
+        if(is.null(basemap)) basemap <- createBasemap();#--use defaults
         map <- basemap + tmap::tm_layout(title=title) + lyr;
         print(map);
       }

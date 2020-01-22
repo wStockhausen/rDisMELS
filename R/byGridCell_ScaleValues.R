@@ -6,7 +6,7 @@
 #' @param scale - multiplicative scale factor
 #' @param cols - dataframe column names to scale
 #'
-#' @return dataframe with scaled results
+#' @return dataframe with scaled results in requested columns.
 #'
 #' @details None.
 #'
