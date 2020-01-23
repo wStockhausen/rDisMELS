@@ -32,6 +32,10 @@ byGridCell_CalcAbundance<-function(dfrs,
     #--get unique start Times
     uSTs<-data.frame(uniqStartTime=unique(dfr$startTime,));
     #--count/sum individuals/abundance by occupied grid cell
+    #--obs_count will be the number of times id-with-startTime
+    #----is in gridCellID, with classification by success
+    #--avg_number will be the averge abundance associated with
+    #----that id-with-startTime in gridCellID, with classification by success
     qry1<-"select
              gridCellID,successful,startTime,id,
              count(*) as obs_count,
@@ -41,6 +45,10 @@ byGridCell_CalcAbundance<-function(dfrs,
            order by gridCellID,successful,startTime,id;";
     tmp1<-sqldf::sqldf(qry1);
     #--aggregate across id (and startTime, possibly)
+    #--num_indivs will be the number of unique individuals,
+    #----possibly by startTime, in gridCellID,  with classification by success
+    #--avg_abundance will be the total averaged abundance of individuals
+    #----in gridCellID, with classification by success and possibly by startTime
     qry2<-"select
              gridCellID,&&startTimesuccessful,
              count(*) as num_indivs,

@@ -7,7 +7,6 @@
 createMapLayer_ValuesByGridCell(
   dfr,
   vals_col,
-  roms_grid,
   basemap = NULL,
   title = "values",
   alpha = 0.9,
@@ -15,9 +14,9 @@ createMapLayer_ValuesByGridCell(
 )
 }
 \arguments{
-\item{dfr}{- dataframe with values to create map layer by gridCellID}
+\item{dfr}{- \code{sf} dataframe with values to create map layer by gridCellID}
 
-\item{roms_grid}{- shapefile name or layer (sf dataset) with grid polygons by ID}
+\item{vals_col}{- column name of values to plot}
 
 \item{basemap}{- basemap to use (default is NULL)}
 
@@ -26,17 +25,15 @@ createMapLayer_ValuesByGridCell(
 \item{alpha}{- transparency to apply to values layer (default is 0.9)}
 
 \item{plotMap}{- flag to combine layer with basemap and plot (default is FALSE)}
-
-\item{val_col}{- column name of values to plot}
 }
 \value{
-a tmap layer object of the values by grid cell, or NULL if all values are 0.
+a tmap layer object of the values by grid cell.
 }
 \description{
 Function to create a map layer with values by grid cell.
 }
 \details{
-Uses packages \code{wtsGIS}, \code{tmap}. If all values are 0, then NULL is
+Uses package \code{tmap}. If all values are 0, then NULL is
 returned for the map layer object. Note that the color scale used for the values
 is determined by the \code{aes.palette} argument to \code{createBasemap} when the basemap is created.
 }
