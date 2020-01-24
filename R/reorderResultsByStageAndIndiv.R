@@ -10,7 +10,7 @@
 #'@return list of data frames by life stage type,
 #'with each dataframe ordered by start time, id, and time.
 #'
-#'@details Uses readr::read_csv to read csv files.
+#'@details Requires package \code{readr} to read csv files.
 #'
 #'@export
 #'

@@ -8,7 +8,7 @@
 #'
 #' @return an object of class sfc_LINESTRING
 #'
-#' @details Uses packages \code{sf}, \code{wtsGIS}
+#' @details Requires packages \code{sf}, \code{wtsGIS}.
 #'
 #' @export
 #'

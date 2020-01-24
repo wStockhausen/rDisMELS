@@ -49,6 +49,7 @@ list of map layers corresponding to different life stage types
 Function to create map layers from a list of dataframes with point locations.
 }
 \details{
-If basemap is NULL and printMaps is TRUE, a basemap is created
+Requires package \code{tmap}. If basemap is NULL and printMaps is TRUE,
+a basemap is created
 using a call to \code{createBasemap} with the supplied parameters.
 }

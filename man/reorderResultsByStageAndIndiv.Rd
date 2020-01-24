@@ -21,5 +21,5 @@ with each dataframe ordered by start time, id, and time.
 Function to reorder a set of IBM results by life stage and individual.
 }
 \details{
-Uses readr::read_csv to read csv files.
+Requires package \code{readr} to read csv files.
 }

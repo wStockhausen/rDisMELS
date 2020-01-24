@@ -8,7 +8,7 @@
 #'
 #' @return a list of sf dataset objects, each with a column ("geom") of class sfc_LINESTRING
 #'
-#' @details Uses packages \code{sf}, \code{wtsGIS}. For each sf dataset, the linestring geometry
+#' @details Requires packages \code{sf}, \code{wtsGIS}. For each sf dataset, the linestring geometry
 #' is in column "geom". Other columns include id, startTime, age, ageInStage, and successful.
 #'
 #' @export

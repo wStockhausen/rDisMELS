@@ -18,5 +18,5 @@ an object of class sfc_LINESTRING
 Function to create an sf (simple features) column with linestring geometries from DisMELS tracks.
 }
 \details{
-Uses packages \code{sf}, \code{wtsGIS}
+Requires packages \code{sf}, \code{wtsGIS}.
 }

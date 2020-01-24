@@ -16,13 +16,14 @@
 #'
 #' @export
 #'
-byGridCell_GridAlgebra<-function(dfr1,
+byGridCell_GridOpsOnGrids<-function(
+                                 dfr1,
                                  op,
                                  dfr2,
                                  cols=c("unsuccessful_indivs",   "successful_indivs",   "total_indivs",
                                         "unsuccessful_abundance","successful_abundance","total_abundance")){
   if (nrow(dfr1)!=nrow(dfr2)){
-    stop("rDisMELS::byGridCell_AddValues: number f rows must be equal for both dataframes\n")
+    stop("rDisMELS::byGridCell_GridOpsOnGrids: number f rows must be equal for both dataframes\n")
   }
   if (op=="+") for (col in cols) dfr1[[col]]<-dfr1[[col]]+dfr2[[col]];
   if (op=="-") for (col in cols) dfr1[[col]]<-dfr1[[col]]-dfr2[[col]];

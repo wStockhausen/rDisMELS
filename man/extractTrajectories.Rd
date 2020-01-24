@@ -47,6 +47,6 @@ If results is NULL, the user will be prompted to select the
 corresponding file using a file chooser dialog.
 Uses functions \code{wtsUtilities::getCSV} and \code{sqldf::sqldf}.
 
-Uses packages \code{sf}, \code{wtsGIS}. For each sf dataset, the linestring geometry
+Requires packages \code{sf}, \code{wtsGIS}. For each sf dataset, the linestring geometry
 is in column "geom". Other columns include id, startTime, age, ageInStage, and successful.
 }

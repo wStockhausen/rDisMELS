@@ -14,7 +14,8 @@
 #'
 #' @export
 #'
-byGridCell_ScalarOps<-function(dfr1,
+byGridCell_ScalarOpsOnGrids<-function(
+                               dfr1,
                                op="+",
                                scalar=0,
                                cols=c("unsuccessful_indivs",   "successful_indivs",   "total_indivs",

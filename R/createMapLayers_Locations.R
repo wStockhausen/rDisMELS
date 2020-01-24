@@ -17,7 +17,8 @@
 #'
 #' @return list of map layers corresponding to different life stage types
 #'
-#' @details If basemap is NULL and printMaps is TRUE, a basemap is created
+#' @details Requires package \code{tmap}. If basemap is NULL and printMaps is TRUE,
+#' a basemap is created
 #' using a call to \code{createBasemap} with the supplied parameters.
 #'
 #' @export

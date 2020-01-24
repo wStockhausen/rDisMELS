@@ -33,7 +33,7 @@ a tmap layer object of the values by grid cell.
 Function to create a map layer with values by grid cell.
 }
 \details{
-Uses package \code{tmap}. If all values are 0, then NULL is
+Requires package \code{tmap}. If all values are 0, then NULL is
 returned for the map layer object. Note that the color scale used for the values
 is determined by the \code{aes.palette} argument to \code{createBasemap} when the basemap is created.
 }
