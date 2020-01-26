@@ -20,6 +20,8 @@ createMapLayers_Locations(
 )
 }
 \arguments{
+\item{dfrs_points}{- list of dataframes by typeName with point locations}
+
 \item{markers}{- marker type (e.g., "dots", "symmbols")}
 
 \item{shape}{- integer id for shape type}
@@ -39,8 +41,6 @@ createMapLayers_Locations(
 \item{aes.palette}{- basemap list for aes.palette passed to \code{createBasemap}}
 
 \item{printMaps}{- flag to print maps (basemap + each layer)}
-
-\item{dfr_points}{- dataframe with point locations}
 }
 \value{
 list of map layers corresponding to different life stage types

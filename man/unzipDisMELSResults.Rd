@@ -34,4 +34,6 @@ This function assumes zip files are named something like 'basenameYYYYMMDD.csv.z
 that the associated zipped csv file is 'basename.csv'. When the csv file is unzipped
 in the folder specified by dir.out, it will be renamed 'basenameYYYYMMDD.csv'. Note
 that at least one of YYYYs, MMs, and DDs must be a non-null vector.
+
+Uses packages \code{utils}.
 }

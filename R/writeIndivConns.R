@@ -7,7 +7,7 @@
 #'@param folder - folder to write to
 #'@param basename - base name for csv files
 #'
-#'@details none
+#'@details Uses package \code{utils}.
 #'
 #'@export
 #'
@@ -19,6 +19,6 @@ writeIndivConns<-function(dfrICs,
     for (date in dates){
       dfrIC<-dfrICs[dfrICs$date==date,];
       fn<-file.path(folder,paste(basename,date,'.csv',sep=''));
-      write.csv(dfrIC,file=fn,row.names=FALSE);
+      utils::write.csv(dfrIC,file=fn,row.names=FALSE);
     }
 }

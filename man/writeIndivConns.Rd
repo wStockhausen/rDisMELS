@@ -17,5 +17,5 @@ writeIndivConns(dfrICs, folder = getwd(), basename = "IndivConn")
 Function to write dataframe with individual connectivity results to files by date.
 }
 \details{
-none
+Uses package \code{utils}.
 }

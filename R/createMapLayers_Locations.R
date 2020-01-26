@@ -3,7 +3,7 @@
 #'
 #' @description Function to create map layers from a list of dataframes with point locations.
 #'
-#' @param dfr_points - dataframe with point locations
+#' @param dfrs_points - list of dataframes by typeName with point locations
 #' @param markers - marker type (e.g., "dots", "symmbols")
 #' @param shape - integer id for shape type
 #' @param size -marker size

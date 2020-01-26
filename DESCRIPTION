@@ -1,26 +1,21 @@
 Package: rDisMELS
 Type: Package
 Title: Basic functions for dealing with DisMELS IBM model output
-Version: 2020.01.24
-Date: 2020-01-24
+Version: 2020.01.25
+Date: 2020-01-25
 Author: William T. Stockhausen
 Maintainer: William T. Stockhausen <william.stockhausen@noaa.gov>
 Description: Provides a set of basic functions for dealing with DisMELS model output.
 License: MIT + file LICENSE
 Depends: R (>= 3.2.1)
-Requires:
-    ggplot2 (>= 1.0.1),
-    reshape2 (>= 1.4.1),
-    sf (0.8-0),
-    sqldf (>= 0.4-10),
-    tmap (>=2.0),
-    tmaptools (>=2.0),
-    wtsGIS (>= 2020.01.24),
-    wtsUtilities (>= 2019.09.15)
 Imports:
     ggplot2 (>= 3.0),
+    readr,
     reshape2 (>= 1.4.1),
+    sf (>= 0.8-0),
     sqldf (>= 0.4-10),
+    tmap (>= 2.0),
+    tmaptools (>= 2.0),
     wtsGIS (>= 2020.01.24),
     wtsUtilities (>= 2019.09.15)
 RoxygenNote: 7.0.2

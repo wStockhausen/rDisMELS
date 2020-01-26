@@ -17,6 +17,9 @@
 #'in the folder specified by dir.out, it will be renamed 'basenameYYYYMMDD.csv'. Note
 #'that at least one of YYYYs, MMs, and DDs must be a non-null vector.
 #'
+#'Uses packages \code{utils}.
+#'
+#'
 unzipDisMELSResults<-function(YYYYs=NULL,
                               MMs=NULL,
                               DDs=NULL,
@@ -49,7 +52,7 @@ unzipDisMELSResults<-function(YYYYs=NULL,
                 zipf<-file.path(dir.inp,paste(zipf,"csv","zip",sep='.'));
                 if (file.exists(zipf)){
                     cat("Unzipping file     : ",zipf,"\n",sep='');
-                    unzip(zipf,exdir=dir.out)
+                    utils::unzip(zipf,exdir=dir.out)
                     csvi<-file.path(dir.out,paste(basename,'.csv',sep=''))
                     csvf<-file.path(dir.out,paste(basename,id,'.csv',sep=''))
                     file.rename(csvi,csvf);

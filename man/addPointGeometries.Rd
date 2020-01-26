@@ -8,8 +8,6 @@ addPointGeometries(dfrs)
 }
 \arguments{
 \item{dfrs}{- list of dataframes, by typeName, with DisMELS IBM results}
-
-\item{strCRS}{- coordinate reference system: EPSG code or character with proj4string}
 }
 \value{
 a list of sf (dataset) objects, by typeName, each with a column ("geom") of class sfc_POINT
@@ -18,6 +16,6 @@ a list of sf (dataset) objects, by typeName, each with a column ("geom") of clas
 Function to add point geometries to a list dataframes from DisMELS output
 }
 \details{
-Uses packages \code{sf}, \code{wtsGIS}. For each sf dataset, the point geometries
+Uses packages \code{wtsGIS}. For each sf dataset, the point geometries
 are in column "geom". Other columns are copied from the associated input dataframes.
 }
