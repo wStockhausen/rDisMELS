@@ -4,12 +4,18 @@
 \alias{byGridCell_CreateSFDataset}
 \title{Create a map layer with values by grid cell}
 \usage{
-byGridCell_CreateSFDataset(dfr, roms_grid)
+byGridCell_CreateSFDataset(
+  dfr,
+  roms_grid,
+  join_type = c("right join", "left join", "inner join", "full join")
+)
 }
 \arguments{
 \item{dfr}{- dataframe with values to create map layer by gridCellID}
 
 \item{roms_grid}{- shapefile name or layer (sf dataset) with grid polygons by ID}
+
+\item{join_type}{- join type for dfr joined to roms_grid}
 }
 \value{
 an \code{sf} (simple features) dataframe with the values by grid cell.
@@ -18,7 +24,13 @@ an \code{sf} (simple features) dataframe with the values by grid cell.
 Function to create a map layer with values by grid cell.
 }
 \details{
-Uses package \code{wtsGIS}. Cells in the \code{roms_grid} which are not matched
-in the dataframe \code{dfr} will have NAs in the corresponding columns from
-\code{dfr}.
+Uses package \code{wtsGIS}. The results depend on the join type:
+
+ - right join: matched rows in \code{dfr},         all rows in \code{roms_grid}
+
+ - left join:      all rows in \code{dfr},     matched rows in \code{roms_grid}
+
+ - inner join: only rows in \code{dfr} matched to \code{roms_grid}
+
+ - full join:  all rows in \code{dfr} and all rows in \code{roms_grid}
 }

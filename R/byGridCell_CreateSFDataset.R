@@ -5,17 +5,25 @@
 #'
 #' @param dfr - dataframe with values to create map layer by gridCellID
 #' @param roms_grid - shapefile name or layer (sf dataset) with grid polygons by ID
+#' @param join_type - join type for dfr joined to roms_grid
 #'
 #' @return an \code{sf} (simple features) dataframe with the values by grid cell.
 #'
-#' @details Uses package \code{wtsGIS}. Cells in the \code{roms_grid} which are not matched
-#' in the dataframe \code{dfr} will have NAs in the corresponding columns from
-#' \code{dfr}.
+#' @details Uses package \code{wtsGIS}. The results depend on the join type:
+#'
+#'  - right join: matched rows in \code{dfr},         all rows in \code{roms_grid}
+#'
+#'  - left join:      all rows in \code{dfr},     matched rows in \code{roms_grid}
+#'
+#'  - inner join: only rows in \code{dfr} matched to \code{roms_grid}
+#'
+#'  - full join:  all rows in \code{dfr} and all rows in \code{roms_grid}
 #'
 #' @export
 #'
 byGridCell_CreateSFDataset<-function(dfr,
-                                     roms_grid
+                                     roms_grid,
+                                     join_type=c("right join","left join","inner join","full join")
                                      ){
   if (is.character(roms_grid)){
     #--create ROMS polygon grid sf dataset
@@ -28,7 +36,8 @@ byGridCell_CreateSFDataset<-function(dfr,
                                           roms_grid,
                                           dataID="gridCellID",
                                           geomsID="ID",
-                                          duplicateGeoms=TRUE);
+                                          sfJoinType=join_type[1],
+                                          spDuplicateGeoms=TRUE);
   # #--drop cells without values
   # if (dropEmptyCells){
   #   idx<-!is.na(dfr_sf$xi);
