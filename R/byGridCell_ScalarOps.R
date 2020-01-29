@@ -14,7 +14,7 @@
 #'
 #' @export
 #'
-byGridCell_ScalarOpsOnGrids<-function(
+byGridCell_ScalarOps<-function(
                                dfr1,
                                op="+",
                                scalar=0,

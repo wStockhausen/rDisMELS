@@ -9,7 +9,7 @@ byGridCell_CalcAbundance(dfrs, roms_grid_IDs, byStartTime = FALSE)
 \arguments{
 \item{dfrs}{- list of dataframes, by typeName, with DisMELS IBM results}
 
-\item{roms_grid_IDs}{- vector (or dataframe with column named roms_grid_ID) with all ids for the roms grid}
+\item{roms_grid_IDs}{- vector (or dataframe with column named roms_grid_ID) with all ids of interest from the roms grid}
 
 \item{byStartTime}{- flag to average by startTime}
 }
@@ -24,4 +24,7 @@ Uses packages \code{sqldf}, \code{reshape2}.The number of unique individuals
 that occupied a grid cell is reported in output dataframe columns ?_indivs. The abundance (averaged
 over time for each individual, then summed over unique individuals) is reported in
 output dataframe columns ??_abundance.
+
+Calculations can be limited to a subset of grid cells by providing only their IDs
+(as opposed to all IDs) in \code{roms_grid_IDs}.
 }

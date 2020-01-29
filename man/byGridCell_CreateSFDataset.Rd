@@ -12,12 +12,13 @@ byGridCell_CreateSFDataset(dfr, roms_grid)
 \item{roms_grid}{- shapefile name or layer (sf dataset) with grid polygons by ID}
 }
 \value{
-an \code{sf} (simple features) dataframe with the values by grid cell, or NULL if all values are 0.
+an \code{sf} (simple features) dataframe with the values by grid cell.
 }
 \description{
 Function to create a map layer with values by grid cell.
 }
 \details{
-Uses package \code{wtsGIS}. If all values are 0, then NULL is
-returned for the sf dataframe object.
+Uses package \code{wtsGIS}. Cells in the \code{roms_grid} which are not matched
+in the dataframe \code{dfr} will have NAs in the corresponding columns from
+\code{dfr}.
 }

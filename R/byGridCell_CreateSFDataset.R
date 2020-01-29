@@ -6,10 +6,11 @@
 #' @param dfr - dataframe with values to create map layer by gridCellID
 #' @param roms_grid - shapefile name or layer (sf dataset) with grid polygons by ID
 #'
-#' @return an \code{sf} (simple features) dataframe with the values by grid cell, or NULL if all values are 0.
+#' @return an \code{sf} (simple features) dataframe with the values by grid cell.
 #'
-#' @details Uses package \code{wtsGIS}. If all values are 0, then NULL is
-#' returned for the sf dataframe object.
+#' @details Uses package \code{wtsGIS}. Cells in the \code{roms_grid} which are not matched
+#' in the dataframe \code{dfr} will have NAs in the corresponding columns from
+#' \code{dfr}.
 #'
 #' @export
 #'
@@ -27,10 +28,14 @@ byGridCell_CreateSFDataset<-function(dfr,
                                           roms_grid,
                                           dataID="gridCellID",
                                           geomsID="ID",
-                                          duplicateGeoms=FALSE);
-  #--drop cells without values
-  idx<-!is.na(dfr_sf$xi);
-  if (any(idx)) dfr_sf<-dfr_sf[idx,,drop=FALSE];#keep geometry column
+                                          duplicateGeoms=TRUE);
+  # #--drop cells without values
+  # if (dropEmptyCells){
+  #   idx<-!is.na(dfr_sf$xi);
+  #   if (any(idx)) {
+  #     dfr_sf<-dfr_sf[idx,,drop=FALSE];#keep geometry column
+  #   } else return(NULL);#--no non-empty cells
+  # }
   return(dfr_sf);
 }
 

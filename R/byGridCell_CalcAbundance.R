@@ -4,7 +4,7 @@
 #' @description Function to calculate abundance of individuals by grid cell.
 #'
 #' @param dfrs - list of dataframes, by typeName, with DisMELS IBM results
-#' @param roms_grid_IDs - vector (or dataframe with column named roms_grid_ID) with all ids for the roms grid
+#' @param roms_grid_IDs - vector (or dataframe with column named roms_grid_ID) with all ids of interest from the roms grid
 #' @param byStartTime - flag to average by startTime
 #'
 #' @return a list of dataframes, by life stage, with average abundance by grid cell
@@ -13,6 +13,10 @@
 #' that occupied a grid cell is reported in output dataframe columns ?_indivs. The abundance (averaged
 #' over time for each individual, then summed over unique individuals) is reported in
 #' output dataframe columns ??_abundance.
+#'
+#' Calculations can be limited to a subset of grid cells by providing only their IDs
+#' (as opposed to all IDs) in \code{roms_grid_IDs}.
+#'
 #'
 #' @export
 #'
@@ -46,9 +50,9 @@ byGridCell_CalcAbundance<-function(dfrs,
     tmp1<-sqldf::sqldf(qry1);
     #--aggregate across id (and startTime, possibly)
     #--num_indivs will be the number of unique individuals,
-    #----possibly by startTime, in gridCellID,  with classification by success
-    #--avg_abundance will be the total averaged abundance of individuals
-    #----in gridCellID, with classification by success and possibly by startTime
+    #----possibly by startTime, in gridCellID,  with classification by success.
+    #--avg_abundance will be the total averaged abundance of individuals,
+    #----possibly by startTime, in gridCellID, with classification by success
     qry2<-"select
              gridCellID,&&startTimesuccessful,
              count(*) as num_indivs,
@@ -99,7 +103,11 @@ byGridCell_CalcAbundance<-function(dfrs,
     rm(tmp3a,tmp3b);
 
     #--expand to all grid cells/startTimes
-    uCs<-sqldf::sqldf("select roms_grid_ID, uniqStartTime from romsInfo,uSTs;");
+    if (byStartTime){
+      uCs<-sqldf::sqldf("select roms_grid_ID, uniqStartTime from romsInfo,uSTs;");
+    } else {
+      uCs<-sqldf::sqldf("select roms_grid_ID  from romsInfo;");
+    }
     qry4<-"select
              roms_grid_ID&&startTime,
              unsuccessful_indivs,   successful_indivs,   total_indivs,
