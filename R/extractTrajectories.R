@@ -30,7 +30,7 @@ extractTrajectories<-function(dfrs,
                      age=numeric(nIDs),
                      ageInStage=numeric(nIDs),
                      successful=logical(nIDs),
-                     geom=sf::st_sfc(sf::st_multilinestring(rep(list(matrix(numeric(0), 1, 3)),times=nIDs), dim = "XYZ")),
+                     geom=sf::st_sfc(sf::st_multilinestring(rep(list(matrix(0, 1, 3)),times=nIDs), dim = "XYZ")),
                      row.names=FALSE,
                      crs=strCRS
                      );
