@@ -1,40 +1,33 @@
 #'
-#' @title Classify individuals by success/failure
+#' @title Extract IDs for successful individuals
 #'
-#' @description Function to classify individuals by success/failure.
+#' @description Function to extract IDs for successful individuals.
 #'
-#' @param dfrs - list of dataframes by typeName
-#' @param index - dataframe returned from \code{extractIndexForSuccessfulIndivs}
-#' @param typeName - life stage typeName considered successful (an alternative to providing \code{index})
+#' @param dfr - a dataframe or tibble with the "successful" life stage
+#' @param typeName - name of life stage defining success
 #'
-#' @return the list of dataframes by typeName, with added column "succcess"
-#' (TRUE/FALSE) indicating whether individual is considered a success.
+#' @return a dataframe or tibble with origID, startTime, and successful for all individuals.
 #'
-#' @details Successful individuals are identified using \code{extractIndexForSuccessfulIndivs(dfrs,typeName)} if
-#' \code{index} is null.
+#' @details The
 #'
 #' @export
 #'
-classifyIndivsBySuccess<-function(dfrs,
-                                  index=NULL,
+classifyIndivsBySuccess<-function(dfrStart,
+                                  dfrEnd,
                                   typeName){
-  #--get dataframe indicating successful individuals
-  idxSuccessfulIndivs<-index;
-  if (is.null(idxSuccessfulIndivs))
-    idxSuccessfulIndivs<-extractIndexForSuccessfulIndivs(dfrs,typeName);
-
-  #--classify individuals as successful or unsuccessful
-  typeNames<-names(dfrs);
-  for (typeName in typeNames){
-    cat("\n--Identifying successful individuals for",typeName,"\n");
-    dfr<-dfrs[[typeName]][,c("origID","startTime")];
-    dfr$successful<-FALSE;
-    for (r in 1:nrow(idxSuccessfulIndivs)){
-      idx<-(dfr$origID==idxSuccessfulIndivs$origID[r])&
-           (dfr$startTime==idxSuccessfulIndivs$startTime[r]);
-      if (any(idx)) dfr$successful[which(idx)]<-TRUE;
-    }
-    dfrs[[typeName]]$successful<-dfr$successful;
-  }
-  return(dfrs);
+  uniqStart=unique(dfrStart[,c("origID","startTime")]);
+  idx<-(dfrEnd$ageInStage==0)&(dfrEnd$typeName==typeName);
+  uniqEnd<-dfrEnd[idx,c("origID","startTime")];
+  qry="select
+          s.startTime as startTime,
+          s.origID as origID,
+          e.origID as test
+        from uniqStart as s left join uniqEnd as e
+        on s.origID = e.origID and s.startTime = e.startTime
+        order by s.startTime, s.origID;";
+  dfrp=sqldf::sqldf(qry);
+  dfrp$successful = FALSE;
+  dfrp$successful[!is.na(dfrp$test)] = TRUE;
+  dfrp = dfrp[,c("startTime","origID","successful")];
+  return(dfrp);
 }

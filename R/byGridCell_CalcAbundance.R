@@ -25,9 +25,10 @@ byGridCell_CalcAbundance<-function(dfrs,
                                    byStartTime=FALSE){
   typeNames<-names(dfrs);
   romsInfo<-roms_grid_IDs;
+  if (is.factor(romsInfo)) romsInfo<-as.character(romsInfo);
   if (is.vector(romsInfo)) {
     #--convert to dtaframe
-    romsInfo<-data.frame(roms_grid_ID=roms_grid_IDs,stringsAsFactors=FALSE);
+    romsInfo<-data.frame(roms_grid_ID=romsInfo,stringsAsFactors=FALSE);
   }
   lst<-list();
   for (typeName in typeNames){

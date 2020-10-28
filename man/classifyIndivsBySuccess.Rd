@@ -2,25 +2,21 @@
 % Please edit documentation in R/classifyIndivsBySuccess.R
 \name{classifyIndivsBySuccess}
 \alias{classifyIndivsBySuccess}
-\title{Classify individuals by success/failure}
+\title{Extract IDs for successful individuals}
 \usage{
-classifyIndivsBySuccess(dfrs, index = NULL, typeName)
+classifyIndivsBySuccess(dfrStart, dfrEnd, typeName)
 }
 \arguments{
-\item{dfrs}{- list of dataframes by typeName}
+\item{typeName}{- name of life stage defining success}
 
-\item{index}{- dataframe returned from \code{extractIndexForSuccessfulIndivs}}
-
-\item{typeName}{- life stage typeName considered successful (an alternative to providing \code{index})}
+\item{dfr}{- a dataframe or tibble with the "successful" life stage}
 }
 \value{
-the list of dataframes by typeName, with added column "succcess"
-(TRUE/FALSE) indicating whether individual is considered a success.
+a dataframe or tibble with origID, startTime, and successful for all individuals.
 }
 \description{
-Function to classify individuals by success/failure.
+Function to extract IDs for successful individuals.
 }
 \details{
-Successful individuals are identified using \code{extractIndexForSuccessfulIndivs(dfrs,typeName)} if
-\code{index} is null.
+The
 }

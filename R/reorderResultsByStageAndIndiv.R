@@ -18,8 +18,9 @@ reorderResultsByStageAndIndiv<-function(resFolder,
                                         resFilePrefix,
                                         lifeStageInfo){
   info<-lifeStageInfo;
-  typeNames<-factor(info$lifeStageTypes$typeName,
-                    levels=info$lifeStageTypes$typeName);#typeNames as factor levels
+  typeNames<-unique(info$lifeStageTypes$typeName);
+  typeNames<-factor(typeNames,
+                    levels=typeNames);#typeNames as factor levels
 
   #read model results by java class and sort by startTime, id and time within a class
   resdr<-resFolder;
@@ -29,31 +30,39 @@ reorderResultsByStageAndIndiv<-function(resFolder,
   for  (cls in names(info$classInfo)){
     cat("\tclass name:",cls,"\n");
     csv<-file.path(resdr,paste0(resFilePrefix,cls,".csv"));
-    tmp<-readr::read_csv(csv,skip=1);
-    qry<-"select * from tmp
-          order by startTime,id,time;"
-    tmps<-sqldf::sqldf(qry);
-    tmps$typeName<-factor(tmps$typeName,levels=typeNames);#change typeName from character to factor
-    dfrs[[cls]]<-tmps;
+    if (file.exists(csv)){
+      tmp<-readr::read_csv(csv,skip=1);
+      qry<-"select * from tmp
+            order by startTime,id,time;"
+      tmps<-sqldf::sqldf(qry);
+      tmps$typeName<-factor(tmps$typeName,levels=typeNames);#change typeName from character to factor
+      dfrs[[cls]]<-tmps;
+      rm(tmp,tmps);
+    }
   }
-  rm(csv,tmp,qry,tmps);
+  rm(csv,qry);
 
   #--reorder model results into list of dataframes by typeName, not java class
   dfrts<-list();
   for (typeName in typeNames){
     dfrt<-NULL;
     for (cls in names(info$classInfo)){
-      idx<-dfrs[[cls]]$typeName==typeName;
-      if (any(idx)){
-        if (sum(idx)==length(dfrs[[cls]]$typeName)) {
-          tmp<-dfrs[[cls]];
-        } else {
-          tmp<-dfrs[[cls]][idx,];
+      if (!is.null(dfrs[[cls]])){
+        idx<-dfrs[[cls]]$typeName==typeName;
+        if (any(idx)){
+          if (sum(idx)==length(dfrs[[cls]]$typeName)) {
+            tmp<-dfrs[[cls]];
+          } else {
+            tmp<-dfrs[[cls]][idx,];
+          }
+          dfrt<-rbind(dfrt,tmp);
         }
-        dfrt<-rbind(dfrt,tmp);
       }
+    }#--cls
+    if (!is.null(dfrt)) {
+      dfrts[[typeName]]<-dfrt;
+      rm(dfrt);
     }
-    dfrts[[typeName]]<-dfrt;
   }
 
   return(dfrts);

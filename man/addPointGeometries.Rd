@@ -4,18 +4,23 @@
 \alias{addPointGeometries}
 \title{Add point geometries to a list dataframes from DisMELS output}
 \usage{
-addPointGeometries(dfrs)
+addPointGeometries(dfrs, xCol = "horizPos1", yCol = "horizPos2")
 }
 \arguments{
-\item{dfrs}{- list of dataframes, by typeName, with DisMELS IBM results}
+\item{dfrs}{- list of dataframes, by typeName, or a single dataframe, with DisMELS IBM results}
+
+\item{xCol}{- name of column with x-axis location}
+
+\item{yCol}{- name of column with y-axis location}
 }
 \value{
-a list of sf (dataset) objects, by typeName, each with a column ("geom") of class sfc_POINT
+a list of sf (dataset) objects, by typeName, each with a column ("geom") of class sfc_POINT,
+or a single sf dataset with a column ("geom") of class sfc_POINT.
 }
 \description{
 Function to add point geometries to a list dataframes from DisMELS output
 }
 \details{
-Uses packages \code{wtsGIS}. For each sf dataset, the point geometries
+Uses package \code{wtsGIS}. For each sf dataset, the point geometries
 are in column "geom". Other columns are copied from the associated input dataframes.
 }
