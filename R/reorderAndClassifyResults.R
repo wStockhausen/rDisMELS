@@ -3,10 +3,12 @@
 #'
 #'@description Function to reorder a set of IBM results by life stage and individual.
 #'
-#'@param resFolder - path to folder with results
-#'@param resFilePrefix - prefix for file names (default = "Results")
-#'@param lifeStageInfo - lhsInfo (list) object with life stage info
-#'@param dfrSuccess - dataframe with individuals classified by success
+#' @param resFolder - path to folder with results
+#' @param resFilePrefix - prefix for file names (default = "Results")
+#' @param lifeStageInfo - lhsInfo (list) object with life stage info
+#' @param dfrSuccess - dataframe with individuals classified by success
+#' @param crs - coordinate reference system (object that can be converted to an \code{sf::crs} object; default is WGS84)
+#' @param wrapDateline - flag (T/F) to use 0 to 360 rather than -180 to 180 range for longitudes
 #'
 #'@return list of \pkg{sf} dataframes by life stage type,
 #'with each dataframe ordered by start time, origID, and time. An
@@ -16,15 +18,21 @@
 #'
 #'@details Requires package \pkg{readr} to read csv files.
 #'
+#' @note If locations are in projected coordinates, then \code{wrapDateline}
+#' should be set to FALSE (the default is TRUE).
+#'
 #'@importFrom readr read_csv
 #'@importFrom sqldf sqldf
+#'@importFrom wtsGIS get_crs
 #'
 #'@export
 #'
 reorderAndClassifyResults<-function(resFolder,
                                     resFilePrefix,
                                     lifeStageInfo,
-                                    dfrSuccess=NULL){
+                                    dfrSuccess=NULL,
+                                    crs=wtsGIS::get_crs(4326),
+                                    wrapDateline=TRUE){
   info<-lifeStageInfo;
   typeNames<-unique(info$lifeStageTypes$typeName);
   typeNames<-factor(typeNames,
@@ -57,7 +65,7 @@ reorderAndClassifyResults<-function(resFolder,
         idx<-tmps$typeName==typeName;
         if (sum(idx)>0){
           cat("\t\ttypeName:",typeName,"\n");
-          sf_points = addPointGeometries(tmps[idx,]);
+          sf_points = addPointGeometries(tmps[idx,],crs=crs,wrapDateline=wrapDateline);
           dfrs[[typeName]] = sf_points;
           rm(sf_points);
         }

@@ -4,7 +4,13 @@
 \alias{addPointGeometries}
 \title{Add point geometries to a list dataframes from DisMELS output}
 \usage{
-addPointGeometries(dfrs, xCol = "horizPos1", yCol = "horizPos2")
+addPointGeometries(
+  dfrs,
+  xCol = "horizPos1",
+  yCol = "horizPos2",
+  crs = wtsGIS::get_crs(4326),
+  wrapDateline = TRUE
+)
 }
 \arguments{
 \item{dfrs}{- list of dataframes, by typeName, or a single dataframe, with DisMELS IBM results}
@@ -12,6 +18,10 @@ addPointGeometries(dfrs, xCol = "horizPos1", yCol = "horizPos2")
 \item{xCol}{- name of column with x-axis location}
 
 \item{yCol}{- name of column with y-axis location}
+
+\item{crs}{- coordinate reference system (object that can be converted to an \code{sf::crs} object; default is WGS84)}
+
+\item{wrapDateline}{- flag (T/F) to use 0 to 360 rather than -180 to 180 range for longitudes}
 }
 \value{
 a list of sf (dataset) objects, by typeName, each with a column ("geom") of class sfc_POINT,

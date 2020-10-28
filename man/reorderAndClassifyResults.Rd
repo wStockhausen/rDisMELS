@@ -8,7 +8,9 @@ reorderAndClassifyResults(
   resFolder,
   resFilePrefix,
   lifeStageInfo,
-  dfrSuccess = NULL
+  dfrSuccess = NULL,
+  crs = wtsGIS::get_crs(4326),
+  wrapDateline = TRUE
 )
 }
 \arguments{
@@ -19,6 +21,10 @@ reorderAndClassifyResults(
 \item{lifeStageInfo}{- lhsInfo (list) object with life stage info}
 
 \item{dfrSuccess}{- dataframe with individuals classified by success}
+
+\item{crs}{- coordinate reference system (object that can be converted to an \code{sf::crs} object; default is WGS84)}
+
+\item{wrapDateline}{- flag (T/F) to use 0 to 360 rather than -180 to 180 range for longitudes}
 }
 \value{
 list of \pkg{sf} dataframes by life stage type,
@@ -32,4 +38,8 @@ Function to reorder a set of IBM results by life stage and individual.
 }
 \details{
 Requires package \pkg{readr} to read csv files.
+}
+\note{
+If locations are in projected coordinates, then \code{wrapDateline}
+should be set to FALSE (the default is TRUE).
 }
