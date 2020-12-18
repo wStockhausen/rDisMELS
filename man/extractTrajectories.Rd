@@ -2,9 +2,9 @@
 % Please edit documentation in R/extractTrajectories.R
 \name{extractTrajectories}
 \alias{extractTrajectories}
-\title{Extract trajectories from DisMELS output as a list of sf (simple features) datasets (dataframes) with linestring geometries}
+\title{Extract trajectories from DisMELS output as a list of \pkg{sf} dataframes with linestring geometries}
 \usage{
-extractTrajectories(dfrs, strCRS = wtsGIS::getCRS("WGS84"))
+extractTrajectories(dfrs, strCRS = wtsGIS::get_crs("WGS84"))
 }
 \arguments{
 \item{dfrs}{- list of dataframes, by typeName, with DisMELS IBM results}
@@ -12,12 +12,12 @@ extractTrajectories(dfrs, strCRS = wtsGIS::getCRS("WGS84"))
 \item{strCRS}{- coordinate reference system: EPSG code or character with proj4string}
 }
 \value{
-a list of sf dataset objects, each with a column ("geom") of class sfc_LINESTRING
+a list of \pkg{sf} dataset objects, each with a column ("geom") of class sfc_LINESTRING
 }
 \description{
-Function to extract trajectories from DisMELS output as a list of sf (simple features) datasets (dataframes) with linestring geometries.
+Function to extract trajectories from DisMELS output as a list of \pkg{sf} dataframes with linestring geometries.
 }
 \details{
-Requires packages \code{sf}, \code{wtsGIS}. For each sf dataset, the linestring geometry
+Requires packages \code{sf}, \code{wtsGIS}. For each \pkg{sf} dataframe, the linestring geometry
 is in column "geom". Other columns include id, startTime, age, ageInStage, and successful.
 }

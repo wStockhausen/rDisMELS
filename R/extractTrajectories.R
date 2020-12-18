@@ -1,20 +1,22 @@
 #'
-#' @title Extract trajectories from DisMELS output as a list of sf (simple features) datasets (dataframes) with linestring geometries
+#' @title Extract trajectories from DisMELS output as a list of \pkg{sf} dataframes with linestring geometries
 #'
-#' @description Function to extract trajectories from DisMELS output as a list of sf (simple features) datasets (dataframes) with linestring geometries.
+#' @description Function to extract trajectories from DisMELS output as a list of \pkg{sf} dataframes with linestring geometries.
 #'
 #' @param dfrs - list of dataframes, by typeName, with DisMELS IBM results
 #' @param strCRS - coordinate reference system: EPSG code or character with proj4string
 #'
-#' @return a list of sf dataset objects, each with a column ("geom") of class sfc_LINESTRING
+#' @return a list of \pkg{sf} dataset objects, each with a column ("geom") of class sfc_LINESTRING
 #'
-#' @details Requires packages \code{sf}, \code{wtsGIS}. For each sf dataset, the linestring geometry
+#' @details Requires packages \code{sf}, \code{wtsGIS}. For each \pkg{sf} dataframe, the linestring geometry
 #' is in column "geom". Other columns include id, startTime, age, ageInStage, and successful.
 #'
+#' @import sf
+#' @import wtsGIS
 #' @export
 #'
 extractTrajectories<-function(dfrs,
-                              strCRS=wtsGIS::getCRS("WGS84")){
+                              strCRS=wtsGIS::get_crs("WGS84")){
   typeNames<-names(dfrs);
   dfrs_lines<-list();
   for (typeName in typeNames){

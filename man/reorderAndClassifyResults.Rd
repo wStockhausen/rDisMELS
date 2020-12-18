@@ -10,7 +10,8 @@ reorderAndClassifyResults(
   lifeStageInfo,
   dfrSuccess = NULL,
   crs = wtsGIS::get_crs(4326),
-  wrapDateline = TRUE
+  wrapDateline = TRUE,
+  zipFiles = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ reorderAndClassifyResults(
 \item{crs}{- coordinate reference system (object that can be converted to an \code{sf::crs} object; default is WGS84)}
 
 \item{wrapDateline}{- flag (T/F) to use 0 to 360 rather than -180 to 180 range for longitudes}
+
+\item{zipFiles}{- flag to zip DisMELS csv files}
 }
 \value{
 list of \pkg{sf} dataframes by life stage type,

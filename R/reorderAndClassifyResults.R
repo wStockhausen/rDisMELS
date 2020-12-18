@@ -9,6 +9,7 @@
 #' @param dfrSuccess - dataframe with individuals classified by success
 #' @param crs - coordinate reference system (object that can be converted to an \code{sf::crs} object; default is WGS84)
 #' @param wrapDateline - flag (T/F) to use 0 to 360 rather than -180 to 180 range for longitudes
+#' @param zipFiles - flag to zip DisMELS csv files
 #'
 #'@return list of \pkg{sf} dataframes by life stage type,
 #'with each dataframe ordered by start time, origID, and time. An
@@ -23,6 +24,7 @@
 #'
 #'@importFrom readr read_csv
 #'@importFrom sqldf sqldf
+#'@importFrom utils zip
 #'@importFrom wtsGIS get_crs
 #'
 #'@export
@@ -32,7 +34,8 @@ reorderAndClassifyResults<-function(resFolder,
                                     lifeStageInfo,
                                     dfrSuccess=NULL,
                                     crs=wtsGIS::get_crs(4326),
-                                    wrapDateline=TRUE){
+                                    wrapDateline=TRUE,
+                                    zipFiles=FALSE){
   info<-lifeStageInfo;
   typeNames<-unique(info$lifeStageTypes$typeName);
   typeNames<-factor(typeNames,
@@ -71,6 +74,7 @@ reorderAndClassifyResults<-function(resFolder,
         }
       }
       rm(tmps);
+      if (zipFiles) {zip(zipfile=paste0(csv,".zip"),files=csv);}
     }
   }#--cls
   rm(csv,qry);

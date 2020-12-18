@@ -1,14 +1,14 @@
 #'
-#' @title Create map layers from a list of dataframes with point locations
+#' @title Create \pkg{tmap}-style layers from a list of dataframes with point locations
 #'
-#' @description Function to create map layers from a list of dataframes with point locations.
+#' @description Function to create \pkg{tmap}-style layers from a list of dataframes with point locations.
 #'
 #' @param dfrs_points - list of dataframes by typeName with point locations
 #' @param markers - marker type (e.g., "dots", "symmbols")
 #' @param shape - integer id for shape type
 #' @param size -marker size
 #' @param alpha -marker transparency
-#' @param basemap - basemap on which to plot locations (if printMaps is TRUE)
+#' @param basemap - \pkg{tmap}-style basemap on which to plot locations (if printMaps is TRUE)
 #' @param colors.background - basemap background color passed to \code{createBasemap}
 #' @param colors.land -basemap land color passed to \code{createBasemap}
 #' @param colors.bathym - basemap color for bathymetric contours, passed to \code{createBasemap}
@@ -17,34 +17,36 @@
 #'
 #' @return list of map layers corresponding to different life stage types
 #'
-#' @details Requires package \code{tmap}. If basemap is NULL and printMaps is TRUE,
+#' @details Requires package \pkg{tmap}. If basemap is NULL and printMaps is TRUE,
 #' a basemap is created
-#' using a call to \code{createBasemap} with the supplied parameters.
+#' using a call to \code{tmap_CreateBasemap} with the supplied parameters.
+#'
+#' @import tmap
 #'
 #' @export
 #'
-createMapLayers_Locations<-function(
-                            dfrs_points,
-                            markers=c("dots","symbols"),
-                            shape=1,
-                            size=0.2,
-                            alpha=0.6,
-                            basemap=NULL,
-                            colors.background="grey85",
-                            colors.land="grey45",
-                            colors.bathym="grey65",
-                            aes.palette=list(cat=c("blue","red"),
-                                             div=c("blue","red"),
-                                             seq=c("blue","red")),
-                            printMaps=FALSE){
+tmap_CreateLayers_Locations<-function(
+                              dfrs_points,
+                              markers=c("dots","symbols"),
+                              shape=1,
+                              size=0.2,
+                              alpha=0.6,
+                              basemap=NULL,
+                              colors.background="grey85",
+                              colors.land="grey45",
+                              colors.bathym="grey65",
+                              aes.palette=list(cat=c("blue","red"),
+                                               div=c("blue","red"),
+                                               seq=c("blue","red")),
+                              printMaps=FALSE){
   typeNames<-names(dfrs_points);
 
   #create basemap
   if (printMaps & is.null(basemap)){
-    basemap <- createBasemap(colors.background=colors.background,
-                             colors.bathym=colors.bathym,
-                             colors.land=colors.land,
-                             aes.palette=aes.palette)
+    basemap <- tmap_CreateBasemap(colors.background=colors.background,
+                                  colors.bathym=colors.bathym,
+                                  colors.land=colors.land,
+                                  aes.palette=aes.palette)
   }
 
   #make point-based map layers
