@@ -17,7 +17,7 @@
 #' successful (TRUE) or unsuccessful (FALSE) individuals. The
 #''geom' column contains the point location of each observation.
 #'
-#'@details Requires package \pkg{readr} to read csv files.
+#' @details Requires package \pkg{readr} to read csv files.
 #'
 #' @note If locations are in projected coordinates, then \code{wrapDateline}
 #' should be set to FALSE (the default is TRUE).
@@ -74,7 +74,7 @@ reorderAndClassifyResults<-function(resFolder,
         }
       }
       rm(tmps);
-      if (zipFiles) {zip(zipfile=paste0(csv,".zip"),files=csv);}
+      if (zipFiles) {utils::zip(zipfile=paste0(csv,".zip"),files=csv,flags="-jr9X");}
     }
   }#--cls
   rm(csv,qry);

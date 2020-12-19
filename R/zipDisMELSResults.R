@@ -6,10 +6,13 @@
 #' @param resFolder - path to folder with results
 #' @param resFilePrefix - prefix for file names (default = "Results")
 #' @param lifeStageInfo - lhsInfo (list) object with life stage info
+#' @param flags - string of flags passed to \code{\link[utils]{zip}} (default="-jr9X")
 #'
 #' @return none.
 #'
-#' @details Identified DisMELS files are zipped. Originals are not deleted.
+#' @details Identified DisMELS files are zipped. Originals are not deleted. Using the
+#' default \code{flags}, the file path information is stripped from the zipped file.
+#' Use "-r9X" to keep the path information.
 #'
 #' @importFrom utils zip
 #'
@@ -17,7 +20,8 @@
 #'
 zipDisMELSResults<-function(resFolder,
                             resFilePrefix,
-                            lifeStageInfo){
+                            lifeStageInfo,
+                            flags="-jr9X"){
   info<-lifeStageInfo;
   typeNames<-unique(info$lifeStageTypes$typeName);
   typeNames<-factor(typeNames,
@@ -33,7 +37,7 @@ zipDisMELSResults<-function(resFolder,
     csv<-file.path(resdr,paste0(resFilePrefix,cls,".csv"));
     cat("\tzipping file '",csv,"'\n",sep="");
     if (file.exists(csv)){
-      zip(zipfile=paste0(csv,".zip"),files=csv);
+      utils::zip(zipfile=paste0(csv,".zip"),files=csv,flags=flags);
     }
   }
 }

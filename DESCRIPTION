@@ -1,8 +1,8 @@
 Package: rDisMELS
 Type: Package
 Title: Basic functions for dealing with DisMELS IBM model output
-Version: 2020.12.17
-Date: 2020-12-17
+Version: 2020.12.18
+Date: 2020-12-18
 Author: William T. Stockhausen
 Maintainer: William T. Stockhausen <william.stockhausen@noaa.gov>
 Description: Provides a set of basic functions for dealing with DisMELS model output.

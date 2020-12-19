@@ -4,7 +4,7 @@
 \alias{zipDisMELSResults}
 \title{Reorder a set of IBM results by life stage and individual}
 \usage{
-zipDisMELSResults(resFolder, resFilePrefix, lifeStageInfo)
+zipDisMELSResults(resFolder, resFilePrefix, lifeStageInfo, flags = "-jr9X")
 }
 \arguments{
 \item{resFolder}{- path to folder with results}
@@ -12,6 +12,8 @@ zipDisMELSResults(resFolder, resFilePrefix, lifeStageInfo)
 \item{resFilePrefix}{- prefix for file names (default = "Results")}
 
 \item{lifeStageInfo}{- lhsInfo (list) object with life stage info}
+
+\item{flags}{- string of flags passed to \code{\link[utils]{zip}} (default="-jr9X")}
 }
 \value{
 none.
@@ -20,5 +22,7 @@ none.
 Function to reorder a set of IBM results by life stage and individual.
 }
 \details{
-Identified DisMELS files are zipped. Originals are not deleted.
+Identified DisMELS files are zipped. Originals are not deleted. Using the
+default \code{flags}, the file path information is stripped from the zipped file.
+Use "-r9X" to keep the path information.
 }
