@@ -1,14 +1,15 @@
 Package: rDisMELS
 Type: Package
 Title: Basic functions for dealing with DisMELS IBM model output
-Version: 2020.12.18
-Date: 2020-12-18
+Version: 2020.12.28
+Date: 2020-12-28
 Author: William T. Stockhausen
 Maintainer: William T. Stockhausen <william.stockhausen@noaa.gov>
-Description: Provides a set of basic functions for dealing with DisMELS model output.
+Description: Provides a set of basic functions for dealing with DisMELS IBM model output.
 License: MIT + file LICENSE
 Depends: R (>= 3.2.1)
 Imports:
+    dplyr,
     ggplot2 (>= 3.0),
     grid,
     magrittr,

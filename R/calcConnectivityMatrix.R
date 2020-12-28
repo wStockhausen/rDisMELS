@@ -98,7 +98,7 @@ calcConnectivityMatrix<-function(sfs_points,
     #--plot ending locations by start zone
     cat("\tprinting end locations\n")
     sf_tmp = sf_ends %>% sf::st_transform(crs) %>% sf::st_shift_longitude();
-    sf_tmp %<>% dplyr::inner_join(tbl_starts[,c("origID","startTime","zone")],
+    sf_tmp %<>% dplyr::inner_join(tbl_starts[,c("id","origID","startTime","zone")],
                                   by=c("origID"="origID","startTime"="startTime"),
                                   suffix=c("_end","_start"));
     #----determine how to group start zones
@@ -122,7 +122,7 @@ calcConnectivityMatrix<-function(sfs_points,
   tbl_ends = sf_ends %>% sf::st_drop_geometry();
 
   qry1 = "select
-           s.startTime,s.origID,
+           s.startTime,s.origID,e.id,
            s.zone as startZone,s.number as startNum,
            e.zone as endZone,  e.number as endNum
         from tbl_starts as s left join tbl_ends as e
@@ -169,7 +169,6 @@ calcConnectivityMatrix<-function(sfs_points,
   t4$endNum   = endStageFac * t4$endNum;
   t4 %<>% mutate(connFrac = endNum/startNum);
   #wtsUtilities::saveObj(t4,file.path(resFolder,paste0("step3_ConnectivityDataframe.RData")));
-  t4 %<>% mutate(year=y,month=mon,.before=1);
 
   return(list(step3_StartEndZones=t1,step3_ConnectivityDataframe=t4,pStartMap=pS,pEndMap=pE));
 }
