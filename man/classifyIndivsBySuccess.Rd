@@ -4,12 +4,14 @@
 \alias{classifyIndivsBySuccess}
 \title{Extract IDs for successful individuals}
 \usage{
-classifyIndivsBySuccess(dfrStart, dfrEnd, typeName)
+classifyIndivsBySuccess(dfrStart, dfrEnd, typeNames)
 }
 \arguments{
-\item{typeName}{- name of life stage defining success}
+\item{dfrStart}{- a dataframe or tibble that includes individuals in the initial life stage}
 
-\item{dfr}{- a dataframe or tibble with the "successful" life stage}
+\item{dfrEnd}{- a dataframe or tibble that includes individuals in the "successful" life stage}
+
+\item{typeNames}{- vector of names of life stages defining success}
 }
 \value{
 a dataframe or tibble with origID, startTime, and successful for all individuals.

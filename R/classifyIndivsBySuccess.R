@@ -3,8 +3,9 @@
 #'
 #' @description Function to extract IDs for successful individuals.
 #'
-#' @param dfr - a dataframe or tibble with the "successful" life stage
-#' @param typeName - name of life stage defining success
+#' @param dfrStart - a dataframe or tibble that includes individuals in the initial life stage
+#' @param dfrEnd - a dataframe or tibble that includes individuals in the "successful" life stage
+#' @param typeNames - vector of names of life stages defining success
 #'
 #' @return a dataframe or tibble with origID, startTime, and successful for all individuals.
 #'
@@ -14,9 +15,9 @@
 #'
 classifyIndivsBySuccess<-function(dfrStart,
                                   dfrEnd,
-                                  typeName){
+                                  typeNames){
   uniqStart=unique(dfrStart[,c("origID","startTime")]);
-  idx<-(dfrEnd$ageInStage==0)&(dfrEnd$typeName==typeName);
+  idx<-(dfrEnd$ageInStage==0)&(dfrEnd$typeName %in% typeNames);
   uniqEnd<-dfrEnd[idx,c("origID","startTime")];
   qry="select
           s.startTime as startTime,

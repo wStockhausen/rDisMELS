@@ -13,12 +13,12 @@ byGridCell_CreateSFDataset(
 \arguments{
 \item{dfr}{- dataframe with values to create map layer by gridCellID}
 
-\item{roms_grid}{- ROMS grid name, shapefile name, or layer (sf dataset) with grid polygons by ID}
+\item{roms_grid}{- ROMS grid name, path to shapefile, or \pkg{sf} dataframe with grid polygons by ID}
 
-\item{join_type}{- join type for dfr joined to roms_grid}
+\item{join_type}{- join type for \code{dfr} joined to \code{roms_grid}}
 }
 \value{
-an \code{sf} (simple features) dataframe with the values by grid cell.
+an \pkg{sf} (simple features) dataframe with the values by grid cell.
 }
 \description{
 Function to create a map layer with values by grid cell.
@@ -26,6 +26,7 @@ Function to create a map layer with values by grid cell.
 \details{
 Uses \code{\link[wtsROMS]{getGrid}} if roms_grid is the name of a ROMS grid.
 Uses \code{\link[wtsGIS]{createLayerFromShapefile}} if roms_grid is a shapefile.
+
 The results depend on the join type:
 
  - right join: matched rows in \code{dfr},         all rows in \code{roms_grid}

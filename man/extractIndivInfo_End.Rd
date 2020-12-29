@@ -7,7 +7,7 @@
 extractIndivInfo_End(sf_EndByStage)
 }
 \arguments{
-\item{sf_EndByStage}{- \pkg{sf} dataframe returned by \code{\link{extractIndivInfoEndByStage}}}
+\item{sf_EndByStage}{- \pkg{sf} dataframe returned by \code{\link{extractIndivInfo_EndByStage}}}
 }
 \value{
 \pkg{sf} dataframe with columns:
@@ -33,7 +33,7 @@ Function to extract info by individual at end of life or model run.
 }
 \details{
 The input \pkg{sf} dataframe should be the output of
-\code{\link{extractIndivInfoEndByStage}}.
+\code{\link{extractIndivInfo_EndByStage}}.
 For each unique individual, the end of the model run or death is identified by the record
 where \code{age==max(age)}. "Unique" individuals are determined by eliminating original
 individuals which resulted in more than one final individual (e.g., when metamorphosis

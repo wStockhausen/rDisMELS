@@ -4,12 +4,12 @@
 \alias{parseTracks}
 \title{Create an sf (simple features) column with linestring geometries from DisMELS tracks}
 \usage{
-parseTracks(tracks, strCRS = wtsGIS::getCRS("WGS84"))
+parseTracks(tracks, crs = wtsGIS::get_crs("WGS84"))
 }
 \arguments{
 \item{tracks}{- track column from DisMELS model results file}
 
-\item{strCRS}{- coordinate reference system: EPSG code or character with proj4string}
+\item{crs}{- coordinate reference system: \pkg{sf} crs object, EPSG code, or character with proj4string}
 }
 \value{
 an object of class sfc_LINESTRING

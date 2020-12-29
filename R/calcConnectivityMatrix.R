@@ -110,12 +110,10 @@ calcConnectivityMatrix<-function(sfs_points,
     #----group start zones
     sf_tmp$group = factor(floor((sf_tmp$zone_start+1)/nSZpG),levels=1:nSZGs,labels=lbls);
     sf_tmp$zone_start = factor(sf_tmp$zone_start,levels=1:nSZs);
-    subtitle = ifelse(mon=="",paste0(y),paste0(y,"-",mon));
     pE=ggplot2::ggplot(data=sf_tmp)+bmls$land+
                      ggplot2::geom_sf(mapping=ggplot2::aes(colour=zone_start),shape=20,alpha=0.5)+
                      ggplot2::scale_colour_manual(values=rep(colours[1:nSZpG],nSZGs))+
                      bmls$zones+bmls$labels+bmls$map_scale+bmls$theme+
-                     ggplot2::labs(subtitle=subtitle)+
                      ggplot2::facet_wrap(ggplot2::vars(group),ncol=nPlotCols);
   }
 

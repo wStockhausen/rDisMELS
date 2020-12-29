@@ -4,16 +4,19 @@
 #' @description Function to create an sf (simple features) column with linestring geometries from DisMELS tracks.
 #'
 #' @param tracks - track column from DisMELS model results file
-#' @param strCRS - coordinate reference system: EPSG code or character with proj4string
+#' @param crs - coordinate reference system: \pkg{sf} crs object, EPSG code, or character with proj4string
 #'
 #' @return an object of class sfc_LINESTRING
 #'
 #' @details Requires packages \code{sf}, \code{wtsGIS}.
 #'
+#' @import sf
+#' @iport wtsGIS
+#'
 #' @export
 #'
 parseTracks<-function(tracks,
-                      strCRS=wtsGIS::getCRS("WGS84")){
+                      crs=wtsGIS::get_crs("WGS84")){
   nt<-length(tracks);
   geoms<-vector(length=nt,mode="list");
   s<-strsplit(tracks,";",fixed=TRUE);
@@ -34,7 +37,7 @@ parseTracks<-function(tracks,
   if (nt>1){
     if (sf::st_is(geoms[[1]],c("POINT","POINT Z"))) geoms<-geoms[2:nt];
   }
-  sfc_geoms<-sf::st_sfc(geoms,crs=strCRS);
+  sfc_geoms<-sf::st_sfc(geoms,crs=crs);
   sfc_geoms<-sfc_geoms[!sf::st_is_empty(sfc_geoms)];
   return(sfc_geoms);
 }
