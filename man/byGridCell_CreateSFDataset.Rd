@@ -25,7 +25,7 @@ Function to create a map layer with values by grid cell.
 }
 \details{
 Uses \code{\link[wtsROMS]{getGrid}} if roms_grid is the name of a ROMS grid.
-Uses \code{\link[wtsGIS]{createLayerFromShapefile}} if roms_grid is a shapefile.
+Uses \code{\link[wtsGIS]{readShapefile}} if roms_grid is a shapefile.
 
 The results depend on the join type:
 

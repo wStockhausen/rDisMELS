@@ -32,5 +32,5 @@ Function to create a \pkg{tmap}-style basemap.
 }
 \details{
 Requires packages \pkg{wtsGIS}, \pkg{tmap}, and possibly \pkg{tmaptools}.
-See \code{\link[wtsGIS]{getStandardBoundingBox}} for alternative, predefined bounding boxes.
+See \code{\link[wtsGIS]{getStandardBBox}} for alternative, predefined bounding boxes.
 }

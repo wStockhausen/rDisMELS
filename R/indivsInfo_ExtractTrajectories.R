@@ -4,7 +4,7 @@
 #' @description Function to extract trajectories from DisMELS output as a list of \pkg{sf} dataframes with linestring geometries.
 #'
 #' @param dfrs - list of dataframes, by typeName, with DisMELS IBM results
-#' @param strCRS - coordinate reference system: EPSG code or character with proj4string
+#' @param crs - coordinate reference system: \pkg{sf} crs object, EPSG code, or character with proj4string
 #'
 #' @return a list of \pkg{sf} dataset objects, each with a column ("geom") of class sfc_LINESTRING
 #'
@@ -13,10 +13,11 @@
 #'
 #' @import sf
 #' @import wtsGIS
+#'
 #' @export
 #'
-extractTrajectories<-function(dfrs,
-                              strCRS=wtsGIS::get_crs("WGS84")){
+indivsInfo_ExtractTrajectories<-function(dfrs,
+                                         crs=wtsGIS::get_crs("WGS84")){
   typeNames<-names(dfrs);
   dfrs_lines<-list();
   for (typeName in typeNames){
@@ -34,7 +35,7 @@ extractTrajectories<-function(dfrs,
                      successful=logical(nIDs),
                      geom=sf::st_sfc(sf::st_multilinestring(rep(list(matrix(0, 1, 3)),times=nIDs), dim = "XYZ")),
                      row.names=FALSE,
-                     crs=strCRS
+                     crs=crs
                      );
       nID<-0;
       bbox<-NULL;
@@ -45,7 +46,7 @@ extractTrajectories<-function(dfrs,
         maxAge<-max(dfrp$ageInStage);
         idx<-which(dfrp$ageInStage==maxAge);
         track<-dfrp$track;
-        trajectory<-sf::st_combine(parseTracks(track,strCRS=strCRS));#parse tracks, combine into single trajectory
+        trajectory<-sf::st_combine(parseTracks(track,crs=crs));#parse tracks, combine into single trajectory
         bbox<-wtsGIS::unionBBox(bbox,sf::st_bbox(trajectory));
         #print(trajectory);
         # tblt<-sf::st_sf(id        =uID,

@@ -11,7 +11,7 @@
 #' @details Requires packages \code{sf}, \code{wtsGIS}.
 #'
 #' @import sf
-#' @iport wtsGIS
+#' @import wtsGIS
 #'
 #' @export
 #'

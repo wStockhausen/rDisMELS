@@ -12,14 +12,15 @@
 #'
 #' @import dplyr
 #' @import magrittr
+#' @import stats
 #'
 #' @export
 #'
 calcMeanConnectivityMatrix<-function(tbl_conn){
     tmp2 = tbl_conn %>%
-              group_by(startZone,endZone) %>%
-              summarise(meanFrac=mean(connFrac),sdFrac=stats::sd(connFrac),medFrac=median(connFrac)) %>%
-              ungroup() %>%
-              mutate(meanPct=100*meanFrac,sdPct=100*sdFrac,medPct=100*medFrac);
+              dplyr::group_by(startZone,endZone) %>%
+              dplyr::summarise(meanFrac=mean(connFrac),sdFrac=stats::sd(connFrac),medFrac=stats::median(connFrac)) %>%
+              dplyr::ungroup() %>%
+              dplyr::mutate(meanPct=100*meanFrac,sdPct=100*sdFrac,medPct=100*medFrac);
     return(tmp2);
 }

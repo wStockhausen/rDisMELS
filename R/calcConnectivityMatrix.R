@@ -1,5 +1,5 @@
 #'
-#' @title Calculate a connectivity matrix datafarme from a connectivity results \pkg{sf} dataframe
+#' @title Calculate a connectivity matrix dataframe from a connectivity results \pkg{sf} dataframe
 #'
 #' @description Function to calculate a connectivity matrix datafarme from a connectivity results dataframe.
 #'
@@ -66,7 +66,7 @@ calcConnectivityMatrix<-function(sfs_points,
   if (sf::st_crs(sf_conn)!=sf::st_crs(sf_starts)){
     sf_starts<-sf_starts %>% sf::st_transform(sf::st_crs(sf_conn))
   }
-  sf_starts %<>% sf::st_join(sf_conn,.predicate=sf::st_within);
+  sf_starts %<>% sf::st_join(sf_conn,join=sf::st_within,left=TRUE);
   sf_starts$zone = as.numeric(as.character(sf_starts$zone));
   sf_starts %<>% subset(as.numeric(as.character(zone)) %in% tblSZs$startZone);
 
@@ -76,7 +76,7 @@ calcConnectivityMatrix<-function(sfs_points,
   if (sf::st_crs(sf_conn)!=sf::st_crs(sf_ends)){
     sf_ends<-sf_ends %>% sf::st_transform(sf::st_crs(sf_conn))
   }
-  sf_ends %<>% sf::st_join(sf_conn,.predicate=sf::st_within);
+  sf_ends %<>% sf::st_join(sf_conn,join=sf::st_within,left=TRUE);
   sf_ends$zone = as.numeric(as.character(sf_ends$zone));
 
   pS = NULL;

@@ -10,7 +10,7 @@
 #' @return an \pkg{sf} (simple features) dataframe with the values by grid cell.
 #'
 #' @details Uses \code{\link[wtsROMS]{getGrid}} if roms_grid is the name of a ROMS grid.
-#' Uses \code{\link[wtsGIS]{createLayerFromShapefile}} if roms_grid is a shapefile.
+#' Uses \code{\link[wtsGIS]{readShapefile}} if roms_grid is a shapefile.
 #'
 #' The results depend on the join type:
 #'

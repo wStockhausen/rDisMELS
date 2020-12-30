@@ -2,7 +2,7 @@
 % Please edit documentation in R/calcConnectivityMatrix.R
 \name{calcConnectivityMatrix}
 \alias{calcConnectivityMatrix}
-\title{Calculate a connectivity matrix datafarme from a connectivity results \pkg{sf} dataframe}
+\title{Calculate a connectivity matrix dataframe from a connectivity results \pkg{sf} dataframe}
 \usage{
 calcConnectivityMatrix(
   sfs_points,

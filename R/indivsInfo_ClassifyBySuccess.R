@@ -13,9 +13,9 @@
 #'
 #' @export
 #'
-classifyIndivsBySuccess<-function(dfrStart,
-                                  dfrEnd,
-                                  typeNames){
+indivsInfo_ClassifyBySuccess<-function(dfrStart,
+                                       dfrEnd,
+                                       typeNames){
   uniqStart=unique(dfrStart[,c("origID","startTime")]);
   idx<-(dfrEnd$ageInStage==0)&(dfrEnd$typeName %in% typeNames);
   uniqEnd<-dfrEnd[idx,c("origID","startTime")];
