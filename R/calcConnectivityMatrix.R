@@ -4,12 +4,12 @@
 #' @description Function to calculate a connectivity matrix datafarme from a connectivity results dataframe.
 #'
 #' @param sfs_points - list by life stage of \pkg{sf} dataframes with connectivity results and point locations from a single model run
-#' @param sf_conn - \pkg{sf} dataframe with connectivity zone information (polygons)
+#' @param sf_zones - \pkg{sf} dataframe with connectivity zone information (polygons)
 #' @param startStage - name of start life stage for connectivity matrix
 #' @param endStage - name of end life stage for connectivity matrix
 #' @param endStageFac - multiplier on apparent number successful (e.g., 2 if sexes were split after starting life stage)
-#' @param startZones - vector of starting zone id's (integers) for sf_conn
-#' @param endZones - vector of ending zone id's (integers) for sf_conn
+#' @param startZones - vector of starting zone id's (integers) for sf_zones
+#' @param endZones - vector of ending zone id's (integers) for sf_zones
 #' @param plotStartLocs - flag to plot start locations
 #' @param plotEndLocs - flag to plot end locations
 #' @param bmls - list of \pkg{ggplot2} basemap layers
@@ -21,13 +21,13 @@
 #' @return list with elements
 #' \itemize{
 #'   \item{step3_StartEndZones - dataframe with start/end zones for each individual}
-#'   \item{step3_ConnectivityDataframe - connectivity matrix as dataframe}
+#'   \item{step3_ConnectivityDataframe - connectivity matrices by unique startTime as a dataframe}
 #'   \item{pStartMap - ggplot2 map of start locations (or NULL)}
 #'   \item{pEndMap - ggplot2 map of end locations (or NULL)}
 #' }
 #'
-#' @details Calculates the connectivity matrix for a model run based on the connectivity
-#' zones defined in \code{sf_conn}. Optionally, \pkg{ggplot2}-style maps of the starting and
+#' @details Calculates the connectivity matrices by unique \code{startTime} for a model run based on the connectivity
+#' zones defined in \code{sf_zones}. Optionally, \pkg{ggplot2}-style maps of the starting and
 #' ending locations of individuals can be created. End zone locations are colored according
 #' to their start zone.
 #'
@@ -41,7 +41,7 @@
 #' @export
 #'
 calcConnectivityMatrix<-function(sfs_points,
-                                 sf_conn,
+                                 sf_zones,
                                  startStage="Z1",
                                  endStage="C1F",
                                  endStageFac=2.0,
@@ -63,20 +63,20 @@ calcConnectivityMatrix<-function(sfs_points,
   #--extract sf dataframe with individuals at start of simulation
   #--and assign starting connectivity zone
   sf_starts<-sfs_points[[startStage]] %>% subset(startTime==time);
-  if (sf::st_crs(sf_conn)!=sf::st_crs(sf_starts)){
-    sf_starts<-sf_starts %>% sf::st_transform(sf::st_crs(sf_conn))
+  if (sf::st_crs(sf_zones)!=sf::st_crs(sf_starts)){
+    sf_starts<-sf_starts %>% sf::st_transform(sf::st_crs(sf_zones))
   }
-  sf_starts %<>% sf::st_join(sf_conn,join=sf::st_within,left=TRUE);
+  sf_starts %<>% sf::st_join(sf_zones,join=sf::st_within,left=TRUE);
   sf_starts$zone = as.numeric(as.character(sf_starts$zone));
   sf_starts %<>% subset(as.numeric(as.character(zone)) %in% tblSZs$startZone);
 
   #--extract sf dataframe with individuals at beginning of "end" stage
   #--and assign ending connectivity zone
   sf_ends<-sfs_points[[endStage]] %>% subset(ageInStage==0.0);
-  if (sf::st_crs(sf_conn)!=sf::st_crs(sf_ends)){
-    sf_ends<-sf_ends %>% sf::st_transform(sf::st_crs(sf_conn))
+  if (sf::st_crs(sf_zones)!=sf::st_crs(sf_ends)){
+    sf_ends<-sf_ends %>% sf::st_transform(sf::st_crs(sf_zones))
   }
-  sf_ends %<>% sf::st_join(sf_conn,join=sf::st_within,left=TRUE);
+  sf_ends %<>% sf::st_join(sf_zones,join=sf::st_within,left=TRUE);
   sf_ends$zone = as.numeric(as.character(sf_ends$zone));
 
   pS = NULL;
@@ -119,6 +119,7 @@ calcConnectivityMatrix<-function(sfs_points,
 
   tbl_ends = sf_ends %>% sf::st_drop_geometry();
 
+  #--construct start/end numbers and zones table for all individuals
   qry1 = "select
            s.startTime,s.origID,e.id,
            s.zone as startZone,s.number as startNum,
@@ -129,20 +130,25 @@ calcConnectivityMatrix<-function(sfs_points,
   t1 = sqldf::sqldf(qry1);
   #wtsUtilities::saveObj(t1,file.path(resFolder,paste0("step3_StartEndZones.RData")));
 
+  #--construct table with starting numbers by startTime and startZone
   qry2a = "select startTime,startZone,sum(startNum) as startNum
           from t1
           group by startTime, startZone;";
   t2a = sqldf::sqldf(qry2a);
 
+  #--expand starting numbers by startTime and startZone to all start zones
   qry2 = "select t1.startTime,s.startZone,sum(t1.startNum) as startNum
           from tblSZs as s left join t1
           on s.startZone=t1.startZone
           group by t1.startTime, s.startZone;";
   t2 = sqldf::sqldf(qry2);
 
+  #--determine unique startTimes
   uStartTimes = tibble::tibble(startTime=unique(t2$startTime));
+  #--create expanded table with full connectivity matrices for all startTimes
   uStCZs = dplyr::full_join(uStartTimes,connZones,by=character());
 
+  #--calculate end numbers by end zone for each startTime
   qry3 = "select u.startTime,u.startZone,u.endZone,sub.endNum
           from uStCZs as u left join
             (select startTime,startZone,endZone,sum(endNum) as endNum
@@ -154,6 +160,7 @@ calcConnectivityMatrix<-function(sfs_points,
           order by u.startTime, u.startZone, u.endZone;";
   t3 = sqldf::sqldf(qry3);
 
+  #--combine t2 and t3 to get start/end numbers by start/end zones for each startTime
   qry4 = "select
             t2.startTime as startTime,
             t2.startZone as startZone,
@@ -165,7 +172,7 @@ calcConnectivityMatrix<-function(sfs_points,
           order by t2.startTime, t2.startZone, t3.endZone;";
   t4 = sqldf::sqldf(qry4); t4$endNum[is.na(t4$endNum)]=0;
   t4$endNum   = endStageFac * t4$endNum;
-  t4 %<>% mutate(connFrac = endNum/startNum);
+  t4 %<>% dplyr::mutate(connFrac = endNum/startNum);
   #wtsUtilities::saveObj(t4,file.path(resFolder,paste0("step3_ConnectivityDataframe.RData")));
 
   return(list(step3_StartEndZones=t1,step3_ConnectivityDataframe=t4,pStartMap=pS,pEndMap=pE));

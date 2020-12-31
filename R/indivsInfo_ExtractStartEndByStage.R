@@ -50,10 +50,10 @@
 #'@export
 #'
 indivsInfo_ExtractStartEndByStage<-function(sf_start=NULL,
-                                           sf_ebs=NULL,
-                                           lst_indivs=NULL,
-                                           startLHS=NULL,
-                                           checkCalcs=FALSE){
+                                            sf_ebs=NULL,
+                                            lst_indivs=NULL,
+                                            startLHS=NULL,
+                                            checkCalcs=FALSE){
   #--process lst_indvs, as necessary
   if (is.null(sf_start)) sf_start = indivsInfo_ExtractStart(lst_indivs[[startLHS]]);
   if (is.null(sf_ebs))   sf_ebs   = indivsInfo_ExtractEndByStage(lst_indivs);

@@ -6,7 +6,7 @@
 \usage{
 calcConnectivityMatrix(
   sfs_points,
-  sf_conn,
+  sf_zones,
   startStage = "Z1",
   endStage = "C1F",
   endStageFac = 2,
@@ -24,7 +24,7 @@ calcConnectivityMatrix(
 \arguments{
 \item{sfs_points}{- list by life stage of \pkg{sf} dataframes with connectivity results and point locations from a single model run}
 
-\item{sf_conn}{- \pkg{sf} dataframe with connectivity zone information (polygons)}
+\item{sf_zones}{- \pkg{sf} dataframe with connectivity zone information (polygons)}
 
 \item{startStage}{- name of start life stage for connectivity matrix}
 
@@ -32,9 +32,9 @@ calcConnectivityMatrix(
 
 \item{endStageFac}{- multiplier on apparent number successful (e.g., 2 if sexes were split after starting life stage)}
 
-\item{startZones}{- vector of starting zone id's (integers) for sf_conn}
+\item{startZones}{- vector of starting zone id's (integers) for sf_zones}
 
-\item{endZones}{- vector of ending zone id's (integers) for sf_conn}
+\item{endZones}{- vector of ending zone id's (integers) for sf_zones}
 
 \item{plotStartLocs}{- flag to plot start locations}
 
@@ -54,7 +54,7 @@ calcConnectivityMatrix(
 list with elements
 \itemize{
   \item{step3_StartEndZones - dataframe with start/end zones for each individual}
-  \item{step3_ConnectivityDataframe - connectivity matrix as dataframe}
+  \item{step3_ConnectivityDataframe - connectivity matrices by unique startTime as a dataframe}
   \item{pStartMap - ggplot2 map of start locations (or NULL)}
   \item{pEndMap - ggplot2 map of end locations (or NULL)}
 }
@@ -63,8 +63,8 @@ list with elements
 Function to calculate a connectivity matrix datafarme from a connectivity results dataframe.
 }
 \details{
-Calculates the connectivity matrix for a model run based on the connectivity
-zones defined in \code{sf_conn}. Optionally, \pkg{ggplot2}-style maps of the starting and
+Calculates the connectivity matrices by unique \code{startTime} for a model run based on the connectivity
+zones defined in \code{sf_zones}. Optionally, \pkg{ggplot2}-style maps of the starting and
 ending locations of individuals can be created. End zone locations are colored according
 to their start zone.
 }
