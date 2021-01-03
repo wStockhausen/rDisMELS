@@ -1,34 +1,34 @@
 #'
-#' @title Extract IDs for successful individuals
+#' @title Extract a dataframe of original IDs for successful individuals
 #'
-#' @description Function to extract IDs for successful individuals.
+#' @description Function to extract a dataframe of original IDs for successful individuals.
 #'
-#' @param dfrStart - a dataframe or tibble that includes individuals in the initial life stage
-#' @param dfrEnd - a dataframe or tibble that includes individuals in the "successful" life stage
-#' @param typeNames - vector of names of life stages defining success
-#'
-#' @return a dataframe or tibble with origID, startTime, and successful for all individuals.
-#'
-#' @details The
-#'
-#' @export
-#'
+ #' @param dfrStart - dataframe with startTime and origID of unique initial individuals
+ #' @param dfrEnd - dataframe with startTime, orgiID, and id of unique individuals in "successful" life stage(s)
+ #'
+ #' @return a dataframe with origID and startTime for successful individuals.
+ #'
+ #' @details The "index" consists of a dataframe with columns
+ #' \itemize{
+ #'   \item{startTime}
+ #'   \item{origID}
+ #'   \item{successful - TRUE/FALSE indicating whether or not a "succssful" life stage was eventually reached}
+ #' }
+ #' and a row for each "original" individual.
+ #'
+ #' @import dplyr
+ #' @import magrittr
+ #'
+ #' @export
+ #'
 indivsInfo_ClassifyBySuccess<-function(dfrStart,
-                                       dfrEnd,
-                                       typeNames){
-  uniqStart=unique(dfrStart[,c("origID","startTime")]);
-  idx<-(dfrEnd$ageInStage==0)&(dfrEnd$typeName %in% typeNames);
-  uniqEnd<-dfrEnd[idx,c("origID","startTime")];
-  qry="select
-          s.startTime as startTime,
-          s.origID as origID,
-          e.origID as test
-        from uniqStart as s left join uniqEnd as e
-        on s.origID = e.origID and s.startTime = e.startTime
-        order by s.startTime, s.origID;";
-  dfrp=sqldf::sqldf(qry);
-  dfrp$successful = FALSE;
-  dfrp$successful[!is.na(dfrp$test)] = TRUE;
-  dfrp = dfrp[,c("startTime","origID","successful")];
-  return(dfrp);
+                                       dfrEnd){
+   dfrp<-dfrStart %>%
+           dplyr::select(startTime,origID) %>%
+           dplyr::left_join(dfrEnd %>% dplyr::select(startTime,origID,id),by=c("startTime","origID")) %>%
+           dplyr::mutate(successful=!is.na(id)) %>%
+           dplyr::select(startTime,origID,successful) %>%
+           dplyr::distinct() %>%
+           dplyr::arrange(startTime,origID);
+   return(dfrp);
 }

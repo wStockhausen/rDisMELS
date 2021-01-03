@@ -13,13 +13,13 @@ indivsInfo_ExtractStartEndByStage(
 )
 }
 \arguments{
-\item{sf_start}{- \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractStart}}}
+\item{sf_start}{- (optional) \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractStart}}}
 
-\item{sf_ebs}{- \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractEndByStage}}}
+\item{sf_ebs}{- (optional) \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractEndByStage}}}
 
-\item{lst_indivs}{- list of \pkg{sf} dataframes by life stage returned by \code{\link{reorderAndClassifyResults}} (req'd if sf_start or sf_end is NULL)}
+\item{lst_indivs}{- (req'd if sf_start or sf_end is NULL) list of \pkg{sf} dataframes by life stage returned by \code{\link{reorderAndClassifyResults}}}
 
-\item{startLHS}{- life stage in which all individuals start (req'd if sf_start is NULL)}
+\item{startLHS}{- (req'd if sf_start is NULL) life stage in which all individuals start}
 
 \item{checkCalcs}{- flag (T/F) to check endGeom is correctly assigned (for debugging)}
 }

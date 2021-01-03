@@ -3,11 +3,11 @@
 #'
 #'@description Function to extract info by individual at start and end of life or model run.
 #'
-#'@param sf_sebs  - \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractStartEndByStage}}
-#'@param sf_start - \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractStart}}
-#'@param sf_end   - \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractEnd}}
-#'@param lst_indivs - list of \pkg{sf} dataframes by life stage returned by \code{\link{reorderAndClassifyResults}} (req'd if sf_ebs and sf_start or sf_end is NULL)
-#'@param startLHS   - life stage in which all individuals start (req'd if sf_start is NULL)
+#'@param sf_sebs  - (optional) \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractStartEndByStage}}
+#'@param sf_start - (optional) \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractStart}}
+#'@param sf_end   - (optional) \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractEnd}}
+#'@param lst_indivs - (req'd if sf_ebs and sf_start or sf_end is NULL) list of \pkg{sf} dataframes by life stage returned by \code{\link{reorderAndClassifyResults}}
+#'@param startLHS   - (req'd if sf_start is NULL) life stage in which all individuals start
 #'@param checkCalcs - flag (T/F) to check endGeom is correctly assigned (for debugging)
 #'
 #'@return \pkg{sf} dataframe with columns:
@@ -38,14 +38,22 @@
 #'}
 #'
 #'@details If provided, the input \pkg{sf} dataframe \code{sf_sebs} should be the
-#'output of \code{\link{indivsInfo_ExtractStartEndByStage}}. If \code{sf_sebs} is NULL,
-#'the input \pkg{sf} dataframes \code{sf_start} and \code{sf_end} can be given and should be
-#'the output of \code{\link{indivsInfo_ExtractStart}} and  \code{\link{indivsInfo_ExtractEnd}},
-#'respectively. If either of these are NULL, \code{lst_indivs} must be given. If \code{sf_start} is NULL,
-#'\code{startLHS} must be given. If \code{sf_start} is NULL, it is calculated internally
-#'using \code{sf_start = indivsInfo_ExtractStart(lst_indivs[[startLHS]])}. If \code{sf_end}
-#'is NULL, it is calculated internally using \code{sf_ebs = indivsInfo_ExtractEndByStage(lst_indivs)}
-#'followed by \code{sf_end = indivsInfo_ExtractEnd(sf_ebs)}.
+#'output of \code{\link{indivsInfo_ExtractStartEndByStage}}.
+#'
+#'If \code{sf_sebs} is NULL, the input \pkg{sf} dataframes \code{sf_start} and \code{sf_end}
+#'can be given and should be the output of
+#'\code{\link{indivsInfo_ExtractStart}} and  \code{\link{indivsInfo_ExtractEnd}}, respectively.
+#'If either of these are NULL, \code{lst_indivs} must be given. This should be the list of
+#'\pkg{sf} dataframes by life stage returned by \code{\link{reorderAndClassifyResults}}.
+#'
+#'
+#'If \code{sf_start} is NULL, \code{startLHS} must be given.
+#'If \code{sf_start} is NULL, it is calculated internally using
+#'\code{sf_start = indivsInfo_ExtractStart(lst_indivs[[startLHS]])}.
+#'
+#'If \code{sf_end} is NULL, it is calculated internally using
+#'\code{sf_ebs = indivsInfo_ExtractEndByStage(lst_indivs)} followed by
+#'\code{sf_end = indivsInfo_ExtractEnd(sf_ebs)}.
 #'
 #'@import dplyr
 #'@import magrittr
@@ -53,11 +61,11 @@
 #'@export
 #'
 indivsInfo_ExtractStartEnd<-function(sf_sebs=NULL,
-                                    sf_start=NULL,
-                                    sf_end=NULL,
-                                    lst_indivs=NULL,
-                                    startLHS=NULL,
-                                    checkCalcs=FALSE){
+                                     sf_start=NULL,
+                                     sf_end=NULL,
+                                     lst_indivs=NULL,
+                                     startLHS=NULL,
+                                     checkCalcs=FALSE){
   if (!is.null(sf_sebs)){
     #--simply extract rows where endAge = max(endAge)
     #----determine max age for each individual

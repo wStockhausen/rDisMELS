@@ -24,8 +24,13 @@ Function to extract age for each individual at end of life or model run.
 \details{
 The input \pkg{sf} dataframe should be the output of
 \code{\link{indivsInfo_ExtractEndByStage}} or \code{\link{indivsInfo_ExtractStartEndByStage}}.
-For each unique individual, the end of the model run or death is identified by the record
-where \code{age==max(age)}. "Unique" individuals are determined by eliminating original
-individuals which resulted in more than one final individual (e.g., when metamorphosis
-results in more than one individual).
+
+The end of the model run or death is basically identified by the record
+where \code{age==max(age)} for each origID, endID pair. However, a traightforward
+application of this approach would "double count"
+individuals which changed id's during the course of their lifetime, because the "original"
+individual (with id = origID) appears to have died when it metamorphoses (origID stays
+the same, but id changes to a new unique value). Consequently, individuals which have
+origID=endID are removed if there are any other individuals with the same origID but
+different endIDs.
 }

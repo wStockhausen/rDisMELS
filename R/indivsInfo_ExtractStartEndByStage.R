@@ -3,10 +3,10 @@
 #'
 #'@description Function to extract info by individual at start and end of life or model run.
 #'
-#'@param sf_start - \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractStart}}
-#'@param sf_ebs   - \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractEndByStage}}
-#'@param lst_indivs - list of \pkg{sf} dataframes by life stage returned by \code{\link{reorderAndClassifyResults}} (req'd if sf_start or sf_end is NULL)
-#'@param startLHS   - life stage in which all individuals start (req'd if sf_start is NULL)
+#'@param sf_start - (optional) \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractStart}}
+#'@param sf_ebs   - (optional) \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractEndByStage}}
+#'@param lst_indivs - (req'd if sf_start or sf_end is NULL) list of \pkg{sf} dataframes by life stage returned by \code{\link{reorderAndClassifyResults}}
+#'@param startLHS   - (req'd if sf_start is NULL) life stage in which all individuals start
 #'@param checkCalcs - flag (T/F) to check endGeom is correctly assigned (for debugging)
 #'
 #'@return \pkg{sf} dataframe with columns:

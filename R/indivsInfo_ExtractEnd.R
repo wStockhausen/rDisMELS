@@ -23,8 +23,8 @@
 #'  \item{endGeom - ending 2d location as SF_POINT}
 #'}
 #'
-#'@details The input \pkg{sf} dataframe should be the output of
-#'\code{\link{indivsInfo_ExtractEndByStage}}.
+#'@details The input \pkg{sf} dataframe should be the output of \code{\link{indivsInfo_ExtractEndByStage}}.
+#'
 #'For each unique individual, the end of the model run or death is identified by the record
 #'where \code{age==max(age)}. "Unique" individuals are determined by eliminating original
 #'individuals which resulted in more than one final individual (e.g., when metamorphosis

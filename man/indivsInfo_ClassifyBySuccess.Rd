@@ -2,23 +2,27 @@
 % Please edit documentation in R/indivsInfo_ClassifyBySuccess.R
 \name{indivsInfo_ClassifyBySuccess}
 \alias{indivsInfo_ClassifyBySuccess}
-\title{Extract IDs for successful individuals}
+\title{Extract a dataframe of original IDs for successful individuals}
 \usage{
-indivsInfo_ClassifyBySuccess(dfrStart, dfrEnd, typeNames)
+indivsInfo_ClassifyBySuccess(dfrStart, dfrEnd)
 }
 \arguments{
-\item{dfrStart}{- a dataframe or tibble that includes individuals in the initial life stage}
+\item{dfrStart}{- dataframe with startTime and origID of unique initial individuals}
 
-\item{dfrEnd}{- a dataframe or tibble that includes individuals in the "successful" life stage}
-
-\item{typeNames}{- vector of names of life stages defining success}
+\item{dfrEnd}{- dataframe with startTime, orgiID, and id of unique individuals in "successful" life stage(s)}
 }
 \value{
-a dataframe or tibble with origID, startTime, and successful for all individuals.
+a dataframe with origID and startTime for successful individuals.
 }
 \description{
-Function to extract IDs for successful individuals.
+Function to extract a dataframe of original IDs for successful individuals.
 }
 \details{
-The
+The "index" consists of a dataframe with columns
+\itemize{
+  \item{startTime}
+  \item{origID}
+  \item{successful - TRUE/FALSE indicating whether or not a "succssful" life stage was eventually reached}
+}
+and a row for each "original" individual.
 }
