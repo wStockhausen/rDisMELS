@@ -6,7 +6,7 @@
 #'@param sf_sebs  - (optional) \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractStartEndByStage}}
 #'@param sf_start - (optional) \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractStart}}
 #'@param sf_end   - (optional) \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractEnd}}
-#'@param lst_indivs - (req'd if sf_ebs and sf_start or sf_end is NULL) list of \pkg{sf} dataframes by life stage returned by \code{\link{reorderAndClassifyResults}}
+#'@param lst_indivs - (req'd if sf_ebs and sf_start or sf_end is NULL) list of \pkg{sf} dataframes by life stage returned by \code{\link{indivsInfo_ReorderResults}}
 #'@param startLHS   - (req'd if sf_start is NULL) life stage in which all individuals start
 #'@param checkCalcs - flag (T/F) to check endGeom is correctly assigned (for debugging)
 #'
@@ -44,7 +44,7 @@
 #'can be given and should be the output of
 #'\code{\link{indivsInfo_ExtractStart}} and  \code{\link{indivsInfo_ExtractEnd}}, respectively.
 #'If either of these are NULL, \code{lst_indivs} must be given. This should be the list of
-#'\pkg{sf} dataframes by life stage returned by \code{\link{reorderAndClassifyResults}}.
+#'\pkg{sf} dataframes by life stage returned by \code{\link{indivsInfo_ReorderResults}}.
 #'
 #'
 #'If \code{sf_start} is NULL, \code{startLHS} must be given.

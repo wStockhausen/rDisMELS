@@ -20,7 +20,7 @@ indivsInfo_ExtractStartEnd(
 
 \item{sf_end}{- (optional) \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractEnd}}}
 
-\item{lst_indivs}{- (req'd if sf_ebs and sf_start or sf_end is NULL) list of \pkg{sf} dataframes by life stage returned by \code{\link{reorderAndClassifyResults}}}
+\item{lst_indivs}{- (req'd if sf_ebs and sf_start or sf_end is NULL) list of \pkg{sf} dataframes by life stage returned by \code{\link{indivsInfo_ReorderResults}}}
 
 \item{startLHS}{- (req'd if sf_start is NULL) life stage in which all individuals start}
 
@@ -65,7 +65,7 @@ If \code{sf_sebs} is NULL, the input \pkg{sf} dataframes \code{sf_start} and \co
 can be given and should be the output of
 \code{\link{indivsInfo_ExtractStart}} and  \code{\link{indivsInfo_ExtractEnd}}, respectively.
 If either of these are NULL, \code{lst_indivs} must be given. This should be the list of
-\pkg{sf} dataframes by life stage returned by \code{\link{reorderAndClassifyResults}}.
+\pkg{sf} dataframes by life stage returned by \code{\link{indivsInfo_ReorderResults}}.
 
 
 If \code{sf_start} is NULL, \code{startLHS} must be given.

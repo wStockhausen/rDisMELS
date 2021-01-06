@@ -3,76 +3,54 @@
 #'
 #' @description Function to extract trajectories from DisMELS output as a list of \pkg{sf} dataframes with linestring geometries.
 #'
-#' @param dfrs - list of dataframes, by typeName, with DisMELS IBM results
-#' @param crs - coordinate reference system: \pkg{sf} crs object, EPSG code, or character with proj4string
+#' @param sfs_points - list of sf dataframes by typeName (output from \code{\link{indivsInfo_ReorderResults}})
+#' @param crs - coordinate reference system for trajectories: \pkg{sf} crs object, EPSG code, or character with proj4string
 #'
-#' @return a list of \pkg{sf} dataset objects, each with a column ("geom") of class sfc_LINESTRING
+#' @return a \pkg{sf} dataframe with a column ("geom") of class sfc_LINESTRING giving the trajectory of each
+#' original individual by life stage (see Details)
 #'
-#' @details Requires packages \code{sf}, \code{wtsGIS}. For each \pkg{sf} dataframe, the linestring geometry
-#' is in column "geom". Other columns include id, startTime, age, ageInStage, and successful.
+#' @details Requires packages \code{sf}, \code{wtsGIS}.
 #'
+#' @note The output \pkg{sf} dataframe has columns
+#' \itemize{
+#' \item{typeName}
+#' \item{id}
+#' \item{parentID}
+#' \item{origID}
+#' \item{startTime}
+#' \item{successful}
+#' \item{additional columns}
+#' \item{geom - column with trajectory as an sfg_LINESTRING object}
+#' }
+#' Additional columns are: max_age, max_ageInStage, max_num, min_num,
+#' max_depth, min_depth, mn_depth, max_temp, min_temp, mn_temp.
+#'
+#' @import dplyr
 #' @import sf
 #' @import wtsGIS
 #'
 #' @export
 #'
-indivsInfo_ExtractTrajectories<-function(dfrs,
+indivsInfo_ExtractTrajectories<-function(sfs_points,
                                          crs=wtsGIS::get_crs("WGS84")){
-  typeNames<-names(dfrs);
-  dfrs_lines<-list();
-  for (typeName in typeNames){
-    cat("Processing",typeName,"\n")
-    start<-Sys.time();
-    dfr<-dfrs[[typeName]];
-    uIDs<-unique(dfr$id);
-    nIDs<-length(uIDs);
-    if (nIDs>0){
-      # tbl<-NULL;
-      tbl<-sf::st_sf(id=integer(nIDs),
-                     startTime=character(nIDs),
-                     age=numeric(nIDs),
-                     ageInStage=numeric(nIDs),
-                     successful=logical(nIDs),
-                     geom=sf::st_sfc(sf::st_multilinestring(rep(list(matrix(0, 1, 3)),times=nIDs), dim = "XYZ")),
-                     row.names=FALSE,
-                     crs=crs
-                     );
-      nID<-0;
-      bbox<-NULL;
-      for (uID in uIDs){
-        nID<-nID+1;
-        if (wtsUtilities::mod(nID,100)==0) cat("--Processing",typeName,"track",nID,"of",nIDs,"\n")
-        dfrp <-dfr[dfr$id==uID,];
-        maxAge<-max(dfrp$ageInStage);
-        idx<-which(dfrp$ageInStage==maxAge);
-        track<-dfrp$track;
-        trajectory<-sf::st_combine(parseTracks(track,crs=crs));#parse tracks, combine into single trajectory
-        bbox<-wtsGIS::unionBBox(bbox,sf::st_bbox(trajectory));
-        #print(trajectory);
-        # tblt<-sf::st_sf(id        =uID,
-        #                 startTime =dfrp$startTime[idx],
-        #                 age       =dfrp$age[idx],
-        #                 ageInStage=dfrp$ageInStage[idx],
-        #                 successful=dfrp$successful[idx],
-        #                 geom      =trajectory);
-        # tbl<-rbind(tbl,tblt);
-        tbl$id[nID]        <-uID;
-        tbl$startTime[nID] <-dfrp$startTime[idx];
-        tbl$age[nID]       <-dfrp$age[idx];
-        tbl$ageInStage[nID]<-dfrp$ageInStage[idx];
-        tbl$successful[nID]<-dfrp$successful[idx];
-        tbl$geom[nID]      <-trajectory;
-      }#--uIDs
-      attr(sf::st_geometry(tbl), "bbox")<-bbox;
-      bbx<-sf::st_bbox(tbl)
-      dfrs_lines[[typeName]]<-tbl;
-      cat("bbox=",bbox,"\n")
-      cat("bbx =",bbx,"\n")
-      cat("--elapsed time = ",Sys.time()-start,"\n")
-    }#--nIDs>0
-  }#--typeNames
-  return(dfrs_lines)
+  lhss = names(sfs_points);             #--get life stage names
+  #--create trajectories
+  sf_trjs = NULL;
+  for (lhs in lhss){
+    cat("\t\tprocessing",lhs,"\n");
+    sf_lhs = sfs_points[[lhs]] %>%
+              sf::st_transform(crs);#--transform to Alaska Albers
+    sf_ls = sf_lhs %>%
+              dplyr::group_by(typeName,id,parentID,origID,startTime,successful) %>%
+              dplyr::summarize(max_age=max(age),max_ageInStage=max(ageInStage),
+                              max_num=max(number),min_num=min(number),
+                              max_depth=max(vertPos),min_depth=min(vertPos),mn_depth=mean(vertPos),
+                              max_temp=max(temperature),min_temp=min(temperature),mn_temp=mean(temperature),
+                              do_union=FALSE) %>%
+              sf::st_cast("LINESTRING");#--create trajectories
+    sf_trjs = rbind(sf_trjs,sf_ls);
+    rm(sf_lhs,sf_ls);
+  }
+  return(sf_trjs);
 }
 
-# dfrsp<-dfrs[[4]][dfrs[[4]]$id<1000,];
-# dfrs_trajectories<-createSFDatasets_Trajectories(list(test=dfrsp));

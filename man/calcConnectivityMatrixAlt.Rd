@@ -14,7 +14,7 @@ calcConnectivityMatrixAlt(
 \arguments{
 \item{dfr_isezs}{- dataframe with individuals classified by start/end zones}
 
-\item{endLHSs}{- name(s) of ending life stage(s) for connectivity matrix}
+\item{endLHSs}{- vector of name(s) of ending life stage(s) for connectivity matrix}
 
 \item{startZones}{- vector of all starting zone id's (integers)}
 

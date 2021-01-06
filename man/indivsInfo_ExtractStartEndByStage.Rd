@@ -17,7 +17,7 @@ indivsInfo_ExtractStartEndByStage(
 
 \item{sf_ebs}{- (optional) \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractEndByStage}}}
 
-\item{lst_indivs}{- (req'd if sf_start or sf_end is NULL) list of \pkg{sf} dataframes by life stage returned by \code{\link{reorderAndClassifyResults}}}
+\item{lst_indivs}{- (req'd if sf_start or sf_end is NULL) list of \pkg{sf} dataframes by life stage returned by \code{\link{indivsInfo_ReorderResults}}}
 
 \item{startLHS}{- (req'd if sf_start is NULL) life stage in which all individuals start}
 

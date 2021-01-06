@@ -5,7 +5,7 @@
 #'
 #'@param sf_start - (optional) \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractStart}}
 #'@param sf_ebs   - (optional) \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractEndByStage}}
-#'@param lst_indivs - (req'd if sf_start or sf_end is NULL) list of \pkg{sf} dataframes by life stage returned by \code{\link{reorderAndClassifyResults}}
+#'@param lst_indivs - (req'd if sf_start or sf_end is NULL) list of \pkg{sf} dataframes by life stage returned by \code{\link{indivsInfo_ReorderResults}}
 #'@param startLHS   - (req'd if sf_start is NULL) life stage in which all individuals start
 #'@param checkCalcs - flag (T/F) to check endGeom is correctly assigned (for debugging)
 #'

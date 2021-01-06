@@ -1,24 +1,30 @@
 #'
-#'@title Reorder a set of IBM results by life stage and individual
+#'@title Reorder a set of IBM results by life stage, individual and age
 #'
-#'@description Function to reorder a set of IBM results by life stage and individual.
+#'@description Function to reorder a set of IBM results by life stage, individual and age.
 #'
 #'@param resFolder - path to folder with results
 #'@param resFilePrefix - prefix for file names (default = "Results")
-#'@param lifeStageInfo - lhsInfo (list) object with life stage info
+#'@param lifeStageInfo - life stage info (list) object
 #'
 #'@return list of data frames by life stage type,
 #'with each dataframe ordered by start time, id, and time.
 #'
-#'@details Requires package \code{readr} to read csv files.
+#'@details Requires package \pkg{readr} to read csv files.
+#'
+#'@note Times in the csv files are interpreted by readr::read_csv as UTC, as well
+#'as in the reordered dataframes.
+#'
+#'@importFrom dplyr arrange
+#'@importFrom readr read_csv
 #'
 #'@export
 #'
-reorderResultsByStageAndIndiv<-function(resFolder,
-                                        resFilePrefix,
-                                        lifeStageInfo){
+indivsInfo_ReorderResults<-function(resFolder,
+                                    resFilePrefix,
+                                    lifeStageInfo){
   info<-lifeStageInfo;
-  typeNames<-unique(info$lifeStageTypes$typeName);
+  typeNames<-unique(info$lifeStageTypes$typeName);#--don't sort!
   typeNames<-factor(typeNames,
                     levels=typeNames);#typeNames as factor levels
 
@@ -32,15 +38,12 @@ reorderResultsByStageAndIndiv<-function(resFolder,
     csv<-file.path(resdr,paste0(resFilePrefix,cls,".csv"));
     if (file.exists(csv)){
       tmp<-readr::read_csv(csv,skip=1);
-      qry<-"select * from tmp
-            order by startTime,id,time;"
-      tmps<-sqldf::sqldf(qry);
-      tmps$typeName<-factor(tmps$typeName,levels=typeNames);#change typeName from character to factor
+      tmp$typeName<-factor(tmp$typeName,levels=typeNames);#change typeName from character to factor
+      tmps  = tmp %>% dplyr::arrange(startTime,id,typeName,time);
       dfrs[[cls]]<-tmps;
-      rm(tmp,tmps);
+      rm(csv,tmp,tmps);
     }
   }
-  rm(csv,qry);
 
   #--reorder model results into list of dataframes by typeName, not java class
   dfrts<-list();

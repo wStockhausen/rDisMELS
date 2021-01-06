@@ -3,7 +3,7 @@
 #'
 #' @description Function to extract info on individuals at start of initial life stage.
 #'
-#' @param sf_indivs - \pkg{sf} dataframe with reordered "connectivity results" for the initial life stage
+#' @param sf_indivs - \pkg{sf} dataframe for the initial life stage from call to \code{\link{indivsInfo_ReorderResults}}
 #'
 #' @return \pkg{sf} dataframe with columns:
 #'\itemize{
@@ -22,7 +22,7 @@
 #'}
 #'
 #'@details The input \pkg{sf} dataframe should be the one returned
-#'by \code{\link{reorderAndClassifyResults}} for the initial life stage.
+#'by \code{\link{indivsInfo_ReorderResults}} for the initial life stage.
 #'For each individual, the initial location is identified by the record
 #'when \code{startTime == time}.
 #'

@@ -4,7 +4,7 @@
 #' @description Function to calculate a connectivity matrix dataframe individuals classified by start/end zones.
 #'
 #' @param dfr_isezs - dataframe with individuals classified by start/end zones
-#' @param endLHSs - name(s) of ending life stage(s) for connectivity matrix
+#' @param endLHSs - vector of name(s) of ending life stage(s) for connectivity matrix
 #' @param startZones - vector of all starting zone id's (integers)
 #' @param endZones - vector of all ending zone id's (integers)
 #'
@@ -18,6 +18,7 @@
 #' as \code{\link{calcConnectivityMatrix}}.
 #'
 #' @importFrom sf st_drop_geometry
+#' @importFrom wtsUtilities Sum
 #'
 #' @import dplyr
 #' @import magrittr
@@ -47,9 +48,9 @@ calcConnectivityMatrixAlt<-function(dfr_isezs,
   dfr_szs = dfr_isezs %>%
               dplyr::select(startTime,origID,startNum,startZone) %>%
               dplyr::group_by(startTime,origID,startZone) %>%
-              dplyr::summarize(startNum=first(startNum),.groups="keep") %>%
+              dplyr::summarize(startNum=dplyr::first(startNum),.groups="keep") %>%
               dplyr::group_by(startTime,startZone) %>%
-              dplyr::summarize(startNum=sum(startNum,na.rm=TRUE),.groups="keep") %>%
+              dplyr::summarize(startNum=wtsUtilities::Sum(startNum),.groups="keep") %>%
               dplyr::ungroup() %>%
               subset(startZone %in% tblSZs$startZone);
   #--expand dfr_szs to full connectivity matrices for all startTimes
@@ -61,7 +62,7 @@ calcConnectivityMatrixAlt<-function(dfr_isezs,
   dfr_ezs = dfr_isezs %>% subset(endLHS %in% endLHSs) %>%
               dplyr::select(startTime,startZone,endZone,endNum) %>%
               dplyr::group_by(startTime,startZone,endZone) %>%
-              dplyr::summarize(endNum=sum(endNum,na.rm=TRUE),.groups="keep") %>%
+              dplyr::summarize(endNum=wtsUtilities::Sum(endNum),.groups="keep") %>%
               dplyr::ungroup() %>%
               subset((startZone %in% tblSZs$startZone)&(endZone %in% tblEZs$endZone));
   #--expand dfr_ezs to full connectivity matrices for all startTimes

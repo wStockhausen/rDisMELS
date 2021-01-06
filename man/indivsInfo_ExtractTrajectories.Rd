@@ -4,20 +4,35 @@
 \alias{indivsInfo_ExtractTrajectories}
 \title{Extract trajectories from DisMELS output as a list of \pkg{sf} dataframes with linestring geometries}
 \usage{
-indivsInfo_ExtractTrajectories(dfrs, crs = wtsGIS::get_crs("WGS84"))
+indivsInfo_ExtractTrajectories(sfs_points, crs = wtsGIS::get_crs("WGS84"))
 }
 \arguments{
-\item{dfrs}{- list of dataframes, by typeName, with DisMELS IBM results}
+\item{sfs_points}{- list of sf dataframes by typeName (output from \code{\link{indivsInfo_ReorderResults}})}
 
-\item{crs}{- coordinate reference system: \pkg{sf} crs object, EPSG code, or character with proj4string}
+\item{crs}{- coordinate reference system for trajectories: \pkg{sf} crs object, EPSG code, or character with proj4string}
 }
 \value{
-a list of \pkg{sf} dataset objects, each with a column ("geom") of class sfc_LINESTRING
+a \pkg{sf} dataframe with a column ("geom") of class sfc_LINESTRING giving the trajectory of each
+original individual by life stage (see Details)
 }
 \description{
 Function to extract trajectories from DisMELS output as a list of \pkg{sf} dataframes with linestring geometries.
 }
 \details{
-Requires packages \code{sf}, \code{wtsGIS}. For each \pkg{sf} dataframe, the linestring geometry
-is in column "geom". Other columns include id, startTime, age, ageInStage, and successful.
+Requires packages \code{sf}, \code{wtsGIS}.
+}
+\note{
+The output \pkg{sf} dataframe has columns
+\itemize{
+\item{typeName}
+\item{id}
+\item{parentID}
+\item{origID}
+\item{startTime}
+\item{successful}
+\item{additional columns}
+\item{geom - column with trajectory as an sfg_LINESTRING object}
+}
+Additional columns are: max_age, max_ageInStage, max_num, min_num,
+max_depth, min_depth, mn_depth, max_temp, min_temp, mn_temp.
 }
