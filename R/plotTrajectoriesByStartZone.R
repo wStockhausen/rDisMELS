@@ -59,7 +59,7 @@ plotTrajectoriesByStartZone<-function(sf_trjs,
   #----group trajectories by start zones
   sf_trjs %<>% subset(!is.na(startZone)&(startZone %in% startZones));#drop tracks by individuals starting outside start zones
   sf_trjs$group = factor(floor((sf_trjs$startZone+nSZpG-1)/nSZpG),levels=1:nSZGs,labels=lbls);
-  print(sf_trjs$group);
+  #head(sf_trjs$group);
   #sf_trjs$zone_start = factor(sf_trjs$startZone,levels=startZones,labels=paste("zone",startZones));
 
   #----if necessary, transform to map crs and shift longitudes to 0-360
