@@ -30,16 +30,16 @@
 #'
 #' @export
 #'
-plotTrajectoriesByStartZone<-function(sf_trjs,
-                                      colorBy="successful",
-                                      colorLabel=colorBy,
-                                      subtitle="",
-                                      bmls,
-                                      startZones = 1:8,
-                                      nSZpG      = 1, #--number of start zones per map group
-                                      nPlotCols  = 4, #--number of map columns per page
-                                      colours    = c("red","cyan","green","blue","black")
-                                      ){
+plotMap_IndivTrajectories<-function(sf_trjs,
+                                    colorBy="successful",
+                                    colorLabel=colorBy,
+                                    subtitle="",
+                                    bmls,
+                                    startZones = 1:8,
+                                    nSZpG      = 1, #--number of start zones per map group
+                                    nPlotCols  = 4, #--number of map columns per page
+                                    colours    = c("red","cyan","green","blue","black")
+                                    ){
   #----expand colours, as necessary
   ncs = length(unique(sf_trjs[[colorBy]]));
   colours = rep(colours,length.out=ncs);
@@ -59,12 +59,10 @@ plotTrajectoriesByStartZone<-function(sf_trjs,
   #----group trajectories by start zones
   sf_trjs %<>% subset(!is.na(startZone)&(startZone %in% startZones));#drop tracks by individuals starting outside start zones
   sf_trjs$group = factor(floor((sf_trjs$startZone+nSZpG-1)/nSZpG),levels=1:nSZGs,labels=lbls);
-  #head(sf_trjs$group);
-  #sf_trjs$zone_start = factor(sf_trjs$startZone,levels=startZones,labels=paste("zone",startZones));
 
   #----if necessary, transform to map crs and shift longitudes to 0-360
-  if ((sf::st_is_longlat(bmls$map_scale$crs))&(!sf::st_is_longlat(sf_trjs))) {
-    crs = bmls$map_scale$crs;
+  crs = bmls$map_scale$crs;
+  if ((sf::st_is_longlat(crs))&(!sf::st_is_longlat(sf_trjs))) {
     sf_trjs %<>% sf::st_transform(crs) %>% sf::st_shift_longitude();
   }
 
