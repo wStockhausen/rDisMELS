@@ -7,6 +7,7 @@
 byGridCell_CreateSFDataset(
   dfr,
   roms_grid,
+  dataID = "gridCellID",
   join_type = c("right join", "left join", "inner join", "full join")
 )
 }
@@ -14,6 +15,8 @@ byGridCell_CreateSFDataset(
 \item{dfr}{- dataframe with values to create map layer by gridCellID}
 
 \item{roms_grid}{- ROMS grid name, path to shapefile, or \pkg{sf} dataframe with grid polygons by ID}
+
+\item{dataID}{- column name for grid cell ids in input dataframe}
 
 \item{join_type}{- join type for \code{dfr} joined to \code{roms_grid}}
 }

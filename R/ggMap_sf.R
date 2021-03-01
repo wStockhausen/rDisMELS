@@ -1,5 +1,5 @@
 #'
-#' @title Create a ggplot2 object with maps from a \pkg{sf} dataframe
+#' @title TODO: finish. Create a ggplot2 object with maps from a \pkg{sf} dataframe
 #'
 #' @description Function to create a ggplot2 object of maps from a \pkg{sf} dataframe.
 #'
@@ -29,7 +29,7 @@
 #'
 #' @export
 #'
-plotMap_sf<-function(sf_dfr,
+ggMap_sf<-function(sf_dfr,
                      geomsCol="geometry",
                      colorCol=NULL,
                      colorScale=c("discrete","continuous"),

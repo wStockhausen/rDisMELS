@@ -21,7 +21,6 @@
 #' ending locations of individuals. End zone locations can be colored according
 #' to their start zone.
 #'
-#'@import dplyr
 #' @import ggplot2
 #' @import magrittr
 #' @import sf

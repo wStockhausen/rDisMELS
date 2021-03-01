@@ -30,7 +30,7 @@
 #'
 #' @export
 #'
-plotMap_IndivTrajectories<-function(sf_trjs,
+ggMap_IndivTrajectories<-function(sf_trjs,
                                     colorBy="successful",
                                     colorLabel=colorBy,
                                     subtitle="",

@@ -33,7 +33,7 @@
 #'
 #' @export
 #'
-plotConnectivityMap<-function(tbl_conn,
+ggMap_Connectivity<-function(tbl_conn,
                               tbl_web,
                               bmls=NULL,
                               valCol="value",

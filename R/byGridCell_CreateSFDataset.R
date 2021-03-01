@@ -5,6 +5,7 @@
 #'
 #' @param dfr - dataframe with values to create map layer by gridCellID
 #' @param roms_grid - ROMS grid name, path to shapefile, or \pkg{sf} dataframe with grid polygons by ID
+#' @param dataID - column name for grid cell ids in input dataframe
 #' @param join_type - join type for \code{dfr} joined to \code{roms_grid}
 #'
 #' @return an \pkg{sf} (simple features) dataframe with the values by grid cell.
@@ -29,6 +30,7 @@
 #'
 byGridCell_CreateSFDataset<-function(dfr,
                                      roms_grid,
+                                     dataID="gridCellID",
                                      join_type=c("right join","left join","inner join","full join")
                                      ){
   if (inherits(roms_grid,"sf")){
@@ -47,17 +49,11 @@ byGridCell_CreateSFDataset<-function(dfr,
 
   dfr_sf<-wtsGIS::mergeDataframeWithLayer(dfr,
                                           grid,
-                                          dataID="gridCellID",
+                                          dataID=dataID,
                                           geomsID="ID",
                                           sfJoinType=join_type[1],
                                           spDuplicateGeoms=TRUE);
-  # #--drop cells without values
-  # if (dropEmptyCells){
-  #   idx<-!is.na(dfr_sf$xi);
-  #   if (any(idx)) {
-  #     dfr_sf<-dfr_sf[idx,,drop=FALSE];#keep geometry column
-  #   } else return(NULL);#--no non-empty cells
-  # }
+  dfr_sf = dfr_sf[,names(dfr)];#--keep all dfr columns, but only geometry column from grid
   return(dfr_sf);
 }
 
