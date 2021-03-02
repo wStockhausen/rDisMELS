@@ -7,13 +7,17 @@
 plotConnectivityMatrix(
   tbl_conn,
   connPolys,
+  maxVal = NA,
   valCol = "value",
   facetCol = "startTime",
+  facetByRow = TRUE,
+  nrow = NULL,
+  ncol = NULL,
   setZeroToNA = FALSE,
   xlab = "end zone",
   ylab = "start zone",
   fill_lab = "value",
-  fill_scale = ggplot2::scale_fill_viridis_c(option = "plasma"),
+  fill_scale = ggplot2::scale_fill_viridis_c(option = "plasma", limits = c(0, maxVal)),
   legend.position = "right"
 )
 }
@@ -22,9 +26,17 @@ plotConnectivityMatrix(
 
 \item{connPolys}{- tibble representing the connectivity grid}
 
+\item{maxVal}{- max value for fill scale}
+
 \item{valCol}{- column name for values to plot}
 
 \item{facetCol}{- column name for faceting variable}
+
+\item{facetByRow}{- flag (T/F) to arrange facets by row}
+
+\item{nrow}{- number of rows to arrange facets in (if facetByRow is TRUE)}
+
+\item{ncol}{- number of columns to arrange facets in (if facetByRow is FALSE)}
 
 \item{setZeroToNA}{- flag (T/F) to set 0 values to NA's}
 

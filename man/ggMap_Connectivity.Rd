@@ -8,14 +8,19 @@ ggMap_Connectivity(
   tbl_conn,
   tbl_web,
   bmls = NULL,
+  maxVal = NA,
   valCol = "value",
   facetCol = "startTime",
+  facetByRow = TRUE,
+  nrow = NULL,
+  ncol = NULL,
   label = "value",
   val_min = 0,
   bin_size = NULL,
   bin_max = NULL,
   max_size = 3,
-  colour_scale = ggplot2::scale_colour_viridis_c(option = "plasma"),
+  colour_scale = ggplot2::scale_colour_viridis_c(option = "plasma", limits = c(0,
+    maxVal)),
   arrow = grid::arrow(20, grid::unit(0.15, "inches")),
   plotRetentionOnly = FALSE,
   plotExportedOnly = FALSE
@@ -28,9 +33,17 @@ ggMap_Connectivity(
 
 \item{bmls}{- list of base map layers {\pkg{ggplot2} layer objects}}
 
+\item{maxVal}{- max value for fill scale}
+
 \item{valCol}{- column name for values to plot}
 
 \item{facetCol}{- column name for faceting variable}
+
+\item{facetByRow}{- flag (T/F) to arrange facets by row}
+
+\item{nrow}{- number of rows to arrange facets in (if facetByRow is TRUE)}
+
+\item{ncol}{- number of columns to arrange facets in (if facetByRow is FALSE)}
 
 \item{label}{- label for legends}
 

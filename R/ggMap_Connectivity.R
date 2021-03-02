@@ -6,8 +6,12 @@
 #' @param tbl_conn -  tibble with connectivity values to plot
 #' @param tbl_web - tibble representing the connectivity web
 #' @param bmls - list of base map layers {\pkg{ggplot2} layer objects}
+#' @param maxVal - max value for fill scale
 #' @param valCol - column name for values to plot
 #' @param facetCol - column name for faceting variable
+#' @param facetByRow - flag (T/F) to arrange facets by row
+#' @param nrow - number of rows to arrange facets in (if facetByRow is TRUE)
+#' @param ncol - number of columns to arrange facets in (if facetByRow is FALSE)
 #' @param label - label for legends
 #' @param val_min - minimum value to include (0 is never included)
 #' @param bin_size - bin size (no binning if NULL)
@@ -34,23 +38,27 @@
 #' @export
 #'
 ggMap_Connectivity<-function(tbl_conn,
-                              tbl_web,
-                              bmls=NULL,
-                              valCol="value",
-                              facetCol="startTime",
-                              label="value",
-                              val_min=0,
-                              bin_size=NULL,
-                              bin_max=NULL,
-                              max_size=3,
-                              colour_scale=ggplot2::scale_colour_viridis_c(option="plasma"),
-                              arrow=grid::arrow(20,grid::unit(0.15,"inches")),
-                              plotRetentionOnly=FALSE,
-                              plotExportedOnly=FALSE){
+                             tbl_web,
+                             bmls=NULL,
+                             maxVal=NA,
+                             valCol="value",
+                             facetCol="startTime",
+                             facetByRow=TRUE,
+                             nrow=NULL,
+                             ncol=NULL,
+                             label="value",
+                             val_min=0,
+                             bin_size=NULL,
+                             bin_max=NULL,
+                             max_size=3,
+                             colour_scale=ggplot2::scale_colour_viridis_c(option="plasma",limits=c(0,maxVal)),
+                             arrow=grid::arrow(20,grid::unit(0.15,"inches")),
+                             plotRetentionOnly=FALSE,
+                             plotExportedOnly=FALSE){
   #----plot connectivity map
-  tmp = tbl_conn %>% dplyr::inner_join(tbl_web,by=c("startZone","endZone"));
-  tmp = tmp[tmp[[valCol]]>0,];
-  tmp = tmp[tmp[[valCol]]>=val_min,];
+  tmp = tbl_conn %>%
+          dplyr::inner_join(tbl_web,by=c("startZone","endZone")) %>%
+          subset((valCol>0)&(valCol>=val_min));
   tmp = tmp[rev(order(tmp[[valCol]])),];
   tmp[[".cont_vals"]] = tmp[[valCol]];
 
@@ -71,14 +79,27 @@ ggMap_Connectivity<-function(tbl_conn,
   }
 
   if (facetCol=="startTime"){
-    fw = facet_wrap(vars(format(startTime,format="%Y-%m-%d")),nrow=ceiling(sqrt(length(unique(tmp$startTime)))));
+    if (facetByRow){
+      if (is.null(nrow)) nrow = ceiling(sqrt(length(unique(tmp$startTime))));
+      fw = facet_wrap(vars(format(startTime,format="%Y-%m-%d")),nrow=nrow);
+    } else {
+      if (is.null(ncol)) ncol = ceiling(sqrt(length(unique(tmp$startTime))));
+      fw = facet_wrap(vars(format(startTime,format="%Y-%m-%d")),ncol=ncol);
+    }
   } else {
     fw = facet_wrap(facetCol,nrow=ceiling(sqrt(length(unique(tmp[[facetCol]])))));
+    if (facetByRow){
+      if (is.null(nrow)) nrow = ceiling(sqrt(length(unique(tmp[[facetCol]]))));
+      fw = facet_wrap(facetCol,nrow=nrow);
+    } else {
+      if (is.null(ncol)) ncol = ceiling(sqrt(length(unique(tmp[[facetCol]]))));
+      fw = facet_wrap(facetCol,ncol=ncol);
+    }
   }
 
-  tmp1 = tmp %>% subset(startZone!=endZone);
+  tmp1 = tmp %>% subset(as.character(startZone)!=as.character(endZone));
   aes1 = aes_string(x="startlon",y="startlat",xend="endlon",yend="endlat",colour=valCol,size=".cont_vals",alpha=".cont_vals");
-  tmp2 = tmp %>% subset(startZone==endZone);
+  tmp2 = tmp %>% subset(as.character(startZone)==as.character(endZone));
   aes2 = aes_string(x="startlon",y="startlat",colour=valCol,size=".cont_vals");
   if (is.null(bmls)){
     p = ggplot();
