@@ -8,7 +8,8 @@
 #' @param bmls - list of base map layers {\pkg{ggplot2} layer objects}
 #' @param maxVal - max value for fill scale
 #' @param valCol - column name for values to plot
-#' @param facetCol - column name for faceting variable
+#' @param facetGrid - formula for faceting variables using \code{ggplot2::facet_grid}
+#' @param facetWrap - column name(s) for faceting variable(s) using \code{ggplot2::facet_wrap}
 #' @param facetByRow - flag (T/F) to arrange facets by row
 #' @param nrow - number of rows to arrange facets in (if facetByRow is TRUE)
 #' @param ncol - number of columns to arrange facets in (if facetByRow is FALSE)
@@ -19,6 +20,7 @@
 #' @param max_size - max size for connectivity arrows
 #' @param colour_scale - \pkg{ggplot2} colour scale for connectivity values
 #' @param arrow - pass result from call to \code{\link[grid]{arrow}}
+#' @param noAxisLabels - flag (T/F) to include axis labels
 #' @param plotRetentionOnly - flag (T/F) to plot only retained proportions
 #' @param plotExportedOnly - flag (T/F) to plot only non-retained (exported) proportions
 #'
@@ -42,7 +44,8 @@ ggMap_Connectivity<-function(tbl_conn,
                              bmls=NULL,
                              maxVal=NA,
                              valCol="value",
-                             facetCol="startTime",
+                             facetGrid=NULL,
+                             facetWrap=NULL,
                              facetByRow=TRUE,
                              nrow=NULL,
                              ncol=NULL,
@@ -53,6 +56,7 @@ ggMap_Connectivity<-function(tbl_conn,
                              max_size=3,
                              colour_scale=ggplot2::scale_colour_viridis_c(option="plasma",limits=c(0,maxVal)),
                              arrow=grid::arrow(20,grid::unit(0.15,"inches")),
+                             noAxisLabels=TRUE,
                              plotRetentionOnly=FALSE,
                              plotExportedOnly=FALSE){
   #----plot connectivity map
@@ -78,23 +82,26 @@ ggMap_Connectivity<-function(tbl_conn,
     }
   }
 
-  if (facetCol=="startTime"){
-    if (facetByRow){
-      if (is.null(nrow)) nrow = ceiling(sqrt(length(unique(tmp$startTime))));
-      fw = facet_wrap(vars(format(startTime,format="%Y-%m-%d")),nrow=nrow);
+   if (is.null(facetGrid)){
+    #--use facet_wrap for faceting
+    if ((length(facetWrap)==1)&(facetWrap[1]=="startTime")){
+      if (facetByRow){
+        if (is.null(nrow)) nrow = ceiling(sqrt(length(unique(tmp$startTime))));
+        fcts = facet_wrap(vars(format(startTime,format="%Y-%m-%d")),nrow=nrow);
+      } else {
+        if (is.null(ncol)) ncol = ceiling(sqrt(length(unique(tmp$startTime))));
+        fcts = facet_wrap(vars(format(startTime,format="%Y-%m-%d")),ncol=ncol);
+      }
     } else {
-      if (is.null(ncol)) ncol = ceiling(sqrt(length(unique(tmp$startTime))));
-      fw = facet_wrap(vars(format(startTime,format="%Y-%m-%d")),ncol=ncol);
+      if (facetByRow){
+        fcts = facet_wrap(facetWrap,nrow=nrow);
+      } else {
+        fcts = facet_wrap(facetWrap,ncol=ncol);
+      }
     }
   } else {
-    fw = facet_wrap(facetCol,nrow=ceiling(sqrt(length(unique(tmp[[facetCol]])))));
-    if (facetByRow){
-      if (is.null(nrow)) nrow = ceiling(sqrt(length(unique(tmp[[facetCol]]))));
-      fw = facet_wrap(facetCol,nrow=nrow);
-    } else {
-      if (is.null(ncol)) ncol = ceiling(sqrt(length(unique(tmp[[facetCol]]))));
-      fw = facet_wrap(facetCol,ncol=ncol);
-    }
+    #--use facet_grid for faceting
+    fcts = facet_grid(facetGrid);
   }
 
   tmp1 = tmp %>% subset(as.character(startZone)!=as.character(endZone));
@@ -106,13 +113,14 @@ ggMap_Connectivity<-function(tbl_conn,
     if (!plotRetentionOnly) {if (nrow(tmp1)>0) p = p + geom_segment(data=tmp1,mapping=aes1,arrow=arrow);}
     if (!plotExportedOnly)  {if (nrow(tmp2)>0) p = p + geom_point(data=tmp2,mapping=aes2,inherit.aes=FALSE);}
     p = p + colour_scale + scale_alpha_continuous() + scale_size_area(max_size=max_size);
-    p = fw + labs(size=label,colour=label,alpha=label);
+    p = fcts + labs(size=label,colour=label,alpha=label);
   } else {
     p = ggplot() + bmls$land+bmls$zones+bmls$map_scale;
     if (!plotRetentionOnly) {if (nrow(tmp1)>0) p = p + geom_segment(data=tmp1,mapping=aes1,arrow=arrow);}
     if (!plotExportedOnly)  {if (nrow(tmp2)>0) p = p + geom_point(data=tmp2,mapping=aes2,inherit.aes=FALSE);}
     p = p + colour_scale + scale_alpha_continuous() + scale_size_area(max_size=max_size);
-    p = p + bmls$labels + fw + labs(size=label,colour=label,alpha=label) + bmls$theme;
+    p = p + bmls$labels + fcts + labs(size=label,colour=label,alpha=label) + bmls$theme;
   }
+  if (noAxisLabels) p = p + theme(axis.text=element_blank());
   return(p);
 }

@@ -9,7 +9,8 @@ plotConnectivityMatrix(
   connPolys,
   maxVal = NA,
   valCol = "value",
-  facetCol = "startTime",
+  facetGrid = NULL,
+  facetWrap = NULL,
   facetByRow = TRUE,
   nrow = NULL,
   ncol = NULL,
@@ -30,13 +31,15 @@ plotConnectivityMatrix(
 
 \item{valCol}{- column name for values to plot}
 
-\item{facetCol}{- column name for faceting variable}
+\item{facetGrid}{- formula for faceting variables using \code{ggplot2::facet_grid}}
 
-\item{facetByRow}{- flag (T/F) to arrange facets by row}
+\item{facetWrap}{- column name(s) for faceting variable(s) using \code{ggplot2::facet_wrap}}
 
-\item{nrow}{- number of rows to arrange facets in (if facetByRow is TRUE)}
+\item{facetByRow}{- flag (T/F) to arrange wrapped facets by row}
 
-\item{ncol}{- number of columns to arrange facets in (if facetByRow is FALSE)}
+\item{nrow}{- number of rows to arrange wrapped facets in (if facetByRow is TRUE)}
+
+\item{ncol}{- number of columns to arrange wrapped facets in (if facetByRow is FALSE)}
 
 \item{setZeroToNA}{- flag (T/F) to set 0 values to NA's}
 

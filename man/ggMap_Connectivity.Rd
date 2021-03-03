@@ -10,7 +10,8 @@ ggMap_Connectivity(
   bmls = NULL,
   maxVal = NA,
   valCol = "value",
-  facetCol = "startTime",
+  facetGrid = NULL,
+  facetWrap = NULL,
   facetByRow = TRUE,
   nrow = NULL,
   ncol = NULL,
@@ -22,6 +23,7 @@ ggMap_Connectivity(
   colour_scale = ggplot2::scale_colour_viridis_c(option = "plasma", limits = c(0,
     maxVal)),
   arrow = grid::arrow(20, grid::unit(0.15, "inches")),
+  noAxisLabels = TRUE,
   plotRetentionOnly = FALSE,
   plotExportedOnly = FALSE
 )
@@ -37,7 +39,9 @@ ggMap_Connectivity(
 
 \item{valCol}{- column name for values to plot}
 
-\item{facetCol}{- column name for faceting variable}
+\item{facetGrid}{- formula for faceting variables using \code{ggplot2::facet_grid}}
+
+\item{facetWrap}{- column name(s) for faceting variable(s) using \code{ggplot2::facet_wrap}}
 
 \item{facetByRow}{- flag (T/F) to arrange facets by row}
 
@@ -58,6 +62,8 @@ ggMap_Connectivity(
 \item{colour_scale}{- \pkg{ggplot2} colour scale for connectivity values}
 
 \item{arrow}{- pass result from call to \code{\link[grid]{arrow}}}
+
+\item{noAxisLabels}{- flag (T/F) to include axis labels}
 
 \item{plotRetentionOnly}{- flag (T/F) to plot only retained proportions}
 

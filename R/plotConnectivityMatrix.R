@@ -7,10 +7,11 @@
 #' @param connPolys - tibble representing the connectivity grid
 #' @param maxVal - max value for fill scale
 #' @param valCol - column name for values to plot
-#' @param facetCol - column name for faceting variable
-#' @param facetByRow - flag (T/F) to arrange facets by row
-#' @param nrow - number of rows to arrange facets in (if facetByRow is TRUE)
-#' @param ncol - number of columns to arrange facets in (if facetByRow is FALSE)
+#' @param facetGrid - formula for faceting variables using \code{ggplot2::facet_grid}
+#' @param facetWrap - column name(s) for faceting variable(s) using \code{ggplot2::facet_wrap}
+#' @param facetByRow - flag (T/F) to arrange wrapped facets by row
+#' @param nrow - number of rows to arrange wrapped facets in (if facetByRow is TRUE)
+#' @param ncol - number of columns to arrange wrapped facets in (if facetByRow is FALSE)
 #' @param setZeroToNA - flag (T/F) to set 0 values to NA's
 #' @param xlab - x axis label
 #' @param ylab - x axis label
@@ -33,7 +34,8 @@ plotConnectivityMatrix<-function(tbl_conn,
                                  connPolys,
                                  maxVal=NA,
                                  valCol="value",
-                                 facetCol="startTime",
+                                 facetGrid=NULL,
+                                 facetWrap=NULL,
                                  facetByRow=TRUE,
                                  nrow=NULL,
                                  ncol=NULL,
@@ -50,23 +52,26 @@ plotConnectivityMatrix<-function(tbl_conn,
           dplyr::inner_join(connPolys,by=c("startZone","endZone"));
   if(setZeroToNA) tmp$connPct[tmp[[valCol]]==0] = NA;
 
-  if (facetCol=="startTime"){
-    if (facetByRow){
-      if (is.null(nrow)) nrow = ceiling(sqrt(length(unique(tmp$startTime))));
-      fw = facet_wrap(vars(format(startTime,format="%Y-%m-%d")),nrow=nrow);
+  if (is.null(facetGrid)){
+    #--use facet_wrap for faceting
+    if ((length(facetWrap)==1)&(facetWrap[1]=="startTime")){
+      if (facetByRow){
+        if (is.null(nrow)) nrow = ceiling(sqrt(length(unique(tmp$startTime))));
+        fcts = facet_wrap(vars(format(startTime,format="%Y-%m-%d")),nrow=nrow);
+      } else {
+        if (is.null(ncol)) ncol = ceiling(sqrt(length(unique(tmp$startTime))));
+        fcts = facet_wrap(vars(format(startTime,format="%Y-%m-%d")),ncol=ncol);
+      }
     } else {
-      if (is.null(ncol)) ncol = ceiling(sqrt(length(unique(tmp$startTime))));
-      fw = facet_wrap(vars(format(startTime,format="%Y-%m-%d")),ncol=ncol);
+      if (facetByRow){
+        fcts = facet_wrap(facetWrap,nrow=nrow);
+      } else {
+        fcts = facet_wrap(facetWrap,ncol=ncol);
+      }
     }
   } else {
-    fw = facet_wrap(facetCol,nrow=ceiling(sqrt(length(unique(tmp[[facetCol]])))));
-    if (facetByRow){
-      if (is.null(nrow)) nrow = ceiling(sqrt(length(unique(tmp[[facetCol]]))));
-      fw = facet_wrap(facetCol,nrow=nrow);
-    } else {
-      if (is.null(ncol)) ncol = ceiling(sqrt(length(unique(tmp[[facetCol]]))));
-      fw = facet_wrap(facetCol,ncol=ncol);
-    }
+    #--use facet_grid for faceting
+    fcts = facet_grid(facetGrid);
   }
 
   p = ggplot(tmp,mapping=aes_string(x="x",y="y",group="id",fill=valCol)) +
@@ -74,7 +79,7 @@ plotConnectivityMatrix<-function(tbl_conn,
          fill_scale +
          scale_x_continuous(breaks=1:length(endZones),  labels=endZones) +
          scale_y_continuous(breaks=1:length(startZones),labels=startZones) +
-         fw +
+         fcts +
          labs(x=xlab,y=ylab,fill=fill_lab) +
          theme(legend.position=legend.position);
 
