@@ -50,7 +50,7 @@ plotConnectivityMatrix<-function(tbl_conn,
   endZones   = levels(connPolys$endZone);
   tmp = tbl_conn %>%
           dplyr::inner_join(connPolys,by=c("startZone","endZone"));
-  if(setZeroToNA) tmp$connPct[tmp[[valCol]]==0] = NA;
+  if(setZeroToNA) tmp[[valCol]][tmp[[valCol]]==0] = NA;
 
   if (is.null(facetGrid)){
     #--use facet_wrap for faceting
