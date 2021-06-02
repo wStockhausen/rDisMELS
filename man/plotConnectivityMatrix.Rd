@@ -61,5 +61,7 @@ Function to create a \pkg{ggplot2} connectivity matrix plot object.
 }
 \details{
 Creates a \pkg{ggplot2} plot object representing a connectivity matrix
-with start zones on the y axis and end zones on the x axis
+with start zones on the y axis and end zones on the x axis. The startZone and endZone
+columns of the connPolys dataframe should be factors, with levels corresponding to
+the order in which zones should be displayed.
 }

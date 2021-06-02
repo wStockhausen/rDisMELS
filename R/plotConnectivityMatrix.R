@@ -22,7 +22,9 @@
 #' @return \pkg{ggplot2} plot object
 #'
 #' @details Creates a \pkg{ggplot2} plot object representing a connectivity matrix
-#' with start zones on the y axis and end zones on the x axis
+#' with start zones on the y axis and end zones on the x axis. The startZone and endZone
+#' columns of the connPolys dataframe should be factors, with levels corresponding to
+#' the order in which zones should be displayed.
 #'
 #' @import ggplot2
 #' @import magrittr
@@ -48,6 +50,8 @@ plotConnectivityMatrix<-function(tbl_conn,
   #----plot connectivity matrix
   startZones = levels(connPolys$startZone);
   endZones   = levels(connPolys$endZone);
+  if (!is.factor(tbl_conn$startZone)) tbl_conn$startZone = factor(tbl_conn$startZone,levels=startZones,labels=startZones);
+  if (!is.factor(tbl_conn$endZone))   tbl_conn$endZone   = factor(tbl_conn$endZone,  levels=endZones,  labels=endZones);
   tmp = tbl_conn %>%
           dplyr::inner_join(connPolys,by=c("startZone","endZone"));
   if(setZeroToNA) tmp[[valCol]][tmp[[valCol]]==0] = NA;
@@ -76,6 +80,7 @@ plotConnectivityMatrix<-function(tbl_conn,
 
   p = ggplot(tmp,mapping=aes_string(x="x",y="y",group="id",fill=valCol)) +
          geom_polygon() + coord_equal(expand=FALSE) +
+         geom_abline(slope=1,linetype=2) +
          fill_scale +
          scale_x_continuous(breaks=1:length(endZones),  labels=endZones) +
          scale_y_continuous(breaks=1:length(startZones),labels=startZones) +

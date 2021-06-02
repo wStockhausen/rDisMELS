@@ -20,8 +20,13 @@ ggMap_Connectivity(
   bin_size = NULL,
   bin_max = NULL,
   max_size = 3,
-  colour_scale = ggplot2::scale_colour_viridis_c(option = "plasma", limits = c(0,
-    maxVal)),
+  linewidth = NA,
+  alpha = NA,
+  reverse = TRUE,
+  scale_colour = ggplot2::scale_colour_viridis_c(option = "plasma", limits = c(0,
+    maxVal), oob = scales::squish),
+  scale_size = ggplot2::scale_size_area(max_size = max_size, oob = scales::squish),
+  scale_alpha = ggplot2::scale_alpha_continuous(oob = scales::squish),
   arrow = grid::arrow(20, grid::unit(0.15, "inches")),
   noAxisLabels = TRUE,
   plotRetentionOnly = FALSE,
@@ -35,7 +40,7 @@ ggMap_Connectivity(
 
 \item{bmls}{- list of base map layers {\pkg{ggplot2} layer objects}}
 
-\item{maxVal}{- max value for fill scale}
+\item{maxVal}{- max value for scales (higher values will be set to maxVal)}
 
 \item{valCol}{- column name for values to plot}
 
@@ -59,7 +64,17 @@ ggMap_Connectivity(
 
 \item{max_size}{- max size for connectivity arrows}
 
-\item{colour_scale}{- \pkg{ggplot2} colour scale for connectivity values}
+\item{linewidth}{- line width for fixed-width arrows}
+
+\item{alpha}{- transparency value for fixed-alpha symbols and arrows}
+
+\item{reverse}{- plot connections in reverse order (largest on bottom)}
+
+\item{scale_colour}{- \pkg{ggplot2} colour scale for connectivity values (default = ggplot2::scale_colour_viridis_c(option="plasma",limits=c(0,maxVal)))}
+
+\item{scale_size}{- \pkg{ggplot2} size scale for connectivity values (default = scale_size_area(max_size=max_size,oob=scales::squish))}
+
+\item{scale_alpha}{- \pkg{ggplot2} transparency scale for connectivity values (default = scale_alpha_continuous(oob=scales::squish))}
 
 \item{arrow}{- pass result from call to \code{\link[grid]{arrow}}}
 
