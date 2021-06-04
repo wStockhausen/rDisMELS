@@ -7,6 +7,7 @@
 #'@param sf_ebs   - (optional) \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractEndByStage}}
 #'@param lst_indivs - (req'd if sf_start or sf_end is NULL) list of \pkg{sf} dataframes by life stage returned by \code{\link{indivsInfo_ReorderResults}}
 #'@param startLHS   - (req'd if sf_start is NULL) life stage in which all individuals start
+#'@param addVars - (req'd if lst_indivs is given) character vector with names of additional (non-default) variables to extract
 #'@param checkCalcs - flag (T/F) to check endGeom is correctly assigned (for debugging)
 #'
 #'@return \pkg{sf} dataframe with columns:
@@ -21,6 +22,7 @@
 #'  \item{startBathym - bathymetric depth (m) at starting location}
 #'  \item{startAge - starting depth}
 #'  \item{startNum - starting depth}
+#'  \item{start..AddVars - starting values for additional (non-default) variables}
 #'  \item{startGeom - starting 2d location as SF_POINT}
 #'  \item{endTime - ending time}
 #'  \item{endID - ending individual ID}
@@ -32,16 +34,21 @@
 #'  \item{endBathym - bathymetric depth (m) at ending location}
 #'  \item{endAge - ending age(d)}
 #'  \item{endNum - ending number}
+#'  \item{end..AddVars - ending values for additional (non-default) variables}
 #'  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement)}
 #'  \item{endGeom - ending 2d location as SF_POINT}
 #'}
 #'
 #'@details The input \pkg{sf} dataframes \code{sf_start} and \code{sf_end} should be
 #'the output of \code{\link{indivsInfo_ExtractStart}} and  \code{\link{indivsInfo_ExtractEnd}},
-#'respectively. If either are NULL, \code{lst_indivs} must be given. If \code{sf_start} is NULL,
+#'respectively. If both are given as an inputs, \code{addVars} is ignored.
+#'
+#'If either are NULL, \code{lst_indivs} must be given. If \code{sf_start} is NULL,
 #'\code{startLHS} must be given. If \code{sf_start} is NULL, it is calculated internally
-#'using \code{sf_start = indivsInfo_ExtractStart(lst_indivs[[startLHS]])}. If \code{sf_end}
-#'is NULL, it is calculated internally using \code{sf_ebs = indivsInfo_ExtractEndByStage(lst_indivs)}
+#'using \code{sf_start = indivsInfo_ExtractStart(lst_indivs[[startLHS]],addVars=addVars)}.
+#'
+#'If \code{sf_end}
+#'is NULL, it is calculated internally using \code{sf_ebs = indivsInfo_ExtractEndByStage(lst_indivs,addVars=addVars)}
 #'followed by \code{sf_end = indivsInfo_ExtractEnd(sf_ebs)}.
 #'
 #'@import dplyr
@@ -53,10 +60,11 @@ indivsInfo_ExtractStartEndByStage<-function(sf_start=NULL,
                                             sf_ebs=NULL,
                                             lst_indivs=NULL,
                                             startLHS=NULL,
+                                            addVars="",
                                             checkCalcs=FALSE){
   #--process lst_indvs, as necessary
-  if (is.null(sf_start)) sf_start = indivsInfo_ExtractStart(lst_indivs[[startLHS]]);
-  if (is.null(sf_ebs))   sf_ebs   = indivsInfo_ExtractEndByStage(lst_indivs);
+  if (is.null(sf_start)) sf_start = indivsInfo_ExtractStart(lst_indivs[[startLHS]],addVars=addVars);
+  if (is.null(sf_ebs))   sf_ebs   = indivsInfo_ExtractEndByStage(lst_indivs,addVars=addVars);
 
   #--note: can't join two sf dataframes on attributes.
   #--need to drop geometry column in sf_ebs in order to do right join,
@@ -85,4 +93,6 @@ indivsInfo_ExtractStartEndByStage<-function(sf_start=NULL,
 }
 #sf_sebs = indivsInfo_ExtractStartEndByStage(sf_start,sf_ebs,checkCalcs=TRUE);
 #sf_sebs = indivsInfo_ExtractStartEndByStage(lst_indivs=lst_indivs,startLHS=startLHS,checkCalcs=TRUE);
+#sf_sebs = indivsInfo_ExtractStartEndByStage(sf_start,sf_ebs,checkCalcs=TRUE,addVars=c("temperature","salinity"));
+#sf_sebs = indivsInfo_ExtractStartEndByStage(lst_indivs=lst_indivs,startLHS=startLHS,checkCalcs=TRUE,addVars=c("temperature","salinity"));
 

@@ -4,6 +4,7 @@
 #'@description Function to extract info by individual at end of each life stage.
 #'
 #' @param sfs_indivs - list of \pkg{sf} dataframes returned by \code{\link{indivsInfo_ReorderResults}}
+#' @param addVars - character vector with names of additional (non-default) variables to extract
 #'
 #'@return \pkg{sf} dataframe with columns:
 #'\itemize{
@@ -19,6 +20,7 @@
 #'  \item{endBathym - bathymetric depth (m) at ending location}
 #'  \item{endAge - ending age(d)}
 #'  \item{endNum - ending number}
+#'  \item{start..AddVars - columns corresponding to additional variables}
 #'  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement)}
 #'  \item{endGeom - ending 2d location as SF_POINT}
 #'}
@@ -28,31 +30,47 @@
 #'For each individual, the end of the life stage is identified by the record
 #'with \code{active==FALSE}, indicating transition to next life stage or death.
 #'
+#'@importFrom stringr str_to_sentence
 #'@import dplyr
 #'@import magrittr
 #'
 #'@export
 #'
-indivsInfo_ExtractEndByStage<-function(sfs_indivs){
+indivsInfo_ExtractEndByStage<-function(sfs_indivs,addVars=""){
   lhss = names(sfs_indivs);
   #--determine selected attributes for each individual at end of each life stage
   sf_EndByStage  = NULL;
   for (lhs in lhss){
-    sf_tmp = sfs_indivs[[lhs]] %>%
-                 subset(!active) %>%
-                 dplyr::select(startTime,origID,time,id,typeName,
-                               gridCellID,horizPos1,horizPos2,vertPos,bathym,
-                               age,ageInStage,number,successful,
-                               geom) %>%
-                 dplyr::rename(endLHS=typeName,endID=id,endTime=time,
-                               endCellID=gridCellID,endLon=horizPos1,endLat=horizPos2,
-                               endDepth=vertPos,endBathym=bathym,
-                               endAge=age,endAgeInStage=ageInStage,endNum=number,
-                               endGeom=geom);
+    addVarsp = addVars;
+    endAddVars = "";
+    str =
+      "sf_tmp = sfs_indivs[[lhs]] %>%
+                   subset(!active) %>%
+                   dplyr::select(startTime,origID,time,id,typeName,
+                                 gridCellID,horizPos1,horizPos2,vertPos,bathym,
+                                 age,ageInStage,number,&&addVars
+                                 successful,
+                                 geom) %>%
+                   dplyr::rename(endLHS=typeName,endID=id,endTime=time,
+                                 endCellID=gridCellID,endLon=horizPos1,endLat=horizPos2,
+                                 endDepth=vertPos,endBathym=bathym,
+                                 endAge=age,endAgeInStage=ageInStage,endNum=number,
+                                 &&endAddVars
+                                 endGeom=geom);"
+    if (addVars[1]!=""){
+      AddVars = stringr::str_to_sentence(addVars);
+      endAddVars = paste0(paste0("start",AddVars,"=",addVars,collapse=","),",");
+      addVarsp     = paste0(paste0(                    addVars,collapse=","),",");
+    }
+    str = gsub("&&addVars",addVarsp,str,fixed=TRUE);
+    str = gsub("&&endAddVars",endAddVars,str,fixed=TRUE);
+    # cat(str,"\n");
+    eval(parse(text=str)[[1]]);
     sf_EndByStage = rbind(sf_EndByStage,sf_tmp);
   }
   sf_EndByStage %<>% group_by(startTime,origID,endID) %>% arrange(endAge,.by_group=TRUE);
   return(sf_EndByStage);
 }
 #sf_EndByStage = indivsInfo_ExtractEndByStage(sfs_indivs);
+#sf_EndByStage = indivsInfo_ExtractEndByStage(sfs_indivs,addVars=c("temperature","salinity"));
 

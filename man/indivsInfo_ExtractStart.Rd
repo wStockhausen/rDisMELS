@@ -4,10 +4,12 @@
 \alias{indivsInfo_ExtractStart}
 \title{Extract info on individuals at start of initial life stage}
 \usage{
-indivsInfo_ExtractStart(sf_indivs)
+indivsInfo_ExtractStart(sf_indivs, addVars = "")
 }
 \arguments{
 \item{sf_indivs}{- \pkg{sf} dataframe for the initial life stage from call to \code{\link{indivsInfo_ReorderResults}}}
+
+\item{addVars}{- character vector with names of additional (non-default) variables to extract}
 }
 \value{
 \pkg{sf} dataframe with columns:
@@ -22,6 +24,8 @@ indivsInfo_ExtractStart(sf_indivs)
  \item{startBathym - bathymetric depth (m) at starting location}
  \item{startAge - starting depth}
  \item{startNum - starting depth}
+ \item{startTemp - starting temperature}
+ \item{start..AddVars - columns corresponding to additional variables}
  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement)}
  \item{startGeom - starting 2d location as SF_POINT}
 }

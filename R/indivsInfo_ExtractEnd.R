@@ -46,4 +46,5 @@ indivsInfo_ExtractEnd<-function(sf_EndByStage){
   return(sf_end);
 }
 #sf_end = indivsInfo_ExtractEnd(sf_EndByStage);
+#sf_end = indivsInfo_ExtractEnd(sf_EndByStage,addVars=c("temperature","salinity"));
 

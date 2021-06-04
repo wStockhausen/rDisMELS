@@ -26,7 +26,7 @@ The input \pkg{sf} dataframe should be the output of
 \code{\link{indivsInfo_ExtractEndByStage}} or \code{\link{indivsInfo_ExtractStartEndByStage}}.
 
 The end of the model run or death is basically identified by the record
-where \code{age==max(age)} for each origID, endID pair. However, a traightforward
+where \code{age==max(age)} for each origID, endID pair. However, a straightforward
 application of this approach would "double count"
 individuals which changed id's during the course of their lifetime, because the "original"
 individual (with id = origID) appears to have died when it metamorphoses (origID stays

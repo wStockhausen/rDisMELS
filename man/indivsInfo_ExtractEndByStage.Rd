@@ -4,10 +4,12 @@
 \alias{indivsInfo_ExtractEndByStage}
 \title{Extract info by individual at end of each life stage}
 \usage{
-indivsInfo_ExtractEndByStage(sfs_indivs)
+indivsInfo_ExtractEndByStage(sfs_indivs, addVars = "")
 }
 \arguments{
 \item{sfs_indivs}{- list of \pkg{sf} dataframes returned by \code{\link{indivsInfo_ReorderResults}}}
+
+\item{addVars}{- character vector with names of additional (non-default) variables to extract}
 }
 \value{
 \pkg{sf} dataframe with columns:
@@ -24,6 +26,7 @@ indivsInfo_ExtractEndByStage(sfs_indivs)
  \item{endBathym - bathymetric depth (m) at ending location}
  \item{endAge - ending age(d)}
  \item{endNum - ending number}
+ \item{start..AddVars - columns corresponding to additional variables}
  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement)}
  \item{endGeom - ending 2d location as SF_POINT}
 }
