@@ -59,7 +59,7 @@ indivsInfo_ExtractEndByStage<-function(sfs_indivs,addVars=""){
                                  endGeom=geom);"
     if (addVars[1]!=""){
       AddVars = stringr::str_to_sentence(addVars);
-      endAddVars = paste0(paste0("start",AddVars,"=",addVars,collapse=","),",");
+      endAddVars = paste0(paste0("end",AddVars,"=",addVars,collapse=","),",");
       addVarsp     = paste0(paste0(                    addVars,collapse=","),",");
     }
     str = gsub("&&addVars",addVarsp,str,fixed=TRUE);
