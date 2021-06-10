@@ -37,7 +37,7 @@ indivsInfo_ExtractOriginalsBySuccess<-function(dfrStart,
       dfrp<-dfrStart %>%
               dplyr::select(startTime,origID) %>%
               dplyr::distinct() %>%
-              dplyr::arrange(startTime,origID);
+              dplyr::arrange(startTime,origID) %>%
               dplyr::mutate(successful=FALSE);
    }
    return(dfrp);

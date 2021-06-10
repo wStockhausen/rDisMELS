@@ -2,20 +2,20 @@
 % Please edit documentation in R/indivsInfo_ExtractOriginalsBySuccess.R
 \name{indivsInfo_ExtractOriginalsBySuccess}
 \alias{indivsInfo_ExtractOriginalsBySuccess}
-\title{Extract a dataframe of original IDs by success}
+\title{Extract a dataframe of original IDs classified by success}
 \usage{
-indivsInfo_ExtractOriginalsBySuccess(dfrStart, dfrEnd)
+indivsInfo_ExtractOriginalsBySuccess(dfrStart, dfrEnd = NULL)
 }
 \arguments{
 \item{dfrStart}{- dataframe with startTime and origID of unique initial individuals}
 
-\item{dfrEnd}{- dataframe with startTime, orgiID, and id of unique individuals in "successful" life stage(s)}
+\item{dfrEnd}{- NULL, or dataframe with startTime, orgiID, and id of unique individuals in "successful" life stage(s)}
 }
 \value{
-a dataframe with origID and startTime for successful individuals.
+a dataframe
 }
 \description{
-Function to extract a dataframe of original IDs by success.
+Function to extract a dataframe of original IDs classified by success.
 }
 \details{
 The "index" consists of a dataframe with columns
@@ -25,4 +25,6 @@ The "index" consists of a dataframe with columns
   \item{successful - TRUE/FALSE indicating whether or not a "succssful" life stage was eventually reached}
 }
 and a row for each "original" individual.
+
+If \code{dfrEnd} is \code{NULL}, all individuals are classified with success as FALSE.
 }
