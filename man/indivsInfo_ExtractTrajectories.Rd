@@ -4,12 +4,18 @@
 \alias{indivsInfo_ExtractTrajectories}
 \title{Extract trajectories from DisMELS output as a list of \pkg{sf} dataframes with linestring geometries}
 \usage{
-indivsInfo_ExtractTrajectories(sfs_points, crs = wtsGIS::get_crs("WGS84"))
+indivsInfo_ExtractTrajectories(
+  sfs_points,
+  crs = wtsGIS::get_crs("WGS84"),
+  step = 1000
+)
 }
 \arguments{
 \item{sfs_points}{- list of sf dataframes by typeName (output from \code{\link{indivsInfo_ReorderResults}})}
 
 \item{crs}{- coordinate reference system for trajectories: \pkg{sf} crs object, EPSG code, or character with proj4string}
+
+\item{step}{- step size for processing individuals}
 }
 \value{
 a \pkg{sf} dataframe with a column ("geom") of class sfc_LINESTRING giving the trajectory of each
