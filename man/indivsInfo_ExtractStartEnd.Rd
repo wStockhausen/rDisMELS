@@ -11,6 +11,8 @@ indivsInfo_ExtractStartEnd(
   lst_indivs = NULL,
   startLHS = NULL,
   addVars = "",
+  hasSuccessful = FALSE,
+  verbose = FALSE,
   checkCalcs = FALSE
 )
 }
@@ -26,6 +28,10 @@ indivsInfo_ExtractStartEnd(
 \item{startLHS}{- (req'd if sf_start is NULL) life stage in which all individuals start}
 
 \item{addVars}{- (req'd if lst_indivs is given) character vector with names of additional (non-default) variables to extract}
+
+\item{hasSuccessful}{- flag indicating that input dataframes include a "successful" column}
+
+\item{verbose}{- flag to print debugging info}
 
 \item{checkCalcs}{- flag (T/F) to check endGeom is correctly assigned (for debugging)}
 }
@@ -55,7 +61,7 @@ indivsInfo_ExtractStartEnd(
  \item{endAge - ending age(d)}
  \item{endNum - ending number}
  \item{end..AddVars - ending values for additional (non-default) variables}
- \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement)}
+ \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement) [optional: depends on processing]}
  \item{endGeom - ending 2d location as SF_POINT}
 }
 }

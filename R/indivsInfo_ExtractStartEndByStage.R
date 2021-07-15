@@ -53,6 +53,7 @@
 #'
 #'@import dplyr
 #'@import magrittr
+#'@import tibble
 #'
 #'@export
 #'
@@ -67,28 +68,49 @@ indivsInfo_ExtractStartEndByStage<-function(sf_start=NULL,
   if (is.null(sf_ebs))   sf_ebs   = indivsInfo_ExtractEndByStage(lst_indivs,addVars=addVars);
 
   #--note: can't join two sf dataframes on attributes.
-  #--need to drop geometry column in sf_ebs in order to do right join,
-  #--then add it back on. Need to make sure, though, that endGeoms match to
-  #--correct individuals in combined dataframe.
-  sf_start %<>% dplyr::arrange(startTime,origID);             #--make sure sf_start is in known order
-  sf_ebs   %<>% dplyr::arrange(startTime,origID,endID,endAge);#--make sure sf_ebs is in known order
-  #----create combined sf dataframe (missing endGeom column, though) with same order as sf_ebs
-  sf_sebs = sf_start %>%
-              dplyr::select(!successful) %>%
-              dplyr::right_join(sf_ebs %>% sf::st_drop_geometry(),by=c("startTime","origID")) %>%
-              dplyr::arrange(startTime,origID,endID,endAge);
-  sf_sebs %<>% dplyr::mutate(endGeom=sf_ebs$endGeom);#--add in endGeoms
-  if (checkCalcs){
-    #--check the above is correct
-    cnt = sum((sf_sebs$startTime!=sf_ebs$startTime)|(sf_sebs$origID!=sf_ebs$origID)|
-              (sf_sebs$endID!=sf_ebs$endID)|(sf_sebs$endAge!=sf_ebs$endAge));
-    if (cnt==0){
-      cat("Info: checksum in rDisMELS::indivsInfo_ExtractStartEndByStage was zero, as expected.\n")
-    } else {
-      str = "Checksum in rDisMELS::indivsInfo_ExtractStartEndByStage was not zero!"
-      warning(str, immediate.=TRUE);
-    }
+  #--Could do either of the following:
+  #--1. drop geometry column (endGeoms) in sf_ebs in order to do right join, then add it back on.
+  #------In this case, need to make sure, though, that endGeoms match to
+  #------correct individuals in the combined dataframe.
+  #--2. convert sf_ebs to tibble in order to do right join.
+  #------In this case, endGeom is converted to a list column and not dropped from sf_ebs in inner join
+  #--Approach 1 was initially implemented, but approach 2 is simpler and is now implemented.
+
+  #----Approach 1
+  # #----create combined sf dataframe (missing endGeom column, though) with same order as sf_ebs
+  # sf_start %<>% dplyr::arrange(startTime,origID);             #--make sure sf_start is in known order
+  # sf_ebs   %<>% dplyr::arrange(startTime,origID,endID,endAge);#--make sure sf_ebs is in known order
+  # sf_sebs = sf_start %>%
+  #             dplyr::select(!successful) %>%
+  #             dplyr::right_join(sf_ebs %>% sf::st_drop_geometry(),by=c("startTime","origID")) %>%
+  #             dplyr::arrange(startTime,origID,endID,endAge);
+  # sf_sebs %<>% dplyr::mutate(endGeom=sf_ebs$endGeom);#--add in endGeoms
+  # if (checkCalcs){
+  #   #--check the above is correct
+  #   cnt = sum((sf_sebs$startTime!=sf_ebs$startTime)|(sf_sebs$origID!=sf_ebs$origID)|
+  #             (sf_sebs$endID!=sf_ebs$endID)|(sf_sebs$endAge!=sf_ebs$endAge));
+  #   if (cnt==0){
+  #     cat("Info: checksum in rDisMELS::indivsInfo_ExtractStartEndByStage was zero, as expected.\n")
+  #   } else {
+  #     str = "Checksum in rDisMELS::indivsInfo_ExtractStartEndByStage was not zero!"
+  #     warning(str, immediate.=TRUE);
+  #   }
+  # }
+
+  #--Approach 2
+  str = "sf_sebs = sf_start %>% &&successful
+                     dplyr::right_join(tibble::as_tibble(sf_ebs),by=c('startTime','origID')) %>%
+                     dplyr::arrange(startTime,origID,endID,endAge);";
+  if (hasSuccessful) {
+    #--drop 'successful' column from sf_start, will pick up from sf_ebs
+    str = gsub("&&successful","dplyr::select(!successful) %>%",str,fixed=TRUE);
+  } else {
+    #--no 'successful' column to drop
+    str = gsub("&&successful","",str,fixed=TRUE);
   }
+  if (verbose) message(str);
+  eval(parse(text=str)[[1]]);
+
   return(sf_sebs);
 }
 #sf_sebs = indivsInfo_ExtractStartEndByStage(sf_start,sf_ebs,checkCalcs=TRUE);

@@ -19,7 +19,7 @@
 #' \item{parentID}
 #' \item{origID}
 #' \item{startTime}
-#' \item{successful}
+#' \item{successful - included if present in sfs_points}
 #' \item{additional columns}
 #' \item{geom - column with trajectory as an sfg_LINESTRING object}
 #' }
@@ -36,12 +36,26 @@ indivsInfo_ExtractTrajectories<-function(sfs_points,
                                          crs=wtsGIS::get_crs("WGS84"),
                                          step=1000){
   lhss = names(sfs_points);             #--get life stage names
+  #--define processing code
+  str = "sf_ls = sf_lhsp %>%
+                  dplyr::group_by(typeName,id,parentID,origID,startTime &&successful) %>%
+                  summarise(max_age=max(age),max_ageInStage=max(ageInStage),
+                                  max_num=max(number),min_num=min(number),
+                                  max_depth=max(vertPos),min_depth=min(vertPos),mn_depth=mean(vertPos),
+                                  max_temp=max(temperature),min_temp=min(temperature),mn_temp=mean(temperature),
+                                  do_union=FALSE) %>%
+                  sf::st_cast('LINESTRING');"; #--create trajectories
   #--create trajectories
   sf_trjs = NULL;
   for (lhs in lhss){
     cat("\t\tprocessing",lhs,"\n");
     sf_lhs = sfs_points[[lhs]] %>%
               sf::st_transform(crs);#--transform to Alaska Albers
+    if (any(names(sf_lhs)=="successful")){
+      strp = gsub("&&successful",",successful",str,fixed=TRUE);
+    } else {
+      strp = gsub("&&successful","",str,fixed=TRUE);
+    }
     dst = sf_lhs %>%
             sf::st_drop_geometry() %>%
             dplyr::distinct(typeName,id,parentID,origID,startTime);
@@ -52,17 +66,10 @@ indivsInfo_ExtractTrajectories<-function(sfs_points,
       cat("\t\t\tprocessing individuals",min_rw,"to",min(min_rw+step-1,nd),".\n");
       dstp = dst[min_rw:min(min_rw+step-1,nd),];
       sf_lhsp = sf_lhs %>% inner_join(dstp);
-      sf_ls   = sf_lhsp %>%
-                dplyr::group_by(typeName,id,parentID,origID,startTime,successful) %>%
-                summarise(max_age=max(age),max_ageInStage=max(ageInStage),
-                                max_num=max(number),min_num=min(number),
-                                max_depth=max(vertPos),min_depth=min(vertPos),mn_depth=mean(vertPos),
-                                max_temp=max(temperature),min_temp=min(temperature),mn_temp=mean(temperature),
-                                do_union=FALSE) %>%
-                sf::st_cast("LINESTRING");#--create trajectories
+      eval(parse(text=strp))[[1]];
       sf_trjs = rbind(sf_trjs,sf_ls);
     }
-    rm(sf_lhs,sf_ls);
+    rm(sf_lhs,sf_ls,strp);
   }
   return(sf_trjs);
 }

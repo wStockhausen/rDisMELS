@@ -35,7 +35,7 @@ The output \pkg{sf} dataframe has columns
 \item{parentID}
 \item{origID}
 \item{startTime}
-\item{successful}
+\item{successful - included if present in sfs_points}
 \item{additional columns}
 \item{geom - column with trajectory as an sfg_LINESTRING object}
 }

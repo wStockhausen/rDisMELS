@@ -19,7 +19,7 @@
 #'  \item{endBathym - bathymetric depth (m) at ending location}
 #'  \item{endAge - ending age(d)}
 #'  \item{endNum - ending number}
-#'  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement)}
+#'  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement) [if column in \code{sf_EndByStage}]}
 #'  \item{endGeom - ending 2d location as SF_POINT}
 #'}
 #'
