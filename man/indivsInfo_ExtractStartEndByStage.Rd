@@ -10,6 +10,8 @@ indivsInfo_ExtractStartEndByStage(
   lst_indivs = NULL,
   startLHS = NULL,
   addVars = "",
+  hasSuccessful = FALSE,
+  verbose = FALSE,
   checkCalcs = FALSE
 )
 }
@@ -23,6 +25,10 @@ indivsInfo_ExtractStartEndByStage(
 \item{startLHS}{- (req'd if sf_start is NULL) life stage in which all individuals start}
 
 \item{addVars}{- (req'd if lst_indivs is given) character vector with names of additional (non-default) variables to extract}
+
+\item{hasSuccessful}{- flag indicating that sf_start, sf_ebs, or lst_indivs include "successful" columns}
+
+\item{verbose}{- flag to print debugging info}
 
 \item{checkCalcs}{- flag (T/F) to check endGeom is correctly assigned (for debugging)}
 }
@@ -52,7 +58,7 @@ indivsInfo_ExtractStartEndByStage(
  \item{endAge - ending age(d)}
  \item{endNum - ending number}
  \item{end..AddVars - ending values for additional (non-default) variables}
- \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement)}
+ \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement) [depends on inputs]}
  \item{endGeom - ending 2d location as SF_POINT}
 }
 }

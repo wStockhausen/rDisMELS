@@ -8,6 +8,8 @@
 #'@param lst_indivs - (req'd if sf_start or sf_end is NULL) list of \pkg{sf} dataframes by life stage returned by \code{\link{indivsInfo_ReorderResults}}
 #'@param startLHS   - (req'd if sf_start is NULL) life stage in which all individuals start
 #'@param addVars - (req'd if lst_indivs is given) character vector with names of additional (non-default) variables to extract
+#'@param hasSuccessful - flag indicating that sf_start, sf_ebs, or lst_indivs include "successful" columns
+#'@param verbose - flag to print debugging info
 #'@param checkCalcs - flag (T/F) to check endGeom is correctly assigned (for debugging)
 #'
 #'@return \pkg{sf} dataframe with columns:
@@ -35,7 +37,7 @@
 #'  \item{endAge - ending age(d)}
 #'  \item{endNum - ending number}
 #'  \item{end..AddVars - ending values for additional (non-default) variables}
-#'  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement)}
+#'  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement) [depends on inputs]}
 #'  \item{endGeom - ending 2d location as SF_POINT}
 #'}
 #'
@@ -62,10 +64,16 @@ indivsInfo_ExtractStartEndByStage<-function(sf_start=NULL,
                                             lst_indivs=NULL,
                                             startLHS=NULL,
                                             addVars="",
+                                            hasSuccessful=FALSE,
+                                            verbose=FALSE,
                                             checkCalcs=FALSE){
   #--process lst_indvs, as necessary
-  if (is.null(sf_start)) sf_start = indivsInfo_ExtractStart(lst_indivs[[startLHS]],addVars=addVars);
-  if (is.null(sf_ebs))   sf_ebs   = indivsInfo_ExtractEndByStage(lst_indivs,addVars=addVars);
+  if (is.null(sf_start)) sf_start = indivsInfo_ExtractStart(lst_indivs[[startLHS]],
+                                                            addVars=addVars,
+                                                            hasSuccessful=hasSuccessful);
+  if (is.null(sf_ebs))   sf_ebs   = indivsInfo_ExtractEndByStage(lst_indivs,
+                                                                 addVars=addVars,
+                                                                 hasSuccessful=hasSuccessful);
 
   #--note: can't join two sf dataframes on attributes.
   #--Could do either of the following:
