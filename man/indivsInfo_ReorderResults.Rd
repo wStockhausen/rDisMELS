@@ -4,7 +4,12 @@
 \alias{indivsInfo_ReorderResults}
 \title{Reorder a set of IBM results by life stage, individual and age}
 \usage{
-indivsInfo_ReorderResults(resFolder, resFilePrefix, lifeStageInfo)
+indivsInfo_ReorderResults(
+  resFolder,
+  resFilePrefix,
+  lifeStageInfo,
+  startTime = NULL
+)
 }
 \arguments{
 \item{resFolder}{- path to folder with results}
@@ -12,6 +17,8 @@ indivsInfo_ReorderResults(resFolder, resFilePrefix, lifeStageInfo)
 \item{resFilePrefix}{- prefix for file names (default = "Results")}
 
 \item{lifeStageInfo}{- life stage info (list) object}
+
+\item{startTime}{- optional value to replace startTimes in model run (default=NULL)}
 }
 \value{
 list of data frames by life stage type,
@@ -26,4 +33,12 @@ Requires package \pkg{readr} to read csv files.
 \note{
 Times in the csv files are interpreted by readr::read_csv as UTC, as well
 as in the reordered dataframes.
+
+Assigning a value to the input \code{startTime} replaces all values of startTime
+from the model run with the input value in the resulting output. As such, \code{startTime}
+should only be given when, for example, the individuals in a DisMELS model run were initially released
+at the same time, but the simulation was restarted with all individuals at the start of a
+subsequent life stage (resulting in different startTimes for individuals in the DisMELS results for the
+restarted simulation). Replacing startTime for results from the restarted simulation output yields
+simulation results equivalent to a continuous model run (i.e., without the restart).
 }

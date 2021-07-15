@@ -6,6 +6,7 @@
 #'@param resFolder - path to folder with results
 #'@param resFilePrefix - prefix for file names (default = "Results")
 #'@param lifeStageInfo - life stage info (list) object
+#'@param startTime - optional value to replace startTimes in model run (default=NULL)
 #'
 #'@return list of data frames by life stage type,
 #'with each dataframe ordered by start time, id, and time.
@@ -15,6 +16,15 @@
 #'@note Times in the csv files are interpreted by readr::read_csv as UTC, as well
 #'as in the reordered dataframes.
 #'
+#'@note Assigning a value to the input \code{startTime} replaces all values of startTime
+#'from the model run with the input value in the resulting output. As such, \code{startTime}
+#'should only be given when, for example, the individuals in a DisMELS model run were initially released
+#'at the same time, but the simulation was restarted with all individuals at the start of a
+#'subsequent life stage (resulting in different startTimes for individuals in the DisMELS results for the
+#'restarted simulation). Replacing startTime for results from the restarted simulation output yields
+#'simulation results equivalent to a continuous model run (i.e., without the restart).
+#'
+#'
 #'@importFrom dplyr arrange
 #'@importFrom readr read_csv
 #'
@@ -22,7 +32,8 @@
 #'
 indivsInfo_ReorderResults<-function(resFolder,
                                     resFilePrefix,
-                                    lifeStageInfo){
+                                    lifeStageInfo,
+                                    startTime=NULL){
   info<-lifeStageInfo;
   typeNames<-unique(info$lifeStageTypes$typeName);#--don't sort!
   typeNames<-factor(typeNames,
@@ -32,6 +43,7 @@ indivsInfo_ReorderResults<-function(resFolder,
   resdr<-resFolder;
   cat("\n\n-----------------\n");
   cat("Reading and sorting results files in",resdr,"\n");
+  if (!is.null(startTime)) startTime_ = as.POSIXct(as.character(startTime),tz="UTC");
   dfrs<-list();
   for  (cls in names(info$classInfo)){
     cat("\tclass name:",cls,"\n");
@@ -39,9 +51,14 @@ indivsInfo_ReorderResults<-function(resFolder,
     if (file.exists(csv)){
       tmp<-readr::read_csv(csv,skip=1);
       tmp$typeName<-factor(tmp$typeName,levels=typeNames);#change typeName from character to factor
-      tmps  = tmp %>% dplyr::arrange(startTime,id,typeName,time);
-      dfrs[[cls]]<-tmps;
-      rm(csv,tmp,tmps);
+      if (is.null(startTime)){
+        tmp %<>% dplyr::arrange(startTime,id,typeName,time);
+      } else {
+        tmp %<>% dplyr::mutate(startTime=startTime_) %>%
+                 dplyr::arrange(startTime,id,typeName,time);
+      }
+      dfrs[[cls]]<-tmp;
+      rm(csv,tmp);
     }
   }
 
@@ -59,7 +76,9 @@ indivsInfo_ReorderResults<-function(resFolder,
             tmp<-dfrs[[cls]][idx,];
           }
           dfrt<-rbind(dfrt,tmp);
+          rm(tmp);
         }
+        rm(idx);
       }
     }#--cls
     if (!is.null(dfrt)) {

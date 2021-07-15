@@ -4,12 +4,21 @@
 \alias{indivsInfo_ExtractEndByStage}
 \title{Extract info by individual at end of each life stage}
 \usage{
-indivsInfo_ExtractEndByStage(sfs_indivs, addVars = "")
+indivsInfo_ExtractEndByStage(
+  sfs_indivs,
+  addVars = "",
+  hasSuccessful = FALSE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{sfs_indivs}{- list of \pkg{sf} dataframes returned by \code{\link{indivsInfo_ReorderResults}}}
 
 \item{addVars}{- character vector with names of additional (non-default) variables to extract}
+
+\item{hasSuccessful}{- flag indicating that sfs_indivs include a "successful" column}
+
+\item{verbose}{- flag to print debugging info}
 }
 \value{
 \pkg{sf} dataframe with columns:
@@ -27,7 +36,7 @@ indivsInfo_ExtractEndByStage(sfs_indivs, addVars = "")
  \item{endAge - ending age(d)}
  \item{endNum - ending number}
  \item{start..AddVars - columns corresponding to additional variables}
- \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement)}
+ \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement) \[depends on \code{hasSuccessful}\]}
  \item{endGeom - ending 2d location as SF_POINT}
 }
 }

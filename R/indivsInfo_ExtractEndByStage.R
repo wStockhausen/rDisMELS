@@ -5,6 +5,8 @@
 #'
 #' @param sfs_indivs - list of \pkg{sf} dataframes returned by \code{\link{indivsInfo_ReorderResults}}
 #' @param addVars - character vector with names of additional (non-default) variables to extract
+#' @param hasSuccessful - flag indicating that sfs_indivs include a "successful" column
+#' @param verbose - flag to print debugging info
 #'
 #'@return \pkg{sf} dataframe with columns:
 #'\itemize{
@@ -21,7 +23,7 @@
 #'  \item{endAge - ending age(d)}
 #'  \item{endNum - ending number}
 #'  \item{start..AddVars - columns corresponding to additional variables}
-#'  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement)}
+#'  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement) \[depends on \code{hasSuccessful}\]}
 #'  \item{endGeom - ending 2d location as SF_POINT}
 #'}
 #'
@@ -36,7 +38,10 @@
 #'
 #'@export
 #'
-indivsInfo_ExtractEndByStage<-function(sfs_indivs,addVars=""){
+indivsInfo_ExtractEndByStage<-function(sfs_indivs,
+                                       addVars="",
+                                       hasSuccessful=FALSE,
+                                       verbose=FALSE){
   lhss = names(sfs_indivs);
   #--determine selected attributes for each individual at end of each life stage
   sf_EndByStage  = NULL;
@@ -49,7 +54,7 @@ indivsInfo_ExtractEndByStage<-function(sfs_indivs,addVars=""){
                    dplyr::select(startTime,origID,time,id,typeName,
                                  gridCellID,horizPos1,horizPos2,vertPos,bathym,
                                  age,ageInStage,number,&&addVars
-                                 successful,
+                                 &&successful
                                  geom) %>%
                    dplyr::rename(endLHS=typeName,endID=id,endTime=time,
                                  endCellID=gridCellID,endLon=horizPos1,endLat=horizPos2,
@@ -60,15 +65,20 @@ indivsInfo_ExtractEndByStage<-function(sfs_indivs,addVars=""){
     if (addVars[1]!=""){
       AddVars = stringr::str_to_sentence(addVars);
       endAddVars = paste0(paste0("end",AddVars,"=",addVars,collapse=","),",");
-      addVarsp     = paste0(paste0(                    addVars,collapse=","),",");
+      addVarsp   = paste0(paste0(                    addVars,collapse=","),",");
     }
     str = gsub("&&addVars",addVarsp,str,fixed=TRUE);
     str = gsub("&&endAddVars",endAddVars,str,fixed=TRUE);
-    # cat(str,"\n");
+    if (hasSuccessful) {
+      str = gsub("&&successful","successful,",str,fixed=TRUE);
+    } else {
+      str = gsub("&&successful",",",str,fixed=TRUE);
+    }
+    if (verbose) message(str);
     eval(parse(text=str)[[1]]);
     sf_EndByStage = rbind(sf_EndByStage,sf_tmp);
   }
-  sf_EndByStage %<>% group_by(startTime,origID,endID) %>% arrange(endAge,.by_group=TRUE);
+  sf_EndByStage %<>% dplyr::group_by(startTime,origID,endID) %>% dplyr::arrange(endAge,.by_group=TRUE);
   return(sf_EndByStage);
 }
 #sf_EndByStage = indivsInfo_ExtractEndByStage(sfs_indivs);
