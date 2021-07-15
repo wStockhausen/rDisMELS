@@ -4,12 +4,21 @@
 \alias{indivsInfo_ExtractStart}
 \title{Extract info on individuals at start of initial life stage}
 \usage{
-indivsInfo_ExtractStart(sf_indivs, addVars = "")
+indivsInfo_ExtractStart(
+  sf_indivs,
+  addVars = "",
+  hasSuccessful = FALSE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{sf_indivs}{- \pkg{sf} dataframe for the initial life stage from call to \code{\link{indivsInfo_ReorderResults}}}
 
 \item{addVars}{- character vector with names of additional (non-default) variables to extract}
+
+\item{hasSuccessful}{- flag indicating that sfs_indivs include a "successful" column}
+
+\item{verbose}{- flag to print debugging info}
 }
 \value{
 \pkg{sf} dataframe with columns:
@@ -26,7 +35,7 @@ indivsInfo_ExtractStart(sf_indivs, addVars = "")
  \item{startNum - starting depth}
  \item{startTemp - starting temperature}
  \item{start..AddVars - columns corresponding to additional variables}
- \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement)}
+ \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement) [if \code{hasSuccessful}]=TRUE}
  \item{startGeom - starting 2d location as SF_POINT}
 }
 }

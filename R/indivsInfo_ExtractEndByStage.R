@@ -23,7 +23,7 @@
 #'  \item{endAge - ending age(d)}
 #'  \item{endNum - ending number}
 #'  \item{start..AddVars - columns corresponding to additional variables}
-#'  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement) \[depends on \code{hasSuccessful}\]}
+#'  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement) [if \code{hasSuccessful}]=TRUE}
 #'  \item{endGeom - ending 2d location as SF_POINT}
 #'}
 #'

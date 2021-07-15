@@ -5,6 +5,8 @@
 #'
 #' @param sf_indivs - \pkg{sf} dataframe for the initial life stage from call to \code{\link{indivsInfo_ReorderResults}}
 #' @param addVars - character vector with names of additional (non-default) variables to extract
+#' @param hasSuccessful - flag indicating that sfs_indivs include a "successful" column
+#' @param verbose - flag to print debugging info
 #'
 #' @return \pkg{sf} dataframe with columns:
 #'\itemize{
@@ -20,7 +22,7 @@
 #'  \item{startNum - starting depth}
 #'  \item{startTemp - starting temperature}
 #'  \item{start..AddVars - columns corresponding to additional variables}
-#'  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement)}
+#'  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement) [if \code{hasSuccessful}]=TRUE}
 #'  \item{startGeom - starting 2d location as SF_POINT}
 #'}
 #'
@@ -35,7 +37,10 @@
 #'
 #'@export
 #'
-indivsInfo_ExtractStart<-function(sf_indivs,addVars=""){
+indivsInfo_ExtractStart<-function(sf_indivs,
+                                  addVars="",
+                                  hasSuccessful=FALSE,
+                                  verbose=FALSE){
   startAddVars = "";
   str =
     "sf_start = sf_indivs %>%
@@ -43,7 +48,7 @@ indivsInfo_ExtractStart<-function(sf_indivs,addVars=""){
                  dplyr::select(startTime,origID,typeName,
                                gridCellID,horizPos1,horizPos2,vertPos,bathym,
                                age,number,&&addVars
-                               successful,
+                               &&successful
                                geom) %>%
                  dplyr::rename(startLHS=typeName,
                                startGridCell=gridCellID,startLon=horizPos1,startLat=horizPos2,
@@ -58,7 +63,12 @@ indivsInfo_ExtractStart<-function(sf_indivs,addVars=""){
   }
   str = gsub("&&addVars",addVars,str,fixed=TRUE);
   str = gsub("&&startAddVars",startAddVars,str,fixed=TRUE);
-  # cat(str,"\n");
+  if (hasSuccessful) {
+    str = gsub("&&successful","successful,",str,fixed=TRUE);
+  } else {
+    str = gsub("&&successful",",",str,fixed=TRUE);
+  }
+  if (verbose) message(str);
   eval(parse(text=str)[[1]]);
   return(sf_start);
 }
