@@ -22,7 +22,7 @@
 #'  \item{endBathym - bathymetric depth (m) at ending location}
 #'  \item{endAge - ending age(d)}
 #'  \item{endNum - ending number}
-#'  \item{start..AddVars - columns corresponding to additional variables}
+#'  \item{end..AddVars - columns corresponding to additional variables (names converted to camel case)}
 #'  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement) [if \code{hasSuccessful}]=TRUE}
 #'  \item{endGeom - ending 2d location as SF_POINT}
 #'}
@@ -35,7 +35,8 @@
 #'with \code{ageInStage>0}, indicating transition to next life stage or death.
 #'
 #'@note
-#'
+#'If additional variables (\code{addVars}) are requested in the output dataframe,
+#'the names are prepended by "end" and converted to camel case.
 #'
 #'@importFrom stringr str_to_sentence
 #'@import dplyr
@@ -51,6 +52,7 @@ indivsInfo_ExtractEndByStage<-function(sfs_indivs,
   #--determine selected attributes for each individual at end of each life stage
   sf_EndByStage  = NULL;
   for (lhs in lhss){
+    if (verbose) message("Processing ",lhs);
     addVarsp = addVars;
     endAddVars = "";
     str =
@@ -58,8 +60,7 @@ indivsInfo_ExtractEndByStage<-function(sfs_indivs,
                    subset(ageInStage>0) %>%
                    dplyr::select(startTime,origID,time,id,typeName,
                                  gridCellID,horizPos1,horizPos2,vertPos,bathym,
-                                 age,ageInStage,number,&&addVars
-                                 &&successful
+                                 age,ageInStage,number,&&addVars&&successful
                                  geom) %>%
                    dplyr::rename(endLHS=typeName,endID=id,endTime=time,
                                  endCellID=gridCellID,endLon=horizPos1,endLat=horizPos2,
@@ -71,10 +72,12 @@ indivsInfo_ExtractEndByStage<-function(sfs_indivs,
       #--need to:
       #----1. add guards to vars with spaces in name
       #----2. convert end names to camel case
-      addVarsp   = paste0(paste0(addGuards(addVars),collapse=","),",");
+      addVarsp   = paste0(addGuards(addVars),collapse=",");
       endAddVars = paste0(paste0("end",toCamelCase(addVars),"=",addGuards(addVars),collapse=","),",");
+      if (verbose) message("addVarsp = ",addVarsp);
+      if (verbose) message("endAddVars = ",endAddVars);
     }
-    str = gsub("&&addVars",addVarsp,str,fixed=TRUE);
+    str = gsub("&&addVars",   addVarsp,str,  fixed=TRUE);
     str = gsub("&&endAddVars",endAddVars,str,fixed=TRUE);
     if (hasSuccessful) {
       str = gsub("&&successful","successful,",str,fixed=TRUE);

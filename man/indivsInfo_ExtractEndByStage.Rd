@@ -35,7 +35,7 @@ indivsInfo_ExtractEndByStage(
  \item{endBathym - bathymetric depth (m) at ending location}
  \item{endAge - ending age(d)}
  \item{endNum - ending number}
- \item{start..AddVars - columns corresponding to additional variables}
+ \item{end..AddVars - columns corresponding to additional variables (names converted to camel case)}
  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement) [if \code{hasSuccessful}]=TRUE}
  \item{endGeom - ending 2d location as SF_POINT}
 }
@@ -51,5 +51,6 @@ by \code{\link{indivsInfo_ReorderResults}} for the "connectivity results" files.
 For each individual, the end of the life stage is identified by the record
 with \code{ageInStage>0}, indicating transition to next life stage or death.
 
-
+If additional variables (\code{addVars}) are requested in the output dataframe,
+the names are prepended by "end" and converted to camel case.
 }

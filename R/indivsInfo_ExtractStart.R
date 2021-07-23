@@ -21,7 +21,7 @@
 #'  \item{startAge - starting depth}
 #'  \item{startNum - starting depth}
 #'  \item{startTemp - starting temperature}
-#'  \item{start..AddVars - columns corresponding to additional variables}
+#'  \item{start..AddVars - columns corresponding to additional variables (names converted to camel case)}
 #'  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement) [if \code{hasSuccessful}]=TRUE}
 #'  \item{startGeom - starting 2d location as SF_POINT}
 #'}
@@ -31,7 +31,10 @@
 #'For each individual, the initial location is identified by the record
 #'when \code{startTime == time}.
 #'
-#'@importFrom stringr str_to_sentence
+#'@note
+#'If additional variables (\code{addVars}) are requested in the output dataframe,
+#'the names are prepended by "end" and converted to camel case.
+#'
 #'@import dplyr
 #'@import magrittr
 #'
@@ -41,14 +44,14 @@ indivsInfo_ExtractStart<-function(sf_indivs,
                                   addVars="",
                                   hasSuccessful=FALSE,
                                   verbose=FALSE){
+  addVarsp = addVars;
   startAddVars = "";
   str =
     "sf_start = sf_indivs %>%
                  subset(startTime==time) %>%
                  dplyr::select(startTime,origID,typeName,
                                gridCellID,horizPos1,horizPos2,vertPos,bathym,
-                               age,number,&&addVars
-                               &&successful
+                               age,number,&&addVars&&successful
                                geom) %>%
                  dplyr::rename(startLHS=typeName,
                                startGridCell=gridCellID,startLon=horizPos1,startLat=horizPos2,
@@ -59,11 +62,13 @@ indivsInfo_ExtractStart<-function(sf_indivs,
   if (addVars[1]!=""){
     #--need to:
     #----1. add guards to vars with spaces in name
-    #----2. convert end names to camel case
-    addVarsp   = paste0(paste0(addGuards(addVars),collapse=","),",");
-    endAddVars = paste0(paste0("end",toCamelCase(addVars),"=",addGuards(addVars),collapse=","),",");
+    #----2. convert start names to camel case
+    addVarsp     = paste0(addGuards(addVars),collapse=",");
+    startAddVars = paste0(paste0("start",toCamelCase(addVars),"=",addGuards(addVars),collapse=","),",");
+    if (verbose) message("addVarsp     = ",addVarsp);
+    if (verbose) message("startAddVars = ",startAddVars);
   }
-  str = gsub("&&addVars",addVars,str,fixed=TRUE);
+  str = gsub("&&addVars",     addVarsp,str,    fixed=TRUE);
   str = gsub("&&startAddVars",startAddVars,str,fixed=TRUE);
   if (hasSuccessful) {
     str = gsub("&&successful","successful,",str,fixed=TRUE);

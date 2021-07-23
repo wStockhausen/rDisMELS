@@ -34,7 +34,7 @@ indivsInfo_ExtractStart(
  \item{startAge - starting depth}
  \item{startNum - starting depth}
  \item{startTemp - starting temperature}
- \item{start..AddVars - columns corresponding to additional variables}
+ \item{start..AddVars - columns corresponding to additional variables (names converted to camel case)}
  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement) [if \code{hasSuccessful}]=TRUE}
  \item{startGeom - starting 2d location as SF_POINT}
 }
@@ -47,4 +47,8 @@ The input \pkg{sf} dataframe should be the one returned
 by \code{\link{indivsInfo_ReorderResults}} for the initial life stage.
 For each individual, the initial location is identified by the record
 when \code{startTime == time}.
+}
+\note{
+If additional variables (\code{addVars}) are requested in the output dataframe,
+the names are prepended by "end" and converted to camel case.
 }

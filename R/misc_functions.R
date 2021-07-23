@@ -29,7 +29,7 @@ toCamelCase<-function(x){
 #'
 addGuards<-function(x){
   y = x;
-  w = stringr::str_which(x,fixed(" "));
+  w = stringr::str_which(x,stringr::fixed(" "));
   if (length(w)>0) y[w] = paste0("`",x[w],"`");
   return(y);
 }
