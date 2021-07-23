@@ -50,4 +50,6 @@ by \code{\link{indivsInfo_ReorderResults}} for the "connectivity results" files.
 \note{
 For each individual, the end of the life stage is identified by the record
 with \code{ageInStage>0}, indicating transition to next life stage or death.
+
+
 }

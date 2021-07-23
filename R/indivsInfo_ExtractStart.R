@@ -57,9 +57,11 @@ indivsInfo_ExtractStart<-function(sf_indivs,
                                &&startAddVars
                                startGeom=geom);"
   if (addVars[1]!=""){
-    AddVars = stringr::str_to_sentence(addVars);
-    startAddVars = paste0(paste0("start",AddVars,"=",addVars,collapse=","),",");
-    addVars =      paste0(paste0(                    addVars,collapse=","),",");
+    #--need to:
+    #----1. add guards to vars with spaces in name
+    #----2. convert end names to camel case
+    addVarsp   = paste0(paste0(addGuards(addVars),collapse=","),",");
+    endAddVars = paste0(paste0("end",toCamelCase(addVars),"=",addGuards(addVars),collapse=","),",");
   }
   str = gsub("&&addVars",addVars,str,fixed=TRUE);
   str = gsub("&&startAddVars",startAddVars,str,fixed=TRUE);

@@ -34,6 +34,9 @@
 #'For each individual, the end of the life stage is identified by the record
 #'with \code{ageInStage>0}, indicating transition to next life stage or death.
 #'
+#'@note
+#'
+#'
 #'@importFrom stringr str_to_sentence
 #'@import dplyr
 #'@import magrittr
@@ -65,9 +68,11 @@ indivsInfo_ExtractEndByStage<-function(sfs_indivs,
                                  &&endAddVars
                                  endGeom=geom);"
     if (addVars[1]!=""){
-      AddVars = stringr::str_to_sentence(addVars);
-      endAddVars = paste0(paste0("end",AddVars,"=",addVars,collapse=","),",");
-      addVarsp   = paste0(paste0(                    addVars,collapse=","),",");
+      #--need to:
+      #----1. add guards to vars with spaces in name
+      #----2. convert end names to camel case
+      addVarsp   = paste0(paste0(addGuards(addVars),collapse=","),",");
+      endAddVars = paste0(paste0("end",toCamelCase(addVars),"=",addGuards(addVars),collapse=","),",");
     }
     str = gsub("&&addVars",addVarsp,str,fixed=TRUE);
     str = gsub("&&endAddVars",endAddVars,str,fixed=TRUE);
