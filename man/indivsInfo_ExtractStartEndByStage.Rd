@@ -9,7 +9,8 @@ indivsInfo_ExtractStartEndByStage(
   sf_ebs = NULL,
   lst_indivs = NULL,
   startLHS = NULL,
-  addVars = "",
+  addVarsStart = "",
+  addVarsEnd = "",
   hasSuccessful = FALSE,
   verbose = FALSE,
   checkCalcs = FALSE
@@ -24,7 +25,9 @@ indivsInfo_ExtractStartEndByStage(
 
 \item{startLHS}{- (req'd if sf_start is NULL) life stage in which all individuals start}
 
-\item{addVars}{- (req'd if lst_indivs is given) character vector with names of additional (non-default) variables to extract}
+\item{addVarsStart}{- character vector with names of additional (non-default) start variables to extract}
+
+\item{addVarsEnd}{- character vector with names of additional (non-default) end variables to extract}
 
 \item{hasSuccessful}{- flag indicating that sf_start, sf_ebs, or lst_indivs include "successful" columns}
 
@@ -45,7 +48,7 @@ indivsInfo_ExtractStartEndByStage(
  \item{startBathym - bathymetric depth (m) at starting location}
  \item{startAge - starting depth}
  \item{startNum - starting depth}
- \item{start..AddVars - starting values for additional (non-default) variables}
+ \item{start..AddVarsStart - starting values for additional (non-default) variables}
  \item{startGeom - starting 2d location as SF_POINT}
  \item{endTime - ending time}
  \item{endID - ending individual ID}
@@ -57,7 +60,7 @@ indivsInfo_ExtractStartEndByStage(
  \item{endBathym - bathymetric depth (m) at ending location}
  \item{endAge - ending age(d)}
  \item{endNum - ending number}
- \item{end..AddVars - ending values for additional (non-default) variables}
+ \item{end..AddVarsEnd - ending values for additional (non-default) variables}
  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement) [depends on inputs]}
  \item{endGeom - ending 2d location as SF_POINT}
 }

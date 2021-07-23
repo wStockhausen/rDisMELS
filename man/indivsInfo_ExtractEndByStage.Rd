@@ -12,7 +12,7 @@ indivsInfo_ExtractEndByStage(
 )
 }
 \arguments{
-\item{sfs_indivs}{- list of \pkg{sf} dataframes returned by \code{\link{indivsInfo_ReorderResults}}}
+\item{sfs_indivs}{- list of \pkg{sf} dataframes returned by \code{\link{indivsInfo_ReorderResults}} for "connectivity results" files}
 
 \item{addVars}{- character vector with names of additional (non-default) variables to extract}
 
@@ -46,6 +46,8 @@ Function to extract info by individual at end of each life stage.
 \details{
 The input list of \pkg{sf} dataframes should be the one returned
 by \code{\link{indivsInfo_ReorderResults}} for the "connectivity results" files.
+}
+\note{
 For each individual, the end of the life stage is identified by the record
-with \code{active==FALSE}, indicating transition to next life stage or death.
+with \code{ageInStage>0}, indicating transition to next life stage or death.
 }
