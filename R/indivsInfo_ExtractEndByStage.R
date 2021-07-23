@@ -3,7 +3,7 @@
 #'
 #'@description Function to extract info by individual at end of each life stage.
 #'
-#' @param sfs_indivs - list of \pkg{sf} dataframes returned by \code{\link{indivsInfo_ReorderResults}}
+#' @param sfs_indivs - list of \pkg{sf} dataframes returned by \code{\link{indivsInfo_ReorderResults}} for "connectivity results" files
 #' @param addVars - character vector with names of additional (non-default) variables to extract
 #' @param hasSuccessful - flag indicating that sfs_indivs include a "successful" column
 #' @param verbose - flag to print debugging info
@@ -29,8 +29,10 @@
 #'
 #'@details The input list of \pkg{sf} dataframes should be the one returned
 #'by \code{\link{indivsInfo_ReorderResults}} for the "connectivity results" files.
+#'
+#'@note
 #'For each individual, the end of the life stage is identified by the record
-#'with \code{active==FALSE}, indicating transition to next life stage or death.
+#'with \code{ageInStage>0}, indicating transition to next life stage or death.
 #'
 #'@importFrom stringr str_to_sentence
 #'@import dplyr
@@ -50,7 +52,7 @@ indivsInfo_ExtractEndByStage<-function(sfs_indivs,
     endAddVars = "";
     str =
       "sf_tmp = sfs_indivs[[lhs]] %>%
-                   subset(!active) %>%
+                   subset(ageInStage>0) %>%
                    dplyr::select(startTime,origID,time,id,typeName,
                                  gridCellID,horizPos1,horizPos2,vertPos,bathym,
                                  age,ageInStage,number,&&addVars

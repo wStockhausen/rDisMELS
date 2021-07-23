@@ -7,7 +7,8 @@
 #'@param sf_ebs   - (optional) \pkg{sf} dataframe returned by \code{\link{indivsInfo_ExtractEndByStage}}
 #'@param lst_indivs - (req'd if sf_start or sf_end is NULL) list of \pkg{sf} dataframes by life stage returned by \code{\link{indivsInfo_ReorderResults}}
 #'@param startLHS   - (req'd if sf_start is NULL) life stage in which all individuals start
-#'@param addVars - (req'd if lst_indivs is given) character vector with names of additional (non-default) variables to extract
+#'@param addVarsStart - character vector with names of additional (non-default) start variables to extract
+#'@param addVarsEnd - character vector with names of additional (non-default) end variables to extract
 #'@param hasSuccessful - flag indicating that sf_start, sf_ebs, or lst_indivs include "successful" columns
 #'@param verbose - flag to print debugging info
 #'@param checkCalcs - flag (T/F) to check endGeom is correctly assigned (for debugging)
@@ -24,7 +25,7 @@
 #'  \item{startBathym - bathymetric depth (m) at starting location}
 #'  \item{startAge - starting depth}
 #'  \item{startNum - starting depth}
-#'  \item{start..AddVars - starting values for additional (non-default) variables}
+#'  \item{start..AddVarsStart - starting values for additional (non-default) variables}
 #'  \item{startGeom - starting 2d location as SF_POINT}
 #'  \item{endTime - ending time}
 #'  \item{endID - ending individual ID}
@@ -36,7 +37,7 @@
 #'  \item{endBathym - bathymetric depth (m) at ending location}
 #'  \item{endAge - ending age(d)}
 #'  \item{endNum - ending number}
-#'  \item{end..AddVars - ending values for additional (non-default) variables}
+#'  \item{end..AddVarsEnd - ending values for additional (non-default) variables}
 #'  \item{successful - flag indicating "success" (TRUE) or failure (FALSE) (e.g., settlement) [depends on inputs]}
 #'  \item{endGeom - ending 2d location as SF_POINT}
 #'}
@@ -63,16 +64,17 @@ indivsInfo_ExtractStartEndByStage<-function(sf_start=NULL,
                                             sf_ebs=NULL,
                                             lst_indivs=NULL,
                                             startLHS=NULL,
-                                            addVars="",
+                                            addVarsStart="",
+                                            addVarsEnd="",
                                             hasSuccessful=FALSE,
                                             verbose=FALSE,
                                             checkCalcs=FALSE){
   #--process lst_indvs, as necessary
   if (is.null(sf_start)) sf_start = indivsInfo_ExtractStart(lst_indivs[[startLHS]],
-                                                            addVars=addVars,
+                                                            addVars=addVarsStart,
                                                             hasSuccessful=hasSuccessful);
   if (is.null(sf_ebs))   sf_ebs   = indivsInfo_ExtractEndByStage(lst_indivs,
-                                                                 addVars=addVars,
+                                                                 addVars=addVarsEnd,
                                                                  hasSuccessful=hasSuccessful);
 
   #--note: can't join two sf dataframes on attributes.
