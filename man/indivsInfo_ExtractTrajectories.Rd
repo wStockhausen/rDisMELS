@@ -7,7 +7,8 @@
 indivsInfo_ExtractTrajectories(
   sfs_points,
   crs = wtsGIS::get_crs("WGS84"),
-  step = 1000
+  step = 1000,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -16,6 +17,8 @@ indivsInfo_ExtractTrajectories(
 \item{crs}{- coordinate reference system for trajectories: \pkg{sf} crs object, EPSG code, or character with proj4string}
 
 \item{step}{- step size for processing individuals}
+
+\item{verbose}{- flag to print debugging info}
 }
 \value{
 a \pkg{sf} dataframe with a column ("geom") of class sfc_LINESTRING giving the trajectory of each

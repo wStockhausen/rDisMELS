@@ -6,6 +6,7 @@
 #' @param sfs_points - list of sf dataframes by typeName (output from \code{\link{indivsInfo_ReorderResults}})
 #' @param crs - coordinate reference system for trajectories: \pkg{sf} crs object, EPSG code, or character with proj4string
 #' @param step - step size for processing individuals
+#' @param verbose - flag to print debugging info
 #'
 #' @return a \pkg{sf} dataframe with a column ("geom") of class sfc_LINESTRING giving the trajectory of each
 #' original individual by life stage (see Details)
@@ -34,7 +35,8 @@
 #'
 indivsInfo_ExtractTrajectories<-function(sfs_points,
                                          crs=wtsGIS::get_crs("WGS84"),
-                                         step=1000){
+                                         step=1000,
+                                         verbose=FALSE){
   lhss = names(sfs_points);             #--get life stage names
   #--define processing code
   str = "sf_ls = sf_lhsp %>%
@@ -46,9 +48,11 @@ indivsInfo_ExtractTrajectories<-function(sfs_points,
                                   do_union=FALSE) %>%
                   sf::st_cast('LINESTRING');"; #--create trajectories
   #--create trajectories
-  sf_trjs = NULL;
+  ctr = 0;
+  lst_trjs = list();
   for (lhs in lhss){
-    cat("\t\tprocessing",lhs,"\n");
+    #--for testing: lhs = lhss[1];
+    if (verbose) message(paste0("\t\tprocessing ",lhs));
     sf_lhs = sfs_points[[lhs]] %>%
               sf::st_transform(crs);#--transform to Alaska Albers
     if (any(names(sf_lhs)=="successful")){
@@ -60,17 +64,20 @@ indivsInfo_ExtractTrajectories<-function(sfs_points,
             sf::st_drop_geometry() %>%
             dplyr::distinct(typeName,id,parentID,origID,startTime);
     nd = nrow(dst);
-    cat("\t\t\tprocessing",nd,"individuals.\n");
+    if (verbose) message(paste0("\t\t\tprocessing ",nd," individuals."));
     min_rws = seq(1,nd,by=step);
     for (min_rw in min_rws){
-      cat("\t\t\tprocessing individuals",min_rw,"to",min(min_rw+step-1,nd),".\n");
+      #--for testing: min_rw = min_rws[1];
+      if (verbose) message(paste0("\t\t\tprocessing individuals ",min_rw," to ",min(min_rw+step-1,nd)));
       dstp = dst[min_rw:min(min_rw+step-1,nd),];
       sf_lhsp = sf_lhs %>% inner_join(dstp);
       eval(parse(text=strp))[[1]];
-      sf_trjs = rbind(sf_trjs,sf_ls);
+      lst_trjs[[ctr<-ctr+1]] = sf_ls;
     }
     rm(sf_lhs,sf_ls,strp);
   }
+  if (verbose) message(paste0("\t\tbinding rows"));
+  sf_trjs = dplyr::bind_rows(lst_trjs);
   return(sf_trjs);
 }
 
