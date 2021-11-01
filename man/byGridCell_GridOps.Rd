@@ -2,12 +2,12 @@
 % Please edit documentation in R/byGridCell_GridOps.R
 \name{byGridCell_GridOps}
 \alias{byGridCell_GridOps}
-\title{Perform an algebraic operation on values by grid cell in two dataframes}
+\title{Perform a mathematical operation on values by grid cell in one or two dataframes}
 \usage{
 byGridCell_GridOps(
   dfr1,
   op,
-  dfr2,
+  dfr2 = NULL,
   cols = c("unsuccessful_indivs", "successful_indivs", "total_indivs",
     "unsuccessful_abundance", "successful_abundance", "total_abundance")
 )
@@ -15,20 +15,23 @@ byGridCell_GridOps(
 \arguments{
 \item{dfr1}{- dataframe with results by grid cell}
 
-\item{op}{- operation by grid cell ("+","-","*","/")}
+\item{op}{- operation by grid cell ("+","-","*","/","sqrt")}
 
-\item{dfr2}{- dataframe with results by grid cell}
+\item{dfr2}{- dataframe with results by grid cell (ignored if op="sqrt")}
 
-\item{cols}{- dataframe column names to add together}
+\item{cols}{- dataframe column names to apply operation to}
 }
 \value{
-dataframe (dfr1) with results of operation in requested columns.
+dataframe with results of operation in requested columns.
 }
 \description{
-Function to perform an algebraic operation on values by grid cell in two dataframes.
+Function to perform a mathematical operation on values by grid cell in one or two dataframes.
 }
 \details{
 "Factor" levels (gridCellID, startTime) in dataframes must be aligned,
-each must have the same number of rows.#' Columns in datafram not specified in
+each must have the same number of rows. Columns in dataframe not specified in
 \code{cols} are returned unchanged.
+
+Note that dfr1 and dfr2 could also be tibbles or sf datasets. The returned type will be that
+of \code{dfr1}.
 }

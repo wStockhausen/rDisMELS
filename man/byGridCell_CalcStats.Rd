@@ -2,19 +2,36 @@
 % Please edit documentation in R/byGridCell_CalcStats.R
 \name{byGridCell_CalcStats}
 \alias{byGridCell_CalcStats}
-\title{Calculate statistiics for results by grid cell}
+\title{Calculate statistics for results by grid cell}
 \usage{
-byGridCell_CalcStats(dfrs)
+byGridCell_CalcStats(
+  dfrs,
+  roms_grid,
+  quantity,
+  lci = 0.025,
+  uci = 0.975,
+  byStartTime = FALSE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{dfrs}{- list of dataframes with results by grid cell}
+
+\item{roms_grid}{- sf dataset representing a roms grid, with all grid cells of interest}
+
+\item{quantity}{- column name of quantity to calculate statistics for}
+
+\item{lci}{- lower confidence interval}
+
+\item{uci}{- upper confidence interval}
+
+\item{byStartTime}{- flag to average by startTime}
+
+\item{verbose}{- flag to print diagnostic info}
 }
 \value{
-dataframe with statistics
+a list of sf datasets, by life stage, with mean by grid cell
 }
 \description{
-Function to calculate statistiics for results by grid cell.
-}
-\details{
-TODO: This function does nothing, Finish implementing it!
+Function to calculate statistics for results by grid cell.
 }

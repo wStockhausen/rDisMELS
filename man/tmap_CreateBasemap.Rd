@@ -5,7 +5,7 @@
 \title{Create a \pkg{tmap}-style basemap}
 \usage{
 tmap_CreateBasemap(
-  boundingbox = tmaptools::bb(xlim = c(-162, -134), ylim = c(54, 62)),
+  bbox = tmaptools::bb(xlim = c(-162, -134), ylim = c(54, 62)),
   colors.background = "grey85",
   colors.land = "grey45",
   colors.bathym = "grey65",
@@ -14,7 +14,7 @@ tmap_CreateBasemap(
 )
 }
 \arguments{
-\item{boundingbox}{- \pkg{sf}-style bounding box for map (default is for CGOA)}
+\item{bbox}{- \pkg{sf}-style bounding box for map (default is for CGOA in lat/lon)}
 
 \item{colors.background}{- background color}
 

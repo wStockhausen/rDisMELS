@@ -3,7 +3,7 @@
 #'
 #' @description Function to create a \pkg{tmap}-style basemap.
 #'
-#' @param boundingbox - \pkg{sf}-style bounding box for map (default is for CGOA)
+#' @param bbox - \pkg{sf}-style bounding box for map (default is for CGOA in lat/lon)
 #' @param colors.background - background color
 #' @param colors.land - color for land
 #' @param colors.bathym - color for bathymetry
@@ -20,7 +20,7 @@
 #'
 #' @export
 #'
-tmap_CreateBasemap<-function(boundingbox=tmaptools::bb(xlim=c(-162,-134),ylim=c(54,62)),
+tmap_CreateBasemap<-function(bbox=tmaptools::bb(xlim=c(-162,-134),ylim=c(54,62)),
                              colors.background="grey85",
                              colors.land="grey45",
                              colors.bathym="grey65",
@@ -28,7 +28,7 @@ tmap_CreateBasemap<-function(boundingbox=tmaptools::bb(xlim=c(-162,-134),ylim=c(
                                               div=c("blue","red"),
                                               seq=c("blue","red"))){
 
-    basemap <- wtsGIS::tmap_CreateBasemap(boundingbox=boundingbox,
+    basemap <- wtsGIS::tmap_CreateBasemap(bbox=bbox,
                                           colors.bg=colors.background,
                                           colors.land=colors.land,
                                           colors.bathym=colors.bathym) +

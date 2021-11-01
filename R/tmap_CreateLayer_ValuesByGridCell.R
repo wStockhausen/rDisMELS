@@ -5,7 +5,7 @@
 #'
 #' @param dfr - \code{sf} dataframe with values to create map layer by gridCellID
 #' @param vals_col - column name of values to plot
-#' @param basemap - \pkg{tmap}-style basemap to use (default is NULL)
+#' @param basemap - \pkg{tmap}-style basemap to use (default is NULL, which uses the basemap for the CGOA in lat/lon)
 #' @param title - map title (default is "values")
 #' @param alpha - transparency to apply to values layer (default is 0.9)
 #' @param plotMap - flag to combine layer with basemap and plot (default is FALSE)
@@ -31,7 +31,7 @@ tmap_CreateLayer_ValuesByGridCell<-function(dfr,
   }
 
   #--drop cells without values
-  idx<-!is.na(dfr$xi);
+  idx<-!is.na(dfr[[vals_col]]);
   lyr<-NULL;
   if (any(idx)) {
     dfr<-dfr[idx,,drop=FALSE];#keep geometry column

@@ -4,17 +4,19 @@
 \alias{byGridCell_CalcAbundance}
 \title{Calculate abundance of individuals by grid cell}
 \usage{
-byGridCell_CalcAbundance(dfrs, roms_grid_IDs, byStartTime = FALSE)
+byGridCell_CalcAbundance(dfrs, roms_grid, byStartTime = FALSE, verbose = FALSE)
 }
 \arguments{
-\item{dfrs}{- list of dataframes, by typeName, with DisMELS IBM results}
+\item{dfrs}{- list of dataframes (or tibbles or sf datasets), by typeName, with DisMELS IBM results}
 
-\item{roms_grid_IDs}{- vector (or dataframe with column named roms_grid_ID) with all ids of interest from the roms grid}
+\item{roms_grid}{- sf dataset representing a roms grid, with all grid cells of interest}
 
 \item{byStartTime}{- flag to average by startTime}
+
+\item{verbose}{- flag to print diagnostic info}
 }
 \value{
-a list of dataframes, by life stage, with average abundance by grid cell
+a list of sf datasets, by life stage, with average abundance by grid cell
 }
 \description{
 Function to calculate abundance of individuals by grid cell.

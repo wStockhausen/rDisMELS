@@ -19,7 +19,8 @@
 #'
 #' @details Requires package \pkg{tmap}. If basemap is NULL and printMaps is TRUE,
 #' a basemap is created
-#' using a call to \code{tmap_CreateBasemap} with the supplied parameters.
+#' using a call to \code{tmap_CreateBasemap} with the supplied parameters, which will create a basemap
+#' for the CGOA in lat/lon.
 #'
 #' @import tmap
 #'

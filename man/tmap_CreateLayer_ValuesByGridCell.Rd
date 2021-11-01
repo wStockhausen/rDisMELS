@@ -18,7 +18,7 @@ tmap_CreateLayer_ValuesByGridCell(
 
 \item{vals_col}{- column name of values to plot}
 
-\item{basemap}{- \pkg{tmap}-style basemap to use (default is NULL)}
+\item{basemap}{- \pkg{tmap}-style basemap to use (default is NULL, which uses the basemap for the CGOA in lat/lon)}
 
 \item{title}{- map title (default is "values")}
 
