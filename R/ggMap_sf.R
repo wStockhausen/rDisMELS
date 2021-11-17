@@ -41,6 +41,7 @@ ggMap_sf<-function(sf_dfr,
                      shapes=c(20,21,22),
                      alpha=0.5,
                      facet_grid=NULL,
+                     facet_grid_scales="fixed",
                      facet_wrap=NULL,
                      bmls=NULL,
                      crs=wtsGIS::get_crs(4326),
@@ -50,7 +51,10 @@ ggMap_sf<-function(sf_dfr,
     pE=ggplot2::ggplot(data=sf_tmp)+bmls$land+
                      ggplot2::geom_sf(mapping=ggplot2::aes_string(colour=zone_start),shape=20,alpha=0.5)+
                      ggplot2::scale_colour_manual(values=rep(colours[1:nSZpG],nSZGs))+
-                     bmls$zones+bmls$labels+bmls$map_scale+bmls$theme+
-                     ggplot2::facet_wrap(ggplot2::vars(group),ncol=nPlotCols);
+                     bmls$zones+bmls$labels+bmls$map_scale+bmls$theme;
+    if (!is.null(facet_wrap))
+      pE = pE + ggplot2::facet_wrap(ggplot2::vars(facet_wrap),ncol=nPlotCols);
+    if (!is.null(facet_grid))
+      pE = pE + ggplot2::facet_grid(facet_grid,scales=facet_grid_scales);
   return(p);
 }

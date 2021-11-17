@@ -17,6 +17,7 @@ ggMap_sf(
   shapes = c(20, 21, 22),
   alpha = 0.5,
   facet_grid = NULL,
+  facet_grid_scales = "fixed",
   facet_wrap = NULL,
   bmls = NULL,
   crs = wtsGIS::get_crs(4326),
