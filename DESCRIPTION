@@ -1,8 +1,8 @@
 Package: rDisMELS
 Type: Package
 Title: Basic functions for dealing with DisMELS IBM model output
-Version: 2021.11.01
-Date: 2021-11-01
+Version: 2021.11.14
+Date: 2021-11-14
 Author: William T. Stockhausen
 Maintainer: William T. Stockhausen <william.stockhausen@noaa.gov>
 Description: Provides a set of basic functions for dealing with DisMELS IBM model output.
@@ -26,4 +26,4 @@ Imports:
     wtsGIS (>= 2020.01.24),
     wtsROMS,
     wtsUtilities (>= 2019.09.15)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2

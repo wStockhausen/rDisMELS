@@ -15,7 +15,7 @@ byGridCell_ScalarOps(
 \arguments{
 \item{dfr1}{- dataframe with results by grid cell}
 
-\item{op}{- operation to perform ("+","-","*","/","\","^","log")}
+\item{op}{- operation to perform ("+","-","*","/","\\","^","log","sqrt")}
 
 \item{scalar}{- scalar value to use}
 
@@ -29,5 +29,5 @@ Function to perform a scalar operation on grid cell values.
 }
 \details{
 Columns in datafram not specified in \code{cols} are returned unchanged.
-"/" performs grid/scalar whereas \" performs scalar/grid.
+"/" performs grid/scalar whereas "\\" performs scalar/grid.
 }

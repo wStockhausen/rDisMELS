@@ -7,6 +7,7 @@
 #' @param op - operation by grid cell ("+","-","*","/","sqrt")
 #' @param dfr2 - dataframe with results by grid cell (ignored if op="sqrt")
 #' @param cols - dataframe column names to apply operation to
+#' @param gridCellID - column name (as string) for grid cell IDs (default="gridCellID")
 #'
 #' @return dataframe with results of operation in requested columns.
 #'
@@ -23,10 +24,14 @@ byGridCell_GridOps<-function(dfr1,
                              op,
                              dfr2=NULL,
                              cols=c("unsuccessful_indivs",   "successful_indivs",   "total_indivs",
-                                    "unsuccessful_abundance","successful_abundance","total_abundance")){
+                                    "unsuccessful_abundance","successful_abundance","total_abundance"),
+                             gridCellID="gridCellID"){
   if (!is.null(dfr2)){
     if (nrow(dfr1)!=nrow(dfr2)){
-      stop("rDisMELS::byGridCell_GridOpsOnGrids: number f rows must be equal for both dataframes\n")
+      stop("rDisMELS::byGridCell_GridOps: number of rows in both dataframes must be equal\n")
+    }
+    if (sum(dfr1[[gridCellID]]!=dfr2[[gridCellID]])){
+      stop("rDisMELS::byGridCell_GridOps: grid cell ID's must be identical by row for both dataframes\n")
     }
   }
   if (op=="+") for (col in cols) dfr1[[col]] = dfr1[[col]]+dfr2[[col]];
