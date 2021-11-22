@@ -9,7 +9,8 @@ byGridCell_GridOps(
   op,
   dfr2 = NULL,
   cols = c("unsuccessful_indivs", "successful_indivs", "total_indivs",
-    "unsuccessful_abundance", "successful_abundance", "total_abundance")
+    "unsuccessful_abundance", "successful_abundance", "total_abundance"),
+  gridCellID = "gridCellID"
 )
 }
 \arguments{
@@ -20,6 +21,8 @@ byGridCell_GridOps(
 \item{dfr2}{- dataframe with results by grid cell (ignored if op="sqrt")}
 
 \item{cols}{- dataframe column names to apply operation to}
+
+\item{gridCellID}{- column name (as string) for grid cell IDs (default="gridCellID")}
 }
 \value{
 dataframe with results of operation in requested columns.
