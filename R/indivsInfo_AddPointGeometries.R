@@ -20,11 +20,11 @@
 #'
 #' @export
 #'
-addPointGeometries<-function(dfrs,
-                             xCol="horizPos1",
-                             yCol="horizPos2",
-                             crs=wtsGIS::get_crs(4326),
-                             wrapDateline=TRUE){
+indivsInfo_AddPointGeometries<-function(dfrs,
+                                        xCol="horizPos1",
+                                        yCol="horizPos2",
+                                        crs=wtsGIS::get_crs(4326),
+                                        wrapDateline=TRUE){
   if (inherits(dfrs,"data.frame")){
     sf_points<-wtsGIS::createSF_points(dfrs,
                                        xCol=xCol,
@@ -36,13 +36,14 @@ addPointGeometries<-function(dfrs,
     sf_points<-list();
     for (typeName in typeNames){
       cat("Processing",typeName,"\n")
-      dfr<-dfrs[[typeName]];
-      sf_points[[typeName]]<-wtsGIS::createSF_points(dfr,
+      sf_points[[typeName]]<-wtsGIS::createSF_points(dfrs[[typeName]],
                                                      xCol=xCol,
                                                      yCol=yCol,
                                                      crs=crs,
                                                      wrapDateline=wrapDateline);
+      dfrs[[typeName]]<-NULL;#--not sure if this helps with memory
     }
   }
+  rm(dfrs);
   return(sf_points);
 }

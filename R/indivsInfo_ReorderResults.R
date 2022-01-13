@@ -26,7 +26,10 @@
 #'
 #'
 #'@importFrom dplyr arrange
+#'@importFrom dplyr bind_rows
 #'@importFrom readr read_csv
+#'
+#'@import magrittr
 #'
 #'@export
 #'
@@ -59,13 +62,15 @@ indivsInfo_ReorderResults<-function(resFolder,
       }
       dfrs[[cls]]<-tmp;
       rm(csv,tmp);
+      gc(full=TRUE);
     }
   }
 
   #--reorder model results into list of dataframes by typeName, not java class
   dfrts<-list();
-  for (typeName in typeNames){
-    dfrt<-NULL;
+  for (typeName in levels(typeNames)){
+    #--for testing: typeName = typeNames[6];
+    dfrt=list(); ctr=0;
     for (cls in names(info$classInfo)){
       if (!is.null(dfrs[[cls]])){
         idx<-dfrs[[cls]]$typeName==typeName;
@@ -75,17 +80,23 @@ indivsInfo_ReorderResults<-function(resFolder,
           } else {
             tmp<-dfrs[[cls]][idx,];
           }
-          dfrt<-rbind(dfrt,tmp);
+          dfrt[[ctr<-ctr+1]]<-tmp;
           rm(tmp);
         }
         rm(idx);
       }
     }#--cls
-    if (!is.null(dfrt)) {
-      dfrts[[typeName]]<-dfrt;
-      rm(dfrt);
+    if (length(dfrt)>0) {
+      if (length(dfrt)==1) {
+        dfrts[[typeName]]<-dfrt[[1]];
+      } else {
+        dfrts[[typeName]]<-dplyr::bind_rows(dfrt);
+      }
+      rm(dfrt,ctr);
+      #gc(full=TRUE,reset=TRUE);
     }
-  }
-
+  }#--typeName
+  rm(dfrs);
+  gc(full=TRUE,reset=TRUE);
   return(dfrts);
 }
