@@ -8,15 +8,18 @@ indivsInfo_ExtractTrajectories(
   sfs_points,
   crs = wtsGIS::get_crs("WGS84"),
   step = 1000,
+  colTemperature = "temperature",
   verbose = FALSE
 )
 }
 \arguments{
-\item{sfs_points}{- list of sf dataframes by typeName (output from \code{\link{indivsInfo_ReorderResults}})}
+\item{sfs_points}{- list of sf dataframes by typeName or single sf dataframe (output from \code{\link{indivsInfo_ReorderResults}})}
 
 \item{crs}{- coordinate reference system for trajectories: \pkg{sf} crs object, EPSG code, or character with proj4string}
 
 \item{step}{- step size for processing individuals}
+
+\item{colTemperature}{- column name with temperature data (default="temperature")}
 
 \item{verbose}{- flag to print debugging info}
 }
