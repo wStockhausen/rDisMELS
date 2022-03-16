@@ -8,7 +8,9 @@ indivsInfo_ReorderResults(
   resFolder,
   resFilePrefix,
   lifeStageInfo,
-  startTime = NULL
+  classNames = NULL,
+  startTime = NULL,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -18,7 +20,11 @@ indivsInfo_ReorderResults(
 
 \item{lifeStageInfo}{- life stage info (list) object}
 
+\item{classNames}{- optional vector of classNames to process (may need to process classes individually when file sizes are large)}
+
 \item{startTime}{- optional value to replace startTimes in model run (default=NULL)}
+
+\item{verbose}{- flag (T/F) to print processing info}
 }
 \value{
 list of data frames by life stage type,

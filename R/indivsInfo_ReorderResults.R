@@ -6,7 +6,9 @@
 #'@param resFolder - path to folder with results
 #'@param resFilePrefix - prefix for file names (default = "Results")
 #'@param lifeStageInfo - life stage info (list) object
+#'@param classNames - optional vector of classNames to process (may need to process classes individually when file sizes are large)
 #'@param startTime - optional value to replace startTimes in model run (default=NULL)
+#'@param verbose - flag (T/F) to print processing info
 #'
 #'@return list of data frames by life stage type,
 #'with each dataframe ordered by start time, id, and time.
@@ -36,20 +38,23 @@
 indivsInfo_ReorderResults<-function(resFolder,
                                     resFilePrefix,
                                     lifeStageInfo,
-                                    startTime=NULL){
+                                    classNames=NULL,
+                                    startTime=NULL,
+                                    verbose=TRUE){
   info<-lifeStageInfo;
   typeNames<-unique(info$lifeStageTypes$typeName);#--don't sort!
   typeNames<-factor(typeNames,
                     levels=typeNames);#typeNames as factor levels
 
+  if (is.null(classNames)) classNames = names(info$classInfo);#--process all classes
   #read model results by java class and sort by startTime, id and time within a class
   resdr<-resFolder;
-  cat("\n\n-----------------\n");
-  cat("Reading and sorting results files in",resdr,"\n");
+  if (verbose) cat("\n\n-----------------\n");
+  if (verbose) cat("Reading and sorting results files in",resdr,"\n");
   if (!is.null(startTime)) startTime_ = as.POSIXct(as.character(startTime),tz="UTC");
   dfrs<-list();
-  for  (cls in names(info$classInfo)){
-    cat("\tclass name:",cls,"\n");
+  for  (cls in classNames){
+    if (verbose) cat("\tclass name:",cls,"\n");
     csv<-file.path(resdr,paste0(resFilePrefix,cls,".csv"));
     if (file.exists(csv)){
       tmp<-readr::read_csv(csv,skip=1);
@@ -67,14 +72,17 @@ indivsInfo_ReorderResults<-function(resFolder,
   }
 
   #--reorder model results into list of dataframes by typeName, not java class
+  if (verbose) cat("Reordering model results by typeName\n")
   dfrts<-list();
   for (typeName in levels(typeNames)){
     #--for testing: typeName = typeNames[6];
+    if (verbose) cat("\tChecking '",typeName,"'\n",sep="")
     dfrt=list(); ctr=0;
     for (cls in names(info$classInfo)){
       if (!is.null(dfrs[[cls]])){
         idx<-dfrs[[cls]]$typeName==typeName;
         if (any(idx)){
+          if (verbose) cat("\t\tProcessing '",typeName,"'\n",sep="")
           if (sum(idx)==length(dfrs[[cls]]$typeName)) {
             tmp<-dfrs[[cls]];
           } else {

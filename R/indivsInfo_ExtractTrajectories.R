@@ -39,8 +39,8 @@ indivsInfo_ExtractTrajectories<-function(sfs_points,
                                          step=1000,
                                          colTemperature="temperature",
                                          verbose=FALSE){
-  if (!inherits(sf_points,"data.frame")){ #--sf_points is a list of dataframes
-    lhss = names(sfs_points);             #--get life stage names
+  if (!inherits(sfs_points,"data.frame")){ #--sfs_points is a list of dataframes
+    lhss = names(sfs_points);              #--get life stage names
     #--create trajectories
     lst_trjs = list(); ctr = 0;
     for (lhs in lhss){
@@ -55,7 +55,7 @@ indivsInfo_ExtractTrajectories<-function(sfs_points,
     } #--lhs
     if (verbose) message(paste0("\t\tbinding rows of multiple dataframes"));
     sf_trjs = dplyr::bind_rows(lst_trjs);
-  } else { #--sf_points is a dataframe
+  } else { #--sfs_points is a dataframe
   #--define processing code
       str = "sf_ls = sf_lhsp %>%
                       dplyr::group_by(typeName,id,parentID,origID,startTime &&successful) %>%
