@@ -84,8 +84,7 @@ indivsInfo_ExtractTrajectories<-function(sfs_points,
         #--for testing: min_rw = min_rws[1];
         if (verbose) message(paste0("\t\t\tprocessing individuals ",min_rw," to ",min(min_rw+step-1,nd)));
         dstp = dst[min_rw:min(min_rw+step-1,nd),];
-        sf_lhsp = sf_lhs %>% dplyr::inner_join(dstp);
-        # rm(sf_lhs);
+        sf_lhsp = sf_lhs %>% dplyr::inner_join(dstp,by=c("typeName", "id", "parentID", "origID", "startTime"));
         eval(parse(text=strp))[[1]];
         rm(sf_lhsp);
         lst_trjs[[ctr<-ctr+1]] = sf_ls;
