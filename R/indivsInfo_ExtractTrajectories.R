@@ -66,7 +66,8 @@ indivsInfo_ExtractTrajectories<-function(sfs_points,
                                         do_union=FALSE) %>%
                       sf::st_cast('LINESTRING');"; #--create trajectories
       str = gsub("&&colTemp",colTemperature,str,fixed=TRUE);
-      sf_lhs = sfs_points %>% sf::st_transform(crs);#--transform to Alaska Albers
+      sf_lhs = sfs_points %>% sf::st_transform(crs);#--transform to selected crs
+      rm(sfs_points);
       if (any(names(sf_lhs)=="successful")){
         strp = gsub("&&successful",",successful",str,fixed=TRUE);
       } else {
@@ -84,11 +85,11 @@ indivsInfo_ExtractTrajectories<-function(sfs_points,
         if (verbose) message(paste0("\t\t\tprocessing individuals ",min_rw," to ",min(min_rw+step-1,nd)));
         dstp = dst[min_rw:min(min_rw+step-1,nd),];
         sf_lhsp = sf_lhs %>% dplyr::inner_join(dstp);
-        rm(sf_lhs);
+        # rm(sf_lhs);
         eval(parse(text=strp))[[1]];
         rm(sf_lhsp);
         lst_trjs[[ctr<-ctr+1]] = sf_ls;
-        rm(sf_ls,strp);
+        rm(sf_ls);
       }#--min_rw
       sf_trjs = dplyr::bind_rows(lst_trjs);
   }#--sf_points is a dataframe
